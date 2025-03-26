@@ -3,6 +3,7 @@ open Cmdliner
 open Unix
 open Filename
 open Sys
+open Sha
 
 type gitRepository = {
     worktree : string;
