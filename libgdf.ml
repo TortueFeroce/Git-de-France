@@ -4,6 +4,7 @@ open Unix
 open Filename
 open Sys
 open Sha
+open Camlzip
 
 type gitRepository = {
     worktree : string;
@@ -20,3 +21,4 @@ let repo_path repo path =
 let repo_path_list repo p_list =
     (* Concatène une liste *)
     repo_path repo (List.fold_left (fun ongoing_path p -> Filename.concat ongoing_path p) "" p_list)
+
