@@ -1,4 +1,4 @@
-open Libgdf
+ocamlfind ocamlopt -linkpkg -package cmdliner -o revolt revolt.ml
 open Cmdliner
 
 let empty_t = Term.(const ())
