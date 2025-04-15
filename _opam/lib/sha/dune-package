@@ -1,0 +1,65 @@
+(lang dune 3.17)
+(name sha)
+(version v1.15.4)
+(sections
+ (lib /home/axel/Cours/Informatique/L3/OS/Git-de-France/_opam/lib/sha)
+ (libexec /home/axel/Cours/Informatique/L3/OS/Git-de-France/_opam/lib/sha)
+ (doc /home/axel/Cours/Informatique/L3/OS/Git-de-France/_opam/doc/sha)
+ (stublibs
+  /home/axel/Cours/Informatique/L3/OS/Git-de-France/_opam/lib/stublibs))
+(files
+ (lib
+  (META
+   dune-package
+   libsha_stubs.a
+   opam
+   sha.a
+   sha.cma
+   sha.cmxa
+   sha1.cmi
+   sha1.cmt
+   sha1.cmti
+   sha1.cmx
+   sha1.ml
+   sha1.mli
+   sha256.cmi
+   sha256.cmt
+   sha256.cmti
+   sha256.cmx
+   sha256.ml
+   sha256.mli
+   sha512.cmi
+   sha512.cmt
+   sha512.cmti
+   sha512.cmx
+   sha512.ml
+   sha512.mli))
+ (libexec (sha.cmxs))
+ (doc (CHANGES.md LICENSE.md README.md))
+ (stublibs (dllsha_stubs.so)))
+(library
+ (name sha)
+ (kind normal)
+ (synopsis "SHA-1 and SHA-2 family implementations")
+ (archives (byte sha.cma) (native sha.cmxa))
+ (plugins (byte sha.cma) (native sha.cmxs))
+ (foreign_objects sha1_stubs.o sha256_stubs.o sha512_stubs.o)
+ (foreign_archives (archives (for all) (files libsha_stubs.a)))
+ (foreign_dll_files ../stublibs/dllsha_stubs.so)
+ (native_archives sha.a)
+ (requires stdlib-shims)
+ (modes byte native)
+ (modules
+  (unwrapped
+   (module
+    (obj_name sha1)
+    (visibility public)
+    (source (path Sha1) (intf (path sha1.mli)) (impl (path sha1.ml))))
+   (module
+    (obj_name sha256)
+    (visibility public)
+    (source (path Sha256) (intf (path sha256.mli)) (impl (path sha256.ml))))
+   (module
+    (obj_name sha512)
+    (visibility public)
+    (source (path Sha512) (intf (path sha512.mli)) (impl (path sha512.ml)))))))

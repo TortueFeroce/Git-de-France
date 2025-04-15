@@ -1,0 +1,14 @@
+*.a
+*.cma
+*.cmi
+*.cmo
+*.cmx
+*.cmxs
+*.cmxa
+*.o
+*.so
+*.cmt
+*.cmti
+test/minigzip
+test/minizip
+test/testzlib

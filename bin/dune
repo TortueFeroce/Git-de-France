@@ -1,0 +1,5 @@
+(executable
+ (public_name gdf)
+ (name gdf)
+ (promote (until-clean))
+ (libraries libgdf))

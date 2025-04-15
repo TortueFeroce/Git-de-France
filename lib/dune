@@ -1,0 +1,3 @@
+(library
+ (libraries sha camlzip)
+ (name libgdf))

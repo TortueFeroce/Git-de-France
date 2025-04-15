@@ -1,0 +1,35 @@
+opam-version: "2.0"
+added: [
+  "doc/sha" {"D"}
+  "doc/sha/CHANGES.md" {"F:S1134T1744214602.09"}
+  "doc/sha/LICENSE.md" {"F:S694T1744214602.09"}
+  "doc/sha/README.md" {"F:S423T1744214602.09"}
+  "lib/sha" {"D"}
+  "lib/sha/META" {"F:S208T1744214602.09"}
+  "lib/sha/dune-package" {"F:S1632T1744214602.09"}
+  "lib/sha/libsha_stubs.a" {"F:S632722T1744214602.09"}
+  "lib/sha/opam" {"F:S1281T1744214602.09"}
+  "lib/sha/sha.a" {"F:S46264T1744214602.09"}
+  "lib/sha/sha.cma" {"F:S40172T1744214602.09"}
+  "lib/sha/sha.cmxa" {"F:S1394T1744214602.09"}
+  "lib/sha/sha.cmxs" {"F:S395784T1744214602.09"}
+  "lib/sha/sha1.cmi" {"F:S2951T1744214602.09"}
+  "lib/sha/sha1.cmt" {"F:S32732T1744214602.09"}
+  "lib/sha/sha1.cmti" {"F:S19084T1744214602.09"}
+  "lib/sha/sha1.cmx" {"F:S1263T1744214602.09"}
+  "lib/sha/sha1.ml" {"F:S2990T1744214602.09"}
+  "lib/sha/sha1.mli" {"F:S3686T1744214602.09"}
+  "lib/sha/sha256.cmi" {"F:S3055T1744214602.09"}
+  "lib/sha/sha256.cmt" {"F:S34005T1744214602.09"}
+  "lib/sha/sha256.cmti" {"F:S19648T1744214602.09"}
+  "lib/sha/sha256.cmx" {"F:S1345T1744214602.09"}
+  "lib/sha/sha256.ml" {"F:S3111T1744214602.09"}
+  "lib/sha/sha256.mli" {"F:S3776T1744214602.09"}
+  "lib/sha/sha512.cmi" {"F:S3055T1744214602.09"}
+  "lib/sha/sha512.cmt" {"F:S34005T1744214602.09"}
+  "lib/sha/sha512.cmti" {"F:S19648T1744214602.09"}
+  "lib/sha/sha512.cmx" {"F:S1345T1744214602.09"}
+  "lib/sha/sha512.ml" {"F:S3111T1744214602.09"}
+  "lib/sha/sha512.mli" {"F:S3776T1744214602.09"}
+  "lib/stublibs/dllsha_stubs.so" {"F:S354288T1744214602.09"}
+]

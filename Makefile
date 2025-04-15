@@ -1,3 +1,3 @@
-main:
-	ocamlfind ocamlopt -linkpkg -package cmdliner -o git-de-france gdf.ml
-	./git-de-france
+all:
+	rm -rf weshwesh
+	dune build ./bin/gdf.exe
