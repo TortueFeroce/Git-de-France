@@ -4,11 +4,14 @@ open Arg
 open Libgdf
 
 let force = ref false
+let doWrite = ref false
+let objType = ref ""
 
 let options = ref []
 
 let findOptions str = match str with
   | "init" -> [("-f", Set force, "placeholder")]
+  | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
   | _ -> failwith "loserrrr"
 
 let isSubcomm = ref true 
@@ -28,6 +31,7 @@ let () =
   let found_args, c_name = read_option () in
   match c_name, found_args with
     | "init", x::[] -> compute_init x
+    | "hash_object", x::[] -> hash_file x
     | _ -> failwith "pas implémenté"
 
 

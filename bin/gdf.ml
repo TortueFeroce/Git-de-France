@@ -11,7 +11,7 @@ let options = ref []
 
 let findOptions str = match str with
   | "init" -> [("-f", Set force, "placeholder")]
-  | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", String objType, "placeholder")]
+  | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
   | _ -> failwith "loserrrr"
 
 let isSubcomm = ref true 
@@ -31,7 +31,7 @@ let () =
   let found_args, c_name = read_option () in
   match c_name, found_args with
     | "init", x::[] -> compute_init x
-    | "hash_object", x::[] -> hash_file x
+    | "hash_object", x::[] -> hash_file !doWrite !objType x
     | _ -> failwith "pas implémenté"
 
 
