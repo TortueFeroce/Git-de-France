@@ -31,4 +31,23 @@ let compute_init s =
   Unix.mkdir (s^"/.git/refs") perm_base;
   let config_channel = open_out (s^"/.git/config") in
     output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
-    close_out config_channel;
+    close_out config_channel
+
+
+let repo_find () = (
+  (* Fonction qui ... *)
+  let rec aux () = (
+    let cur_name = Unix.getcwd () in
+    try
+      let _ = Unix.stat ".git" in cur_name
+    with _ -> (
+      let () = Unix.chdir "../" in
+      let new_name = Unix.getcwd () in
+      if new_name = cur_name then
+        raise (GdfError "Pas un repo git");
+      aux ()))
+  in aux ())
+
+let () = (
+let () = Unix.chdir ".git/objects" in
+let a = repo_find () in print_string a)
