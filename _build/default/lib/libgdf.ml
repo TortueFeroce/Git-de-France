@@ -23,13 +23,12 @@ let check_init s =
 
 let compute_init s =
   (* Fonction qui est appelée lorsque la commande init est saisie *)
-
-    (Unix.mkdir s perm_base;
-    Unix.mkdir (s^"/.git") perm_base;
-    Unix.mkdir (s^"/.git/objects") perm_base;
-    Unix.mkdir (s^"/.git/refs") perm_base;
-    let _ = Unix.openfile (s^"/.git/config") [O_CREAT] perm_base in ())
-  (* with Unix.Unix_error(_) ->
-    Unix.mkdir (s^"/.git") perm_base;
-    Unix.mkdir (s^"/.git/objects") perm_base;
-    Unix.mkdir (s^"/.git/refs") perm_base *)
+  (try
+    Unix.mkdir s perm_base;
+  with Unix.Unix_error(_) -> () );
+  Unix.mkdir (s^"/.git") perm_base;
+  Unix.mkdir (s^"/.git/objects") perm_base;
+  Unix.mkdir (s^"/.git/refs") perm_base;
+  let config_channel = open_out (s^"/.git/config") in
+    output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
+    close_out config_channel;
