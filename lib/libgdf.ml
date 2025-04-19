@@ -12,8 +12,8 @@ type worktree = path
 
 type git_directory = path
 
-type git_object =
-  | Blob of Gzip.in_channel
+type obj =
+  | Blob of string * string
 
 let perm_base = 0o777
 
@@ -53,17 +53,29 @@ let repo_find () = (
 
 let hash_file _ _ _ =
   failwith "pas encore implémenté"
-
+  
 let add_char_to_str c s = (s^(Char.escaped c))
+  
+let chan_to_string chan size =
+  let data = ref "" in
+  for _ = 0 to size - 1 do
+    add_char_to_str (Gzip.input_char chan) (!data)
+  done;
+  !data
+  
+  let add_char_until n f_channel = 
+    let is_n = ref true in
+    let acc = ref "" in
+    while !is_n do
+      let c = Gzip.input_char f_channel in
+      if c = (Char.chr n) then is_n := false
+      else acc := add_char_to_str c !acc
+    done; !acc
 
-let add_char_until n f_channel = 
-  let is_n = ref true in
-  let acc = ref "" in
-  while !is_n do
-    let c = Gzip.input_char f_channel in
-    if c = (Char.chr n) then is_n := false
-    else acc := add_char_to_str c !acc
-  done; !acc
+let serialize chan typ size =
+  let data = chan_to_string chan size in
+  match typ with
+    | "blob" -> let file_name = String.split_on_cah
 
 let read_object sha = (
   let len_sha = String.length sha in
@@ -81,9 +93,12 @@ let read_object sha = (
   let _ = add_char_until 0x00 file_channel in
   (* TO DO : checker si la taille correspond *)
   match header_file with
-    | "blob" -> Blob(file_channel)
+    | "blob" -> PreBlob(file_channel,)
     | _ -> failwith "les autres types de header ne sont pas implémentés"
   )
+
+let write_object obj =
+
 
 let f_test () =
   (* fonction de test *)
