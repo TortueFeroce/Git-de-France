@@ -82,7 +82,7 @@ let add_char_until n f_channel =
     else acc := add_char_to_str c !acc
   done; !acc
 
-let serialize str =
+let deserialize str =
   let data = String.split_on_char ('\n') str in
   match data with
     | "blob" :: size :: file_name :: q ->
@@ -104,7 +104,7 @@ let read_object sha = (
   with _ -> raise (GdfError "le haché ne correspond à aucun fichier"));
   let file_channel = Gzip.open_in obj_name in
   let pre_obj = str_until_eof file_channel in
-  serialize pre_obj
+  deserialize pre_obj
   )
 
 
