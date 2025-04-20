@@ -54,7 +54,7 @@ let repo_find () = (
 let hash_file _ _ _ =
   failwith "pas encore implémenté"
   
-let add_char_to_str c s = (s^(Char.escaped c))
+let add_char_to_str c s = (s^(String.make 1 c))
   
 let chan_to_string chan size =
   let data = ref "" in
@@ -101,37 +101,34 @@ let serialize obj =
         let size = string_of_int (String.length file_data) in
         String.concat "\n" ["blob"; size; file_name; file_data]
 
-let read_object sha = (
+let read_object sha =
   let len_sha = String.length sha in
-  let obj_name = String.sub sha 2 (len_sha - 2) in
-  let obj_path = (repo_find ())^"/.gdf/objects" in
-  let () = Unix.chdir obj_path in
-  let bit0 = sha.[0] in
-  let bit1 = sha.[1] in
-  let dir_sha = (Char.escaped bit0)^(Char.escaped bit1) in
-  (try
-    Unix.chdir dir_sha;
-  with _ -> raise (GdfError "le haché ne correspond à aucun fichier"));
-  let file_channel = Gzip.open_in obj_name in
+  let dir_sha = String.sub sha 0 2
+  and obj_name = String.sub sha 2 (len_sha - 2) in
+  let obj_path = (repo_find ())^"/.gdf/objects/" in
+  let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
   let pre_obj = read_str_until_eof file_channel in
+  Gzip.close_in file_channel;
   deserialize pre_obj
-  )
 
 let write_object obj do_write =
   let serialized_obj = serialize obj in
   let sha = Sha1.to_hex (Sha1.string serialized_obj) in
   (if do_write then
     let first_sha = String.sub sha 0 2 
-    and last_sha = String.sub sha 2 38 in
+    and last_sha = String.sub sha 2 ((String.length sha) - 2) in
       let repo_path = repo_find () in
-      (if not (Sys.file_exists (repo_path^".gdf/"^first_sha)) then Unix.mkdir (repo_path^".gdf/"^first_sha) perm_base);
-      let file_channel = Gzip.open_out (repo_path^".gdf/"^first_sha^last_sha) in
-      write_str file_channel serialized_obj);
+        (if not (Sys.file_exists (repo_path^"/.gdf/objects/"^first_sha)) 
+          then Unix.mkdir (repo_path^"/.gdf/objects/"^first_sha) perm_base); (*crée le repertoire ou on range l'objet s'il existe pas encore*)
+        let file_channel = Gzip.open_out (repo_path^"/.gdf/objects/"^first_sha^"/"^last_sha) in
+          write_str file_channel serialized_obj;
+          Gzip.close_out file_channel);
   sha
 
 
 
 let f_test () =
   (* fonction de test *)
-  Unix.chdir "../";
-  Unix.mkdir "test" perm_base
+  let sha = write_object (Blob("test", "test test test")) true in
+  match read_object sha with
+    | Blob(a,b) -> print_string a; print_newline (); print_string b;
