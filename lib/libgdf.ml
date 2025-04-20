@@ -29,10 +29,10 @@ let compute_init s =
     Unix.mkdir s perm_base;
     print_string "je suis là";
   with Unix.Unix_error(_) -> () );
-  Unix.mkdir (s^"/.git") perm_base;
-  Unix.mkdir (s^"/.git/objects") perm_base;
-  Unix.mkdir (s^"/.git/refs") perm_base;
-  let config_channel = open_out (s^"/.git/config") in
+  Unix.mkdir (s^"/.gdf") perm_base;
+  Unix.mkdir (s^"/.gdf/objects") perm_base;
+  Unix.mkdir (s^"/.gdf/refs") perm_base;
+  let config_channel = open_out (s^"/.gdf/config") in
     output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
     close_out config_channel
 
@@ -42,12 +42,12 @@ let repo_find () = (
   let rec aux () = (
     let cur_name = Unix.getcwd () in
     try
-      let _ = Unix.stat ".git" in cur_name
+      let _ = Unix.stat ".gdf" in cur_name
     with _ -> (
       let () = Unix.chdir "../" in
       let new_name = Unix.getcwd () in
       if new_name = cur_name then
-        raise (GdfError "Pas un repo git");
+        raise (GdfError "Pas un repo gdf");
       aux ()))
   in aux ())
 
@@ -63,7 +63,7 @@ let chan_to_string chan size =
   done;
   !data
 
-let str_until_eof chan =
+let read_str_until_eof chan =
   let has_ended = ref true and data = ref "" in
     while !has_ended do
       try 
@@ -72,6 +72,10 @@ let str_until_eof chan =
     done;
     !data
 
+let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
+  for i = 0 to (String.length str) - 1 do
+    Gzip.output_char chan str.[i]
+  done
   
 let add_char_until n f_channel = 
   let is_n = ref true in
@@ -91,10 +95,16 @@ let deserialize str =
                 Blob(file_name, file_data)
     | _ -> failwith "non implémenté"
 
+let serialize obj =
+  match obj with
+    | Blob(file_name, file_data) ->
+        let size = string_of_int (String.length file_data) in
+        String.concat "\n" ["blob"; size; file_name; file_data]
+
 let read_object sha = (
   let len_sha = String.length sha in
   let obj_name = String.sub sha 2 (len_sha - 2) in
-  let obj_path = (repo_find ())^"/.git/objects" in
+  let obj_path = (repo_find ())^"/.gdf/objects" in
   let () = Unix.chdir obj_path in
   let bit0 = sha.[0] in
   let bit1 = sha.[1] in
@@ -103,12 +113,25 @@ let read_object sha = (
     Unix.chdir dir_sha;
   with _ -> raise (GdfError "le haché ne correspond à aucun fichier"));
   let file_channel = Gzip.open_in obj_name in
-  let pre_obj = str_until_eof file_channel in
+  let pre_obj = read_str_until_eof file_channel in
   deserialize pre_obj
   )
+
+let write_object obj do_write =
+  let serialized_obj = serialize obj in
+  let sha = Sha1.to_hex (Sha1.string serialized_obj) in
+  (if do_write then
+    let first_sha = String.sub sha 0 2 
+    and last_sha = String.sub sha 2 38 in
+      let repo_path = repo_find () in
+      (if not (Sys.file_exists (repo_path^".gdf/"^first_sha)) then Unix.mkdir (repo_path^".gdf/"^first_sha) perm_base);
+      let file_channel = Gzip.open_out (repo_path^".gdf/"^first_sha^last_sha) in
+      write_str file_channel serialized_obj);
+  sha
 
 
 
 let f_test () =
   (* fonction de test *)
-  failwith "rien dans la fonction de test"
+  Unix.chdir "../";
+  Unix.mkdir "test" perm_base
