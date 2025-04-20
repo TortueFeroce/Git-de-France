@@ -62,26 +62,33 @@ let chan_to_string chan size =
     data := add_char_to_str (Gzip.input_char chan) (!data)
   done;
   !data
-  
-  let add_char_until n f_channel = 
-    let is_n = ref true in
-    let acc = ref "" in
-    while !is_n do
-      let c = Gzip.input_char f_channel in
-      if c = (Char.chr n) then is_n := false
-      else acc := add_char_to_str c !acc
-    done; !acc
 
-let serialize chan typ size =
-  let data = chan_to_string chan size in
-  match typ with
-    | "blob" -> let splited_name = String.split_on_char ('\n') data in
-                let file_name, file_data = 
-                (match splited_name with
-                  | _::[] -> raise (GdfError "problème dans le header")
-                  | x::q -> x,(String.concat "\n" q)
-                  | _ -> raise (GdfError "problème dans le header"))
-                in Blob(file_name, file_data)
+let str_until_eof chan =
+  let has_ended = ref true and data = ref "" in
+    while !has_ended do
+      try 
+        data := add_char_to_str (Gzip.input_char chan) (!data)
+      with _ -> has_ended := false
+    done;
+    !data
+
+  
+let add_char_until n f_channel = 
+  let is_n = ref true in
+  let acc = ref "" in
+  while !is_n do
+    let c = Gzip.input_char f_channel in
+    if c = (Char.chr n) then is_n := false
+    else acc := add_char_to_str c !acc
+  done; !acc
+
+let serialize str =
+  let data = String.split_on_char ('\n') str in
+  match data with
+    | "blob" :: size :: file_name :: q ->
+                let file_data = String.concat "" q in
+                assert ((String.length file_data) = (int_of_string size));
+                Blob(file_name, file_data)
     | _ -> failwith "non implémenté"
 
 let read_object sha = (
@@ -96,10 +103,8 @@ let read_object sha = (
     Unix.chdir dir_sha;
   with _ -> raise (GdfError "le haché ne correspond à aucun fichier"));
   let file_channel = Gzip.open_in obj_name in
-  let header_file = add_char_until 0x20 file_channel in
-  let file_size = int_of_string (add_char_until 0x00 file_channel) in
-  (* TO DO : checker si la taille correspond *)
-  serialize file_channel header_file file_size
+  let pre_obj = str_until_eof file_channel in
+  serialize pre_obj
   )
 
 
