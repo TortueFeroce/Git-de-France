@@ -27,7 +27,6 @@ let compute_init s =
   (* Fonction qui est appelée lorsque la commande init est saisie *)
   (try
     Unix.mkdir s perm_base;
-    print_string "je suis là";
   with Unix.Unix_error(_) -> () );
   Unix.mkdir (s^"/.gdf") perm_base;
   Unix.mkdir (s^"/.gdf/objects") perm_base;
@@ -69,6 +68,16 @@ let read_str_until_eof chan =
     done;
     !data
 
+let read_str_until_eof_stdlib chan =
+  (* Eh oui parce que ce serait trop simple s'il n'y avait qu'une fonction *)
+  let has_ended = ref true and data = ref "" in
+    while !has_ended do
+      try 
+        data := add_char_to_str (Stdlib.input_char chan) (!data)
+      with _ -> has_ended := false
+    done;
+    !data
+
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
   for i = 0 to (String.length str) - 1 do
     Gzip.output_char chan str.[i]
@@ -87,7 +96,9 @@ let deserialize str =
   let data = String.split_on_char ('\n') str in
   match data with
     | "blob" :: size :: file_name :: q ->
-                let file_data = String.concat "" q in
+                let file_data = String.concat "\n" q in 
+                (*l'ajout du \n est important pour la comparaison des tailles, sinon la taille
+                d'entrée ne correspond pas à la taille de l'objet reconcaténé *)
                 assert ((String.length file_data) = (int_of_string size));
                 Blob(file_name, file_data)
     | _ -> failwith "non implémenté"
@@ -125,9 +136,14 @@ let write_object obj do_write =
 let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a mediter. le type ne sert a rien, voir doc git*)
   let obj = read_object sha in 
     match obj with
-      | Blob(_, str) -> print_string str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
+      | Blob(_, str) -> Printf.printf "%s" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
 
-let hash_file _ _ _ = failwith "jsuis trop fatigué"
+let hash_file do_write typfile f_name =
+  let f_channel = Stdlib.open_in f_name in
+  let data = read_str_until_eof_stdlib f_channel in
+  match typfile with
+    | "blob" -> write_object (Blob(f_name, data)) do_write
+    | _ -> failwith "hash_file à faire pour les autres types"
 
 let f_test () =
   (* fonction de test *)

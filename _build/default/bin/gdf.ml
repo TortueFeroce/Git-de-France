@@ -14,6 +14,7 @@ let findOptions str = match str with
   | "init" -> [("-f", Set force, "placeholder")]
   | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
   | "cat-file" -> []
+  | "hash-file" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -34,10 +35,11 @@ let () =
   let found_args, c_name = read_option () in
   match c_name, found_args with
     | "init", x::[] -> compute_init x
-    | "hash_object", x::[] -> hash_file !doWrite !objType x
+    | "hash-object", x::[] -> let sha = hash_file !doWrite !objType x
+                              in print_string sha
     | "test", [] -> f_test ()
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
-    | _ -> failwith "pas implémenté"
+    | _ -> failwith "commande pas implémentée"
 
 
 
