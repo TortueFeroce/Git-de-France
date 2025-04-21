@@ -50,9 +50,6 @@ let repo_find () = (
         raise (GdfError "Pas un repo gdf");
       aux ()))
   in aux ())
-
-let hash_file _ _ _ =
-  failwith "pas encore implémenté"
   
 let add_char_to_str c s = (s^(String.make 1 c))
   
@@ -95,7 +92,7 @@ let deserialize str =
                 Blob(file_name, file_data)
     | _ -> failwith "non implémenté"
 
-let serialize obj =
+let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
   match obj with
     | Blob(file_name, file_data) ->
         let size = string_of_int (String.length file_data) in
@@ -125,7 +122,12 @@ let write_object obj do_write =
           Gzip.close_out file_channel);
   sha
 
+let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a mediter. le type ne sert a rien, voir doc git*)
+  let obj = read_object sha in 
+    match obj with
+      | Blob(_, str) -> print_string str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
 
+let hash_file _ _ _ = failwith "jsuis trop fatigué"
 
 let f_test () =
   (* fonction de test *)
