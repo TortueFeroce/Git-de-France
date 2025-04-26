@@ -31,7 +31,7 @@ let read_option () =
   "Voici les commandes disponibles pour git-de-France :";
   (!args, !command_name)
 
-let () = 
+let () = (
   let found_args, c_name = read_option () in
   match c_name, found_args with
     | "init", x::[] -> compute_init x
@@ -39,7 +39,18 @@ let () =
                               in print_string sha
     | "test", [] -> f_test ()
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
-    | _ -> failwith "commande pas implémentée"
+    | _ -> failwith "commande pas implémentée")
+
+(* Test pour le parser des commits :
+let () = (let commit = commit_parser "24commit_test" in
+          print_newline ();
+          Printf.printf "tree : %s" (commit.tree);
+          print_newline ();
+          print_string "parent : "; List.iter print_string (commit.parent);
+          print_newline ();
+          Printf.printf "gpgsig : %s" (commit.gpgsig);
+          print_newline ();
+          Printf.printf "name : %s" (commit.name)) *)
 
 
 
