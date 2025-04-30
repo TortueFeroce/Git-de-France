@@ -6,7 +6,7 @@ open Libgdf
 
 let force = ref false
 let doWrite = ref false
-let objType = ref ""
+let objType = ref "blob"
 
 let options = ref []
 
@@ -14,7 +14,6 @@ let findOptions str = match str with
   | "init" -> [("-f", Set force, "placeholder")]
   | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
   | "cat-file" -> []
-  | "hash-file" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -30,8 +29,8 @@ let read_option () =
             else args := s :: !args)
   "Voici les commandes disponibles pour git-de-France :";
   (!args, !command_name)
-
-let () = (
+  
+let () = (Printexc.record_backtrace true;
   let found_args, c_name = read_option () in
   match c_name, found_args with
     | "init", x::[] -> compute_init x

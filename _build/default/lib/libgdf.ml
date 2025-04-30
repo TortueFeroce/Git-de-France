@@ -108,10 +108,9 @@ let compute_object_name name =
   (repo_name^"/.gdf/objects/"^dir^"/"^obj_name)
 
 let extract_data obj =
-  (* Renvoie le contenu d'un fichier sous forme de string *)
-  let abs_path = compute_object_name obj in
-  let f_channel = Stdlib.open_in abs_path in
-  (read_str_until_eof_stdlib f_channel)
+  (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
+  let f_channel = Stdlib.open_in obj in
+  read_str_until_eof_stdlib f_channel
 
 let compile_sig s =
   (* Fonction qui prend une signature stockée sous la forme
@@ -124,16 +123,21 @@ let compile_sig s =
 let computed_list_sig s =
   let list_sig = String.split_on_char ' ' s in
   match list_sig with
-    | x::q -> (String.sub x 1 ((String.length x) - 1))::q
+    | ""::q -> q
     | [] -> failwith "qu'est-ce que c'est que ce bordel !?!!"
+    | _ -> failwith "putain de partial matching"
 
 let concat_list_commit c =
   let concat_p_list = match c.parent with
   | [] -> ["parent "]
-  | x::q -> ["parent "^x]@(List.map (fun e -> " "^e) q) in
+  | x::q -> 
+  Printf.printf "sig commit : %s \n" (c.gpgsig);
+  ["parent "^x]@(List.map (fun e -> " "^e) q) in
   ["tree "^(c.tree)]@concat_p_list@["author "^(c.author);"committer "^(c.committer);
   "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig (c.gpgsig))@
   [" -----END PGP SIGNATURE-----";"";(c.name)]
+  (* TO DO : à modifier, computed_list_sig ne sert à rien *)
+  (* miam *)
 
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
   for i = 0 to (String.length str) - 1 do
@@ -148,17 +152,95 @@ let add_char_until n f_channel =
     if c = (Char.chr n) then is_n := false
     else acc := add_char_to_str c !acc
   done; !acc
+  
+let commit_parser obj_content =
+  (* Parser pour les commits, dsl c'est immonde *) (
+  let data_list = String.split_on_char '\n' obj_content in
+  let size = String.length obj_content in
+  let tree = ref "" in
+  let parent = ref [] in
+  let author = ref "" in
+  let committer = ref "" in
+  let gpgsig = ref "" in 
+  let name = ref "" in
+  let rec compute_data lst cur_section = (match lst with
+    | [] -> ()
+    | x::q -> let line_list = String.split_on_char ' ' x in
+              if line_list = [""] then compute_data q cur_section
+              else if List.hd line_list <> "" then begin
+                (match line_list with 
+                  | "tree"::s::[]                           ->
+                    tree := s;
+                    compute_data q "tree"
+                  | "tree"::_                               ->
+                    raise (GdfError "mauvais format pour un tree")
+                  | "parent"::s::[]                         -> 
+                    parent := s::[];
+                    compute_data q "parent"
+                  | "parent"::_                             ->
+                    raise (GdfError "mauvais format pour un parent")
+                  | "author"::_                             ->
+                    (* TO DO [URGENT] : le faire *)
+                    compute_data q "author"
+                  | "committer"::_                          ->
+                    (* TO DO [URGENT] : le faire *)
+                    compute_data q "committer"
+                  | "gpgsig"::_                             ->
+                    compute_data q "gpgsig"
+                  | ""::"-----END"::"PGP"::"SIGNATURE-----"::[] -> 
+                    compute_data q "name"
+                  | _                                       ->
+                    assert (cur_section = "name"); name := String.concat "\n" (x::q))
+              end
+              else begin
+                let data = (match line_list with
+                  | ""::y::[] -> y
+                  | y::[] -> y
+                  | ""::"-----END"::"PGP"::"SIGNATURE-----"::[] ->
+                      let () = compute_data q "name" in ""  
+                  | _ -> failwith ("impossible mais le compilateur ocaml est un peu
+                  con sur les bords (c'est pas le couteau le plus aiguisé du tiroir si
+                  vous voulez mon avis)")) in
+                let data_len = String.length data in
+                if data_len >= 1 then
+                (match cur_section with
+                  | "parent" -> parent := data::(!parent);
+                                compute_data q "parent"
+                  | "gpgsig" -> gpgsig := (!gpgsig)^(" "^data);
+                                compute_data q "gpgsig";
+                  | "name"   -> name := String.concat "\n" (x::q)
+                  | _        -> failwith "oula c'est pas normal")
+              end)
+  in compute_data data_list "tree";
+
+  let commit = {
+    tree = !tree;
+    parent = !parent;
+    author = !author;
+    committer = !committer;
+    gpgsig = !gpgsig;
+    name = !name;
+    size = size
+  } in commit)
+
+let parse_pregzip_commit c =
+  let obj_content = extract_data c in
+  commit_parser obj_content
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
-  match data with
-    | "blob" :: size :: file_name :: q ->
-                let file_data = String.concat "\n" q in 
-                (*l'ajout du \n est important pour la comparaison des tailles, sinon la taille
-                d'entrée ne correspond pas à la taille de l'objet reconcaténé *)
-                assert ((String.length file_data) = (int_of_string size));
-                Blob(file_name, file_data)
-    | _ -> failwith "non implémenté"
+    match data with
+      | "blob" :: size :: file_name :: q ->
+                  let file_data = String.concat "\n" q in 
+                  (*l'ajout du \n est important pour la comparaison des tailles, sinon la taille
+                  d'entrée ne correspond pas à la taille de l'objet reconcaténé *)
+                  assert ((String.length file_data) = (int_of_string size));
+                  Blob(file_name, file_data)
+      | "commit" :: _ :: q ->
+                  (* let file_data = String.concat "\n" q in *)
+                  (* TO DO : la taille ça marche pas *)
+                  Commit(commit_parser (String.concat "\n" q))
+      | _ -> failwith "ta gueule le compilateur ocaml, ce cas n'arrive jamais"
 
 let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
   match obj with
@@ -198,13 +280,15 @@ let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a medit
   let obj = read_object sha in 
     match obj with
       | Blob(_, str) -> Printf.printf "%s" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
-      | _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets"
+      | Commit(_) -> Printf.printf "%s" (serialize obj)
+      (* | _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets" *)
 
 let hash_file do_write typfile f_name =
   let f_channel = Stdlib.open_in f_name in
   let data = read_str_until_eof_stdlib f_channel in
   match typfile with
     | "blob" -> write_object (Blob(f_name, data)) do_write
+    | "commit" -> write_object (Commit(parse_pregzip_commit f_name)) do_write
     | _ -> failwith "hash_file à faire pour les autres types"
 
 let f_test () =
@@ -213,76 +297,4 @@ let f_test () =
   match read_object sha with
     | Blob(a,b) -> print_string a; print_newline (); print_string b
     | _ -> failwith "pas encore fait mais dune ne veut pas qu'il y ait des partial-matching"
-
-let commit_parser name =
-  (* Parser pour les commits, dsl c'est immonde *) (
-  let obj_content = extract_data name in
-  let data_list = String.split_on_char '\n' obj_content in
-  let size = String.length obj_content in
-  let tree = ref "" in
-  let parent = ref [] in
-  let author = ref "" in
-  let committer = ref "" in
-  let gpgsig = ref "" in 
-  let name = ref "" in
-  let rec compute_data lst cur_section = (match lst with
-    | [] -> ()
-    | x::q -> let line_list = String.split_on_char ' ' x in
-              if line_list = [""] then compute_data q cur_section
-              else if List.hd line_list <> "" then begin
-                (match line_list with 
-                  | "tree"::s::[]                           ->
-                    tree := s;
-                    compute_data q "tree"
-                  | "tree"::_                               ->
-                    raise (GdfError "mauvais format pour un tree")
-                  | "parent"::s::[]                         -> 
-                    parent := s::[];
-                    compute_data q "parent"
-                  | "parent"::_                             ->
-                    raise (GdfError "mauvais format pour un parent")
-                  | "author"::_                             ->
-                    (* TO DO [URGENT] : le faire *)
-                    compute_data q "author"
-                  | "committer"::_                          ->
-                    (* TO DO [URGENT] : le faire *)
-                    compute_data q "committer"
-                  | "gpgsig"::_                             ->
-                    compute_data q "gpgsig"
-                  | "-----END"::"PGP"::"SIGNATURE-----"::[] -> 
-                    compute_data q "name"
-                  | _                                       ->
-                    name := String.concat "\n" (x::q))
-              end
-              else begin
-                let data = (match line_list with
-                  | ""::x::[] -> x
-                  | x::[] -> x
-                  | ""::"-----END"::"PGP"::"SIGNATURE-----"::[] -> 
-                    "endsig"
-                  | _ -> failwith ("impossible mais le compilateur ocaml est un peu
-                  con sur les bords (c'est pas le couteau le plus aiguisé du tiroir si
-                  vous voulez mon avis)")) in
-                let data_len = String.length data in
-                if data_len >= 1 then
-                (match cur_section with
-                  | "parent" -> parent := data::(!parent);
-                                compute_data q "parent"
-                  | "gpgsig" -> gpgsig := (!gpgsig)^(" "^data);
-                                compute_data q "gpgsig";
-                  | "name"   -> name := String.concat "\n" (x::q)
-                  | "endsig" -> compute_data q "name"
-                  | _        -> failwith "oula c'est pas normal")
-              end)
-in compute_data data_list "tree";
-
-let commit = {
-  tree = !tree;
-  parent = !parent;
-  author = !author;
-  committer = !committer;
-  gpgsig = !gpgsig;
-  name = !name;
-  size = size
-} in commit)
 
