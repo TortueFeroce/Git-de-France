@@ -134,6 +134,7 @@ let concat_list_commit c =
   ["tree "^(c.tree)]@concat_p_list@["author "^(c.author);"committer "^(c.committer);
   "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig (c.gpgsig))@
   [" -----END PGP SIGNATURE-----";"";(c.name)]
+  (* miam *)
 
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
   for i = 0 to (String.length str) - 1 do
@@ -158,7 +159,10 @@ let deserialize str =
                 d'entrée ne correspond pas à la taille de l'objet reconcaténé *)
                 assert ((String.length file_data) = (int_of_string size));
                 Blob(file_name, file_data)
-    | _ -> failwith "non implémenté"
+    | "commit" :: size :: q ->
+                let file_data = String.concat "\n" q in
+                assert ((String.length file_data = (int_of_string size)))
+                Commit(commit_parser (String.concat '\n' q))
 
 let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
   match obj with
@@ -214,9 +218,9 @@ let f_test () =
     | Blob(a,b) -> print_string a; print_newline (); print_string b
     | _ -> failwith "pas encore fait mais dune ne veut pas qu'il y ait des partial-matching"
 
-let commit_parser name =
+let commit_parser c =
   (* Parser pour les commits, dsl c'est immonde *) (
-  let obj_content = extract_data name in
+  let obj_content = extract_data c in
   let data_list = String.split_on_char '\n' obj_content in
   let size = String.length obj_content in
   let tree = ref "" in
