@@ -137,7 +137,6 @@ let concat_list_commit c =
   ["tree "^(c.tree)]@concat_p_list@["author "^(c.author);"committer "^(c.committer);
   "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig c.gpgsig)@
   [" -----END PGP SIGNATURE-----";"";(c.name)]
-  (* TO DO : à modifier, computed_list_sig ne sert à rien // j'ai fait, prions le seigneur que ça fonctionne*)
   (* miam *)
 
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
@@ -180,11 +179,9 @@ let commit_parser obj_content =
                     compute_data q "parent"
                   | "parent"::_                             ->
                     raise (GdfError "mauvais format pour un parent")
-                  | "author"::_                             ->
-                    (* TO DO [URGENT] : le faire *)
+                  | "author"::a                             -> author := String.concat " " a;
                     compute_data q "author"
-                  | "committer"::_                          ->
-                    (* TO DO [URGENT] : le faire *)
+                  | "committer"::c                          -> committer := String.concat " " c;
                     compute_data q "committer"
                   | "gpgsig"::_                             ->
                     compute_data q "gpgsig"
