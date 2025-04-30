@@ -229,19 +229,6 @@ let parse_pregzip_commit c =
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
-<<<<<<< HEAD
-  match data with
-    | "blob" :: size :: file_name :: q ->
-                let file_data = String.concat "\n" q in 
-                (*l'ajout du \n est important pour la comparaison des tailles, sinon la taille
-                d'entrée ne correspond pas à la taille de l'objet reconcaténé (gna gna gna gna gna gna c'est tout ce que j'entends)*)
-                assert ((String.length file_data) = (int_of_string size));
-                Blob(file_name, file_data)
-    | "commit" :: size :: q ->
-                let file_data = String.concat "\n" q in
-                assert ((String.length file_data = (int_of_string size)))
-                Commit(commit_parser (String.concat '\n' q))
-=======
     match data with
       | "blob" :: size :: file_name :: q ->
                   let file_data = String.concat "\n" q in 
@@ -254,7 +241,6 @@ let deserialize str =
                   (* TO DO : la taille ça marche pas *)
                   Commit(commit_parser (String.concat "\n" q))
       | _ -> failwith "ta gueule le compilateur ocaml, ce cas n'arrive jamais"
->>>>>>> b304573 (<3 <3 <3 <3 <3)
 
 let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
   match obj with
