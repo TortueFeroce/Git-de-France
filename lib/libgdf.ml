@@ -156,7 +156,7 @@ let deserialize str =
     | "blob" :: size :: file_name :: q ->
                 let file_data = String.concat "\n" q in 
                 (*l'ajout du \n est important pour la comparaison des tailles, sinon la taille
-                d'entrée ne correspond pas à la taille de l'objet reconcaténé *)
+                d'entrée ne correspond pas à la taille de l'objet reconcaténé (gna gna gna gna gna gna c'est tout ce que j'entends)*)
                 assert ((String.length file_data) = (int_of_string size));
                 Blob(file_name, file_data)
     | "commit" :: size :: q ->
