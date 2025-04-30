@@ -41,6 +41,7 @@ let () = (
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
     | _ -> failwith "commande pas implémentée")
 
+(* Test pour le parser des commits :
 let () = (let commit = commit_parser "24commit_test" in
           print_newline ();
           Printf.printf "tree : %s" (commit.tree);
@@ -49,7 +50,7 @@ let () = (let commit = commit_parser "24commit_test" in
           print_newline ();
           Printf.printf "gpgsig : %s" (commit.gpgsig);
           print_newline ();
-          Printf.printf "name : %s" (commit.name))
+          Printf.printf "name : %s" (commit.name)) *)
 
 
 

@@ -19,19 +19,22 @@ type user = string*string
 }
   
 mais pour l'instant je reste sur string*string tant que j'ai pas fini
-mon parser à commit *)
+mon parser à commit donc faudrait peut-être le changer en dessous mais flemme
+pour l'instant *)
 
 type commit = {
   tree : string;
   parent : string list;
-  author : user*string;
-  committer : user*string;
+  author : string;
+  committer : string;
   gpgsig : string;
-  name : string
+  name : string;
+  size : int
 }
 
 type obj =
   | Blob of string * string
+  | Commit of commit (* ah ouais en fait c'est pas très beau ce que j'ai fait là :'( *)
 
 let perm_base = 0o777
 
@@ -43,37 +46,37 @@ let check_init s =
 let add_char_to_str c s = (s^(String.make 1 c))
 
 let chan_to_string chan size =
-let data = ref "" in
-for _ = 0 to size - 1 do
-data := add_char_to_str (Gzip.input_char chan) (!data)
-done;
-!data
+  let data = ref "" in
+  for _ = 0 to size - 1 do
+  data := add_char_to_str (Gzip.input_char chan) (!data)
+  done;
+  !data
 
 let read_str_until_eof chan =
-let has_ended = ref true and data = ref "" in
-while !has_ended do
-  try 
-    data := add_char_to_str (Gzip.input_char chan) (!data)
-  with _ -> has_ended := false
-done;
-!data
+  let has_ended = ref true and data = ref "" in
+  while !has_ended do
+    try 
+      data := add_char_to_str (Gzip.input_char chan) (!data)
+    with _ -> has_ended := false
+  done;
+  !data
 
 let read_str_until_eof_stdlib chan =
-(* Eh oui parce que ce serait trop simple s'il n'y avait qu'une fonction *)
-let has_ended = ref true and data = ref "" in
-while !has_ended do
-  try 
-    data := add_char_to_str (Stdlib.input_char chan) (!data)
-  with _ -> has_ended := false
-done;
-!data
+  (* Eh oui parce que ce serait trop simple s'il n'y avait qu'une fonction *)
+  let has_ended = ref true and data = ref "" in
+  while !has_ended do
+    try 
+      data := add_char_to_str (Stdlib.input_char chan) (!data)
+    with _ -> has_ended := false
+  done;
+  !data
   
   
-  let compute_init s =
-    (* Fonction qui est appelée lorsque la commande init est saisie *)
-    (try
-      Unix.mkdir s perm_base;
-    with Unix.Unix_error(_) -> () );
+let compute_init s =
+  (* Fonction qui est appelée lorsque la commande init est saisie *)
+  (try
+    Unix.mkdir s perm_base;
+  with Unix.Unix_error(_) -> () );
   Unix.mkdir (s^"/.gdf") perm_base;
   Unix.mkdir (s^"/.gdf/objects") perm_base;
   Unix.mkdir (s^"/.gdf/refs") perm_base;
@@ -82,8 +85,8 @@ done;
   close_out config_channel
 
   
-  let repo_find () = (
-    (* Fonction qui ... *)
+let repo_find () = (
+  (* Fonction qui ... *)
   let rec aux () = (
     let cur_name = Unix.getcwd () in
     try
@@ -95,7 +98,6 @@ done;
         raise (GdfError "Pas un repo gdf");
         aux ()))
       in aux ())
-
 
 let compute_object_name name = 
   (* Donne le nom global de l'objet ie. depuis le repo principal *)
@@ -110,6 +112,28 @@ let extract_data obj =
   let abs_path = compute_object_name obj in
   let f_channel = Stdlib.open_in abs_path in
   (read_str_until_eof_stdlib f_channel)
+
+let compile_sig s =
+  (* Fonction qui prend une signature stockée sous la forme
+  ligne1 <espace> ligne2 <espace> ... 
+  et renvoie la signature sous forme de string : ligne1 ligne2 ... 
+  
+  En gros ça recolle les bouts*)
+  List.fold_left (fun acc x -> acc^(String.sub x 1 ((String.length x) - 1))) "" s
+
+let computed_list_sig s =
+  let list_sig = String.split_on_char ' ' s in
+  match list_sig with
+    | x::q -> (String.sub x 1 ((String.length x) - 1))::q
+    | [] -> failwith "qu'est-ce que c'est que ce bordel !?!!"
+
+let concat_list_commit c =
+  let concat_p_list = match c.parent with
+  | [] -> ["parent "]
+  | x::q -> ["parent "^x]@(List.map (fun e -> " "^e) q) in
+  ["tree "^(c.tree)]@concat_p_list@["author "^(c.author);"committer "^(c.committer);
+  "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig (c.gpgsig))@
+  [" -----END PGP SIGNATURE-----";"";(c.name)]
 
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
   for i = 0 to (String.length str) - 1 do
@@ -141,6 +165,10 @@ let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'es
     | Blob(file_name, file_data) ->
         let size = string_of_int (String.length file_data) in
         String.concat "\n" ["blob"; size; file_name; file_data]
+    | Commit(c) ->
+        let size = string_of_int c.size in
+        let l_commit = concat_list_commit c in
+        String.concat "\n" (["commit"; size]@l_commit)
 
 let read_object sha =
   let len_sha = String.length sha in
@@ -170,6 +198,7 @@ let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a medit
   let obj = read_object sha in 
     match obj with
       | Blob(_, str) -> Printf.printf "%s" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
+      | _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets"
 
 let hash_file do_write typfile f_name =
   let f_channel = Stdlib.open_in f_name in
@@ -183,15 +212,17 @@ let f_test () =
   let sha = write_object (Blob("test", "test test test")) true in
   match read_object sha with
     | Blob(a,b) -> print_string a; print_newline (); print_string b
+    | _ -> failwith "pas encore fait mais dune ne veut pas qu'il y ait des partial-matching"
 
 let commit_parser name =
   (* Parser pour les commits, dsl c'est immonde *) (
   let obj_content = extract_data name in
   let data_list = String.split_on_char '\n' obj_content in
+  let size = String.length obj_content in
   let tree = ref "" in
   let parent = ref [] in
-  let author = ref (("",""),"") in
-  let committer = ref (("",""),"") in
+  let author = ref "" in
+  let committer = ref "" in
   let gpgsig = ref "" in 
   let name = ref "" in
   let rec compute_data lst cur_section = (match lst with
@@ -231,13 +262,13 @@ let commit_parser name =
                     "endsig"
                   | _ -> failwith ("impossible mais le compilateur ocaml est un peu
                   con sur les bords (c'est pas le couteau le plus aiguisé du tiroir si
-                  vous voulez mon avis), data : ")) in
+                  vous voulez mon avis)")) in
                 let data_len = String.length data in
                 if data_len >= 1 then
                 (match cur_section with
                   | "parent" -> parent := data::(!parent);
                                 compute_data q "parent"
-                  | "gpgsig" -> gpgsig := (!gpgsig)^data;
+                  | "gpgsig" -> gpgsig := (!gpgsig)^(" "^data);
                                 compute_data q "gpgsig";
                   | "name"   -> name := String.concat "\n" (x::q)
                   | "endsig" -> compute_data q "name"
@@ -251,5 +282,7 @@ let commit = {
   author = !author;
   committer = !committer;
   gpgsig = !gpgsig;
-  name = !name
+  name = !name;
+  size = size
 } in commit)
+
