@@ -122,21 +122,22 @@ let compile_sig s =
 
 let computed_list_sig s =
   let list_sig = String.split_on_char ' ' s in
-  match list_sig with
-    | ""::q -> q
-    | [] -> failwith "qu'est-ce que c'est que ce bordel !?!!"
-    | _ -> failwith "putain de partial matching"
+  let rec aux l =
+  match l with
+    | ""::q -> aux q
+    | a::q -> (" "^a) :: aux q
+    | [] -> []
+  in aux list_sig
 
 let concat_list_commit c =
   let concat_p_list = match c.parent with
   | [] -> ["parent "]
   | x::q -> 
-  Printf.printf "sig commit : %s \n" (c.gpgsig);
   ["parent "^x]@(List.map (fun e -> " "^e) q) in
   ["tree "^(c.tree)]@concat_p_list@["author "^(c.author);"committer "^(c.committer);
-  "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig (c.gpgsig))@
+  "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig c.gpgsig)@
   [" -----END PGP SIGNATURE-----";"";(c.name)]
-  (* TO DO : à modifier, computed_list_sig ne sert à rien *)
+  (* TO DO : à modifier, computed_list_sig ne sert à rien // j'ai fait, prions le seigneur que ça fonctionne*)
   (* miam *)
 
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
@@ -280,7 +281,8 @@ let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a medit
   let obj = read_object sha in 
     match obj with
       | Blob(_, str) -> Printf.printf "%s" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
-      | Commit(_) -> Printf.printf "%s" (serialize obj)
+      | Commit(c) -> print_string "je t'en supplie seigneur\n";
+        Printf.printf "%s" (String.concat "\n" (concat_list_commit c))
       (* | _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets" *)
 
 let hash_file do_write typfile f_name =
