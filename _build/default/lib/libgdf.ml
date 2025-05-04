@@ -36,6 +36,8 @@ type obj =
   | Blob of string * string
   | Commit of commit (* ah ouais en fait c'est pas très beau ce que j'ai fait là :'( *)
 
+module StringSet = Set.Make(String)
+
 let perm_base = 0o777
 
 let check_init s =
@@ -238,7 +240,7 @@ let deserialize str =
                   (* let file_data = String.concat "\n" q in *)
                   (* TO DO : la taille ça marche pas *)
                   Commit(commit_parser (String.concat "\n" q))
-      | _ -> failwith "ta gueule le compilateur ocaml, ce cas n'arrive jamais"
+      | _ -> failwith "ta gueule le compilateur ocaml, ce cas n'arrive jamais (en fait si si tu tapes un sha qui existe pas mais la c'est toi qui trolle)"
 
 let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
   match obj with
@@ -288,11 +290,27 @@ let hash_file do_write typfile f_name =
     | "blob" -> write_object (Blob(f_name, data)) do_write
     | "commit" -> write_object (Commit(parse_pregzip_commit f_name)) do_write
     | _ -> failwith "hash_file à faire pour les autres types"
-
+let compute_log sha = 
+  (*alors la, il faut qu'on en parle. cette fonction donne l'arbre des commits en format .dot direct dans la console. okok pas de soucis. sauf que 1) on donne pas tout le log juste l'historique des commits passés en argument, 2) on peut passer qu'un seul commit en argument, 3) ya pas de merge. ?????? c'est juste une ligne ton log??? fin je vois pas l'interet de se casser les couilles avec graphviz pour faire juste une liste dans l'ordre. au passage, l'abscence de merge rends plein de trucs obsolètes, style la possibilité d'avoir >1 parents. apres, si thibault polge demande moi j'execute. mais ça sert a rien. en vrai peut etre on peut donner la possibilté d'avoir une liste d'arguments plus tard? ça serait rigolo au moins un peu. ou alors peut etre je suis juste con et j'ai mal compris. au passage tu sais ce que c'est une mite à l'envers? c'est une co-mite (commit). c'est pas grave si t'as pas compris je sais que mon humour est un peu trop subtil pour beaucoup de gens. bon allez je vais me log la gueule c'est tipar (parti en verlan)*)
+  Printf.printf "digraph wyaglog{\n\tnode[shape=rect]";
+  let seen_commits = ref StringSet.empty in (*hmm, c'est pas beau. ya surement un module mieux mais raph est pas la pour me dire que en fait c'est pas comme ça qu'on fait*)
+  let rec log_graphviz comm = if not (StringSet.mem comm.name !seen_commits) then
+      seen_commits := StringSet.add comm.name !seen_commits;
+      match comm.parent with
+        | [] -> ()
+        | l -> List.iter (fun x -> 
+            let truc = deserialize x in match truc with
+              | Commit(c) -> 
+                  Printf.printf "%s -> %s" c.name comm.name;
+                  log_graphviz c
+              | _ -> failwith "not a commit") l
+  in match deserialize sha with (*le prochain match que je dois ecrire ou ya un seul cas qui fonctionne je me defenestre*)
+    | Commit(coucou) -> log_graphviz coucou; Printf.printf "}"
+    | _ -> failwith "not a commit, sorry :)"
+    
 let f_test () =
   (* fonction de test *)
   let sha = write_object (Blob("test", "test test test")) true in
   match read_object sha with
     | Blob(a,b) -> print_string a; print_newline (); print_string b
     | _ -> failwith "pas encore fait mais dune ne veut pas qu'il y ait des partial-matching"
-
