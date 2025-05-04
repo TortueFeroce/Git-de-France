@@ -14,6 +14,7 @@ let findOptions str = match str with
   | "init" -> [("-f", Set force, "placeholder")]
   | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
   | "cat-file" -> []
+  | "log" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -38,6 +39,7 @@ let () = (Printexc.record_backtrace true;
                               in print_string sha
     | "test", [] -> f_test ()
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
+    | "log", x :: [] -> compute_log x
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
