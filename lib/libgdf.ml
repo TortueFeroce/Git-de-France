@@ -332,6 +332,31 @@ let compute_log sha =
     | Commit(coucou) -> log_graphviz coucou; Printf.printf "}"
     | _ -> failwith "not a commit, sorry :)"
 
+let rec tree_checkout tree path = 
+  let item (_, sha, file) =
+    let obj = read_object sha in
+    match obj with
+      | Tree(_) -> tree_checkout obj (path ^ "/" ^ file)
+      | Blob(file_name, file_data) -> 
+        let channel = Stdlib.open_out file_name in
+        Stdlib.output_string channel file_data
+      | _ -> failwith "nope"
+  in match tree with
+    | Tree(l) -> List.iter item l
+    | _ -> failwith "alors celle la d'erreur si elle arrive je me coupe une couille"
+
+let compute_checkout sha dir =
+  let obj = read_object sha in
+  let tree = match obj with
+    | Commit(c) -> read_object c.tree
+    | _ -> failwith "t'es malin toi"
+  (*c'est pas tres beau trois if de suite mais ça permet de gérer les erreurs un peu mieux*)
+  in if (Sys.file_exists dir) then
+    if not (Sys.is_directory dir) then failwith "File isn't a directory";
+    if Sys.readdir dir <> [||] then failwith "Directory isn't empty"
+  else Unix.mkdir dir perm_base;
+  tree_checkout tree (Unix.realpath dir)
+
 let f_test () =
   (* fonction de test *)
   let sha = write_object (Blob("test", "test test test")) true in
