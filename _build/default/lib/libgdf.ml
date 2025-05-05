@@ -249,7 +249,7 @@ let deserialize str =
                   (* let file_data = String.concat "\n" q in *)
                   (* TO DO : la taille ça marche pas *)
                   Commit(commit_parser (String.concat "\n" q))
-      | "tree" :: _ :: q -> tree_parser q
+      | "tree" :: _ :: q -> tree_parser q (*il peut pas y avoir de \n random dans un tree normalement donc la liste q c'est exactement ce qu'on veut*)
       | _ -> failwith "ta gueule le compilateur ocaml, ce cas n'arrive jamais (en fait si si tu tapes un sha qui existe pas mais la c'est toi qui trolle)"
 
 let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
@@ -297,7 +297,11 @@ let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a medit
     match obj with
       | Blob(_, str) -> Printf.printf "%s" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
       | Commit(c) -> Printf.printf "%s" (String.concat "\n" (concat_list_commit c))
-      | _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets"
+      | Tree(l) -> 
+        let contents_list = List.fold_left (fun acc (s,ss, sss) -> s :: ss :: sss :: acc) [] l in
+        let tree_contents = String.concat "\n" contents_list in (*nos trees seront illisibles...*)
+        Printf.printf "%s" tree_contents
+      (*| _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets"*)
 
 let hash_file do_write typfile f_name =
   let f_channel = Stdlib.open_in f_name in
@@ -305,6 +309,9 @@ let hash_file do_write typfile f_name =
   match typfile with
     | "blob" -> write_object (Blob(f_name, data)) do_write
     | "commit" -> write_object (Commit(parse_pregzip_commit f_name)) do_write
+    | "tree" -> 
+      let tree_contents = String.split_on_char '\n' data in
+      write_object (tree_parser tree_contents) do_write
     | _ -> failwith "hash_file à faire pour les autres types"
 
 let compute_log sha = 
