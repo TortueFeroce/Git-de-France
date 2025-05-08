@@ -84,6 +84,7 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf") perm_base;
   Unix.mkdir (s^"/.gdf/objects") perm_base;
   Unix.mkdir (s^"/.gdf/refs") perm_base;
+  Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
   let config_channel = open_out (s^"/.gdf/config") in
   output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
   close_out config_channel
@@ -116,6 +117,11 @@ let extract_data obj =
   let f_channel = Stdlib.open_in obj in
   read_str_until_eof_stdlib f_channel
 
+let extract_data_zip obj =
+  (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
+  let f_channel = Gzip.open_in obj in
+  read_str_until_eof f_channel
+
 let compile_sig s =
   (* Fonction qui prend une signature stockée sous la forme
   ligne1 <espace> ligne2 <espace> ... 
@@ -146,6 +152,12 @@ let concat_list_commit c =
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
   for i = 0 to (String.length str) - 1 do
     Gzip.output_char chan str.[i]
+  done
+
+let write_str_stdlib chan str =
+  (* tout pareil qu'au dessus mais sans le zip *)
+  for i = 0 to String.length str - 1 do
+    Stdlib.output_char chan str.[i]
   done
   
 let add_char_until n f_channel = 
@@ -356,6 +368,48 @@ let compute_checkout sha dir =
     if Sys.readdir dir <> [||] then failwith "Directory isn't empty"
   else Unix.mkdir dir perm_base;
   tree_checkout tree (Unix.realpath dir)
+  
+let rec ref_resolve ref =
+  (* Fonction qui prend une ref et qui renvoie le haché
+  correspondant finalement à cette ref *)
+  let path = (repo_find ())^("/.gdf/")^ref in
+  let data = extract_data path in
+  let first_bits = String.sub data 0 5 in
+  let lasts_bits = String.sub data 5 (String.length data - 5) in
+  match first_bits with
+    | "ref: " -> ref_resolve lasts_bits
+    | _       -> data
+
+let print_refs () =
+  Unix.chdir ((repo_find ())^"/.gdf/");
+  let ref_list = ref [] in
+  let path0 = "refs/" in
+  let rec aux path =
+    let f_list = Sys.readdir path in
+    Array.iter (fun x -> if Sys.is_directory (path^x) then aux (path^x^"/")
+                        else begin
+                          let data = extract_data (path^x) in
+                          Printf.printf "data : %s\n" data;
+                          ref_list := (extract_data (path^x),path)::(!ref_list) end) f_list
+  in aux path0;
+  List.iter (fun (sha, path) -> Printf.printf "%s %s\n" sha path) (!ref_list)
+
+let print_tag () =
+  Unix.chdir ((repo_find ())^"/.gdf/refs/tags");
+  let file_list = Sys.readdir "." in
+  Array.iter (fun x -> Printf.printf "%s\n" x) file_list
+
+let compute_tag name obj =
+  (* Fonction qui crée un tag dont le nom est <name> et qui
+  est relié à l'objet <obj> *)
+
+  let data_obj = extract_data obj in
+  let sha = Sha1.to_hex (Sha1.string data_obj) in
+  Unix.chdir ((repo_find ())^"/.gdf/refs/tags");
+  if Sys.file_exists name then raise (GdfError ("le tag "^name^" existe déjà"))
+  else begin
+  let f_channel = Stdlib.open_out name in
+  write_str_stdlib f_channel sha end
 
 let f_test () =
   (* fonction de test *)

@@ -7,6 +7,7 @@ open Libgdf
 let force = ref false
 let doWrite = ref false
 let objType = ref "blob"
+let not_light = ref false
 
 let options = ref []
 
@@ -16,10 +17,12 @@ let findOptions str = match str with
   | "cat-file" -> []
   | "log" -> []
   | "checkout" -> []
+  | "show-refs" -> []
+  | "tag" -> [("-a", Set not_light, "placeholder")]
   | "test" -> []
   | _ -> failwith "loserrrr"
 
-let isSubcomm = ref true 
+let isSubcomm = ref true
 
 let read_option () =
   let args = ref [] in
@@ -42,6 +45,10 @@ let () = (Printexc.record_backtrace true;
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
     | "log", x :: [] -> compute_log x
     | "checkout", dir :: sha :: [] -> compute_checkout sha dir
+    | "show-refs", [] -> print_refs ()
+    | "tag", obj :: name :: [] -> compute_tag name obj
+    | "tag", name :: [] -> compute_tag name "HEAD"
+    | "tag", [] -> print_tag ()
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
