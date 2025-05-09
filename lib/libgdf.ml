@@ -74,7 +74,12 @@ let read_str_until_eof_stdlib chan =
     with _ -> has_ended := false
   done;
   !data
-  
+
+let write_str_stdlib chan str =
+  (* tout pareil qu'au dessus mais sans le zip *)
+  for i = 0 to String.length str - 1 do
+    Stdlib.output_char chan str.[i]
+  done
   
 let compute_init s =
   (* Fonction qui est appelée lorsque la commande init est saisie *)
@@ -86,9 +91,11 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf/refs") perm_base;
   Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
   Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
+  let head_channel = Stdlib.open_out "/.gdf/HEAD" in
+    write_str_stdlib head_channel "ref: refs/heads/master\n";
   let config_channel = open_out (s^"/.gdf/config") in
-  output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
-  close_out config_channel
+    output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
+    close_out config_channel
 
   
 let repo_find () = (
@@ -153,12 +160,6 @@ let concat_list_commit c =
 let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
   for i = 0 to (String.length str) - 1 do
     Gzip.output_char chan str.[i]
-  done
-
-let write_str_stdlib chan str =
-  (* tout pareil qu'au dessus mais sans le zip *)
-  for i = 0 to String.length str - 1 do
-    Stdlib.output_char chan str.[i]
   done
   
 let add_char_until n f_channel = 
