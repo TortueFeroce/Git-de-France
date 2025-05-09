@@ -85,6 +85,8 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf/objects") perm_base;
   Unix.mkdir (s^"/.gdf/refs") perm_base;
   Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
+  Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
+  Unix.mkdir (s^"/.gdf/HEAD") perm_base; (* pour mettre la branche actuelle *)
   let config_channel = open_out (s^"/.gdf/config") in
   output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
   close_out config_channel
@@ -388,8 +390,6 @@ let print_refs () =
     let f_list = Sys.readdir path in
     Array.iter (fun x -> if Sys.is_directory (path^x) then aux (path^x^"/")
                         else begin
-                          let data = extract_data (path^x) in
-                          Printf.printf "data : %s\n" data;
                           ref_list := (extract_data (path^x),path)::(!ref_list) end) f_list
   in aux path0;
   List.iter (fun (sha, path) -> Printf.printf "%s %s\n" sha path) (!ref_list)
@@ -402,7 +402,6 @@ let print_tag () =
 let compute_tag name obj =
   (* Fonction qui crée un tag dont le nom est <name> et qui
   est relié à l'objet <obj> *)
-
   let data_obj = extract_data obj in
   let sha = Sha1.to_hex (Sha1.string data_obj) in
   Unix.chdir ((repo_find ())^"/.gdf/refs/tags");
@@ -410,6 +409,12 @@ let compute_tag name obj =
   else begin
   let f_channel = Stdlib.open_out name in
   write_str_stdlib f_channel sha end
+
+let object_resolve name = match name with
+    | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
+    à un haché")
+    | "HEAD" -> failwith "fdlskslkdfjl"
+    | _ -> failwith "attends deux secondes gros"
 
 let f_test () =
   (* fonction de test *)
