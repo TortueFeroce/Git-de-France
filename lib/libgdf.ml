@@ -162,12 +162,12 @@ let write_str chan str = (*on pourrait utiliser output_substring mais parait il 
     Gzip.output_char chan str.[i]
   done
   
-let add_char_until n f_channel = 
-  let is_n = ref true in
+let add_char_until c f_channel = 
+  let is_c = ref true in
   let acc = ref "" in
-  while !is_n do
-    let c = Gzip.input_char f_channel in
-    if c = (Char.chr n) then is_n := false
+  while !is_c do
+    let read_char = Gzip.input_char f_channel in
+    if read_char = c then is_c := false
     else acc := add_char_to_str c !acc
   done; !acc
   
@@ -249,6 +249,14 @@ let tree_parser data =
     | mode :: sha :: path :: q -> (mode, sha, path) :: aux q
     | _ -> failwith "ya un souci qqpart a mon avis"
   in Tree(aux data)
+
+let find_type sha = 
+  let len_sha = String.length sha in
+  let dir_sha = String.sub sha 0 2
+  and obj_name = String.sub sha 2 (len_sha - 2) in
+  let obj_path = (repo_find ())^"/.gdf/objects/" in
+  let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
+  add_char_until '\n' file_channel
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
