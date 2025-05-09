@@ -86,14 +86,13 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf/refs") perm_base;
   Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
   Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
-  Unix.mkdir (s^"/.gdf/HEAD") perm_base; (* pour mettre la branche actuelle *)
   let config_channel = open_out (s^"/.gdf/config") in
   output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
   close_out config_channel
 
   
 let repo_find () = (
-  (* Fonction qui ... *)
+  (* Fonction qui renvoie le dossier dans lequel il y a le .gdf *)
   let rec aux () = (
     let cur_name = Unix.getcwd () in
     try
@@ -375,12 +374,13 @@ let rec ref_resolve ref =
   (* Fonction qui prend une ref et qui renvoie le haché
   correspondant finalement à cette ref *)
   let path = (repo_find ())^("/.gdf/")^ref in
-  let data = extract_data path in
+  try (let data = extract_data path in
   let first_bits = String.sub data 0 5 in
   let lasts_bits = String.sub data 5 (String.length data - 5) in
   match first_bits with
     | "ref: " -> ref_resolve lasts_bits
-    | _       -> data
+    | _       -> data)
+  with _ -> raise (GdfError "le nom donné ne correspond pas à une ref")
 
 let print_refs () =
   Unix.chdir ((repo_find ())^"/.gdf/");
@@ -411,10 +411,34 @@ let compute_tag name obj =
   write_str_stdlib f_channel sha end
 
 let object_resolve name = match name with
+(* Fonction qui renvoie les possibilités pour un nom donné, un tag ou un sha
+   sous forme de liste de string *)
     | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
     à un haché")
-    | "HEAD" -> failwith "fdlskslkdfjl"
-    | _ -> failwith "attends deux secondes gros"
+    | "HEAD" -> [ref_resolve "HEAD"]
+    | _ -> (let possibilities = ref [] in
+          let name_len = String.length name in
+          if name_len >= 4 then begin
+            let prefix = String.sub name 0 2 in
+            let suffix = String.sub name 2 (name_len - 2) in
+            let path = (repo_find ())^"/objects/"^prefix in
+            let files_here = Sys.readdir path in
+            Array.iter (fun x -> if not (Sys.is_directory x) 
+                                && (String.sub x 0 (name_len - 2) = suffix)
+                                then possibilities := x::(!possibilities)) files_here
+          end;(
+          try let sha_tag = ref_resolve ("refs/tags/"^name)
+              in possibilities := sha_tag::(!possibilities) 
+          with _ -> ();
+          try let sha_tag = ref_resolve ("refs/heads/"^name)
+              in possibilities := sha_tag::(!possibilities) 
+          with _ -> ());
+          (* try let sha_tag = ref_resolve ("refs/remotes/"^name)
+              in possibilities := sha_tag::(!possibilities) 
+          with _ -> ();
+          pour l'instant on ne le met pas mais ça peut servir dans la suite*)
+          !possibilities)
+
 
 let f_test () =
   (* fonction de test *)
