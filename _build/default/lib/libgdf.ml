@@ -462,7 +462,10 @@ let object_find name fmt =
     | [],_ -> raise (GdfError "aucune occurence trouvée")
     | (_,x)::_,_ when (find_type x = fmt) -> x
     | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
-    | (_,x)::_,"tree" when (find_type x = "commit") -> failwith "Baptiste aide moi sur celui-là"
+    | (_,x)::_,"tree" when (find_type x = "commit") -> (*c'est pas tres beau mais ça doit marcher*)
+      let obj = read_object x in (match obj with
+        | Commit c -> c.tree
+        | _ -> failwith "peut pas arriver ou alors ya un gros souci qqpart")
     | _::q,_ -> aux q fmt
   in aux list_resolve fmt
   end
