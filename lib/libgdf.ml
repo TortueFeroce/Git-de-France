@@ -424,7 +424,7 @@ let object_resolve name = match name with
    sous forme de liste de string *)
     | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
     à un haché")
-    | "HEAD" -> [ref_resolve "HEAD"]
+    | "HEAD" -> ["head",ref_resolve "HEAD"]
     | _ -> (let possibilities = ref [] in
           let name_len = String.length name in
           if name_len >= 4 then begin
@@ -434,13 +434,13 @@ let object_resolve name = match name with
             let files_here = Sys.readdir path in
             Array.iter (fun x -> if not (Sys.is_directory x) 
                                 && (String.sub x 0 (name_len - 2) = suffix)
-                                then possibilities := x::(!possibilities)) files_here
+                                then possibilities := ("blob",x)::(!possibilities)) files_here
           end;(
           try let sha_tag = ref_resolve ("refs/tags/"^name)
-              in possibilities := sha_tag::(!possibilities) 
+              in possibilities := ("tag",sha_tag)::(!possibilities) 
           with _ -> ();
           try let sha_tag = ref_resolve ("refs/heads/"^name)
-              in possibilities := sha_tag::(!possibilities) 
+              in possibilities := ("head",sha_tag)::(!possibilities) 
           with _ -> ());
           (* try let sha_tag = ref_resolve ("refs/remotes/"^name)
               in possibilities := sha_tag::(!possibilities) 
@@ -448,6 +448,24 @@ let object_resolve name = match name with
           pour l'instant on ne le met pas mais ça peut servir dans la suite*)
           !possibilities)
 
+let object_find name fmt =
+  (* fonction qui renvoie le sha d'un objet dont le nom est name *)
+  (* utiliser find_type sha *)
+  let list_resolve = object_resolve name in
+  if fmt = "" then begin
+    if List.length list_resolve <> 1
+    then raise (GdfError ("le nom : "^name^" ne correspond pas à une occurence valide
+  ou correspond à plusieurs occurences")) (* TO DO : faire une meilleure erreur *)
+    else let (_,y) = List.hd list_resolve in y end
+  else begin
+    let rec aux list_resolve fmt = match list_resolve, fmt with
+    | [],_ -> raise (GdfError "aucune occurence trouvée")
+    | (_,x)::_,_ when (find_type x = fmt) -> x
+    | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
+    | (_,x)::_,"tree" when (find_type x = "commit") -> failwith "Baptiste aide moi sur celui-là"
+    | _::q,_ -> aux q fmt
+  in aux list_resolve fmt
+  end
 
 let f_test () =
   (* fonction de test *)

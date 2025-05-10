@@ -162,12 +162,12 @@ let write_str chan str = (*on pourrait utiliser output_substring mais parait il 
     Gzip.output_char chan str.[i]
   done
   
-let add_char_until n f_channel = 
-  let is_n = ref true in
+let add_char_until c f_channel = 
+  let is_c = ref true in
   let acc = ref "" in
-  while !is_n do
-    let c = Gzip.input_char f_channel in
-    if c = (Char.chr n) then is_n := false
+  while !is_c do
+    let read_char = Gzip.input_char f_channel in
+    if read_char = c then is_c := false
     else acc := add_char_to_str c !acc
   done; !acc
   
@@ -249,6 +249,14 @@ let tree_parser data =
     | mode :: sha :: path :: q -> (mode, sha, path) :: aux q
     | _ -> failwith "ya un souci qqpart a mon avis"
   in Tree(aux data)
+
+let find_type sha = 
+  let len_sha = String.length sha in
+  let dir_sha = String.sub sha 0 2
+  and obj_name = String.sub sha 2 (len_sha - 2) in
+  let obj_path = (repo_find ())^"/.gdf/objects/" in
+  let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
+  add_char_until '\n' file_channel
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
@@ -412,10 +420,11 @@ let compute_tag name obj =
   write_str_stdlib f_channel sha end
 
 let object_resolve name = match name with
-(* Fonction qui renvoie les possibilités pour un nom donné, un tag ou un sha *)
+(* Fonction qui renvoie les possibilités pour un nom donné, un tag ou un sha
+   sous forme de liste de string *)
     | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
     à un haché")
-    | "HEAD" -> [ref_resolve "HEAD"]
+    | "HEAD" -> ["head",ref_resolve "HEAD"]
     | _ -> (let possibilities = ref [] in
           let name_len = String.length name in
           if name_len >= 4 then begin
@@ -425,13 +434,13 @@ let object_resolve name = match name with
             let files_here = Sys.readdir path in
             Array.iter (fun x -> if not (Sys.is_directory x) 
                                 && (String.sub x 0 (name_len - 2) = suffix)
-                                then possibilities := x::(!possibilities)) files_here
+                                then possibilities := ("blob",x)::(!possibilities)) files_here
           end;(
           try let sha_tag = ref_resolve ("refs/tags/"^name)
-              in possibilities := sha_tag::(!possibilities) 
+              in possibilities := ("tag",sha_tag)::(!possibilities) 
           with _ -> ();
           try let sha_tag = ref_resolve ("refs/heads/"^name)
-              in possibilities := sha_tag::(!possibilities) 
+              in possibilities := ("head",sha_tag)::(!possibilities) 
           with _ -> ());
           (* try let sha_tag = ref_resolve ("refs/remotes/"^name)
               in possibilities := sha_tag::(!possibilities) 
@@ -439,6 +448,24 @@ let object_resolve name = match name with
           pour l'instant on ne le met pas mais ça peut servir dans la suite*)
           !possibilities)
 
+let object_find name fmt =
+  (* fonction qui renvoie le sha d'un objet dont le nom est name *)
+  (* utiliser find_type sha *)
+  let list_resolve = object_resolve name in
+  if fmt = "" then begin
+    if List.length list_resolve <> 1
+    then raise (GdfError ("le nom : "^name^" ne correspond pas à une occurence valide
+  ou correspond à plusieurs occurences")) (* TO DO : faire une meilleure erreur *)
+    else let (_,y) = List.hd list_resolve in y end
+  else begin
+    let rec aux list_resolve fmt = match list_resolve, fmt with
+    | [],_ -> raise (GdfError "aucune occurence trouvée")
+    | (_,x)::_,_ when (find_type x = fmt) -> x
+    | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
+    | (_,x)::_,"tree" when (find_type x = "commit") -> failwith "Baptiste aide moi sur celui-là"
+    | _::q,_ -> aux q fmt
+  in aux list_resolve fmt
+  end
 
 let f_test () =
   (* fonction de test *)
