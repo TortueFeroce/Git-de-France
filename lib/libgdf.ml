@@ -121,7 +121,7 @@ let compute_init s =
     write_str_stdlib exclude_channel "";
   let config_channel = open_out (s^"/.gdf/config") in
     output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
-    close_out config_channel
+    close_out config_channel; close_out index_channel; close_out head_channel
 
   
 let repo_find () = (
@@ -149,12 +149,14 @@ let compute_object_name name =
 let extract_data obj =
   (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
   let f_channel = Stdlib.open_in obj in
-  read_str_until_eof_stdlib f_channel
+  read_str_until_eof_stdlib f_channel;
+  Stdlib.close_in f_channel
 
 let extract_data_zip obj =
   (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
   let f_channel = Gzip.open_in obj in
-  read_str_until_eof f_channel
+  read_str_until_eof f_channel;
+  Gzip.close_in f_channel
 
 let compile_sig s =
   (* Fonction qui prend une signature stockée sous la forme
@@ -282,7 +284,8 @@ let find_type sha =
   and obj_name = String.sub sha 2 (len_sha - 2) in
   let obj_path = (repo_find ())^"/.gdf/objects/" in
   let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
-  add_char_until '\n' file_channel
+  add_char_until '\n' file_channel;
+  Gzip.close_in file_channel
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
@@ -354,6 +357,7 @@ let cat_file _ sha = (*le pelo fait des trucs bizarres avec object find, a medit
 let hash_file do_write typfile f_name =
   let f_channel = Stdlib.open_in f_name in
   let data = read_str_until_eof_stdlib f_channel in
+  close_in f_channel;
   match typfile with
     | "blob" -> write_object (Blob(f_name, data)) do_write
     | "commit" -> write_object (Commit(parse_pregzip_commit f_name)) do_write
@@ -387,7 +391,7 @@ let rec tree_checkout tree path =
       | Tree(_) -> tree_checkout obj (path ^ "/" ^ file)
       | Blob(file_name, file_data) -> 
         let channel = Stdlib.open_out file_name in
-        Stdlib.output_string channel file_data
+        Stdlib.output_string channel file_data; Stdlib.close_out channel
       | _ -> failwith "nope"
   in match tree with
     | Tree(l) -> List.iter item l
@@ -443,7 +447,8 @@ let compute_tag name obj =
   if Sys.file_exists name then raise (GdfError ("le tag "^name^" existe déjà"))
   else begin
   let f_channel = Stdlib.open_out name in
-  write_str_stdlib f_channel sha end
+  write_str_stdlib f_channel sha;
+  close_out f_channel end
 
 let object_resolve name = match name with
 (* Fonction qui renvoie les possibilités pour un nom donné, un tag ou un sha
