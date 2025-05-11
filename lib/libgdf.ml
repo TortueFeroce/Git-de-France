@@ -518,14 +518,14 @@ let entries_parser entry =
       size ::
       sha ::
       name :: []
-      -> {i_creation = creation;
-      i_last_modif = last_modif;
-      i_device = device;
-      i_inode = inode;
-      i_perms = perms;
-      i_uid = uid;
-      i_gid = gid;
-      i_size = size;
+      -> {i_creation = int_of_string creation;
+      i_last_modif = int_of_string last_modif;
+      i_device = int_of_string device;
+      i_inode = int_of_string inode;
+      i_perms = int_of_string perms;
+      i_uid = int_of_string uid;
+      i_gid = int_of_string gid;
+      i_size = int_of_string size;
       i_sha = sha
       i_name = name}
     | _ -> failwith "wrong format for an entry"
