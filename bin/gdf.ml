@@ -21,6 +21,7 @@ let findOptions str = match str with
   | "show-refs" -> []
   | "tag" -> [("-a", Set not_light, "placeholder")]
   | "rev-parse" -> [("-t", Set_string type_rev, "placeholder")] (* TO DO : j'ai pas compris son truc de wyag-type *)
+  | "ls-files" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -52,6 +53,7 @@ let () = (Printexc.record_backtrace true;
     | "tag", name :: [] -> compute_tag name "HEAD"
     | "tag", [] -> print_tag ()
     | "rev-parse", name :: [] -> compute_rev_parse name !type_rev
+    | "ls-files", [] -> print_index_files ()
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
