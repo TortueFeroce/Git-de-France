@@ -1,0 +1,18 @@
+opam-version: "2.0"
+added: [
+  "doc/variantslib" {"D"}
+  "doc/variantslib/CHANGES.md" {"F:S63T1746982684.67"}
+  "doc/variantslib/LICENSE.md" {"F:S1126T1746982684.67"}
+  "lib/variantslib" {"D"}
+  "lib/variantslib/META" {"F:S194T1746982684.67"}
+  "lib/variantslib/dune-package" {"F:S756T1746982684.67"}
+  "lib/variantslib/opam" {"F:S810T1746982684.67"}
+  "lib/variantslib/variantslib.a" {"F:S2030T1746982684.67"}
+  "lib/variantslib/variantslib.cma" {"F:S6165T1746982684.67"}
+  "lib/variantslib/variantslib.cmi" {"F:S4316T1746982684.67"}
+  "lib/variantslib/variantslib.cmt" {"F:S11145T1746982684.67"}
+  "lib/variantslib/variantslib.cmx" {"F:S4240T1746982684.67"}
+  "lib/variantslib/variantslib.cmxa" {"F:S4246T1746982684.67"}
+  "lib/variantslib/variantslib.cmxs" {"F:S20224T1746982684.67"}
+  "lib/variantslib/variantslib.ml" {"F:S52T1746982684.67"}
+]

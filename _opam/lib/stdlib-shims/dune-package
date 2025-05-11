@@ -1,4 +1,4 @@
-(lang dune 3.17)
+(lang dune 3.18)
 (name stdlib-shims)
 (version 0.3.0)
 (sections (lib .) (libexec .) (doc ../../doc/stdlib-shims))

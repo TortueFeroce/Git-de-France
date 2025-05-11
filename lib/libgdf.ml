@@ -149,14 +149,12 @@ let compute_object_name name =
 let extract_data obj =
   (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
   let f_channel = Stdlib.open_in obj in
-  read_str_until_eof_stdlib f_channel;
-  Stdlib.close_in f_channel
+  read_str_until_eof_stdlib f_channel
 
 let extract_data_zip obj =
   (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
   let f_channel = Gzip.open_in obj in
-  read_str_until_eof f_channel;
-  Gzip.close_in f_channel
+  read_str_until_eof f_channel
 
 let compile_sig s =
   (* Fonction qui prend une signature stockée sous la forme
@@ -284,8 +282,7 @@ let find_type sha =
   and obj_name = String.sub sha 2 (len_sha - 2) in
   let obj_path = (repo_find ())^"/.gdf/objects/" in
   let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
-  add_char_until '\n' file_channel;
-  Gzip.close_in file_channel
+  add_char_until '\n' file_channel
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
@@ -558,10 +555,13 @@ choisit de le zipper *)
     version = version
   }
 
+let get_index_files () =
+  (* Fonction qui renvoie les fichiers qui ont été staged dans index *)
+  List.map (fun e -> e.i_name) ((index_parser ()).entries)
+
 let print_index_files () =
   (* Fonction qui affiche les noms des fichiers dans index *)
-  let files = List.map (fun e -> e.i_name) ((index_parser ()).entries) in
-  List.iter (fun x -> Printf.printf "%s\n" x) files
+  List.iter (fun x -> Printf.printf "%s\n" x) (get_index_files ())
 
 let gitignore_parse lines =
   List.map (fun line -> 
@@ -569,7 +569,7 @@ let gitignore_parse lines =
   else begin match (String.sub line 0 1) with
     | "#" -> (Comment,"")
     | "!" -> (Excl, String.sub line 1 (String.length line - 1))
-    | _ -> (Usual, String.sub line 1 (String.length line - 1))
+    | _ -> (Usual, line)
 end) lines
 
 let get_rules_from_file file =
@@ -587,21 +587,118 @@ let go_into_dir_where_file_is file =
 
 let get_rules_for_file file =
   let repo = repo_find () in
-  Unix.chdir (go_into_dir_where_file_is file);
+  Unix.chdir (repo^(go_into_dir_where_file_is file));
   let rec aux () =
     if Unix.getcwd () = repo then begin
       if Sys.file_exists ".gdfignore" then
-      (get_rules_from_file (repo^"/.gdf/info/exclude"))@(get_rules_from_file ".gdfignore")
-      else (get_rules_from_file (repo^"/.gdf/info/exclude"))
+      [get_rules_from_file (repo^"/.gdf/info/exclude");get_rules_from_file ".gdfignore"]
+      else [get_rules_from_file (repo^"/.gdf/info/exclude")]
     end
     else begin
       Unix.chdir ("../"^(Unix.getcwd ()));
       if Sys.file_exists ".gdfignore" then
-        (aux ())@(get_rules_from_file ".gdfignore")
+        (aux ())@[get_rules_from_file ".gdfignore"]
       else aux ()
     end
   in aux ()
 
+let rec check_ignore1 rules file = match rules with
+  | (v,pat)::_ when Core_unix.fnmatch ~pat:pat file && v != Comment -> v
+  | _::q -> check_ignore1 q file
+  | [] -> Comment
+
+let check_ignore file =
+  let lst_rules = get_rules_for_file file in
+  let rec aux l = match l with
+    | [] -> Comment
+    | x::q -> let res = check_ignore1 x file in
+              match res with
+                | Comment -> aux q
+                | _ -> res
+  in aux lst_rules
+
+let rec give_list_check_ignore file_lst = match file_lst with
+  | [] -> []
+  | x::q -> (match check_ignore x with
+              | Usual -> x::(give_list_check_ignore q)
+              | _ -> give_list_check_ignore q)
+
+let compute_check_ignore file_lst =
+  List.iter (fun x -> Printf.printf "%s\n" x) (give_list_check_ignore file_lst)
+
+let are_we_on_branch () =
+  let repo = repo_find () in
+  let head_data = extract_data (repo^("/.gdf/HEAD")) in
+  let begin_head_data = String.sub head_data 0 16 in
+  let end_head_data = String.sub head_data 16 (String.length head_data - 16) in
+  match begin_head_data with
+    | "ref: refs/heads/" -> end_head_data
+    | _ -> ""
+
+let cmd_status_branch () =
+  (* Donne le début du status *)
+  let branch = are_we_on_branch () in
+  match branch with
+    | "" -> Printf.printf "HEAD detached at %s\n" (object_find "HEAD" "")
+    | _ -> Printf.printf "On branch %s\n" branch
+
+let is_subtree path =
+  Sys.is_directory path
+
+let tree_to_dict ref =
+  (* Transorme un tree en Hashtbl dont les clefs sont les noms de fichiers
+   et les valeurs sont les hachés des fichiers *)
+  let table = Hashtbl.create 16 in
+  let rec aux ref =
+    let tree_sha = object_find ref "tree" in
+    let tree = read_object tree_sha in
+    let rec compute_tree t = match t with
+      | [] -> ()
+      | (_,sha,path)::q -> if is_subtree path then aux sha
+                              else Hashtbl.add table path sha; compute_tree q
+    in match tree with
+      | Tree(t) -> compute_tree t
+      | _ -> failwith "ça n'arrivera pas sauf si un connard essaie de nous faire une
+      mauvaise blague, et alors là il va entendre de quel bois je me chauffe ..."
+  in aux ref; table
+
+let cmd_status_head_index () =
+  Printf.printf "Changes to be committed:\n";
+  let head = tree_to_dict "HEAD" in
+  let index = index_parser () in
+  List.iter (fun e -> try let sha_in_head = Hashtbl.find head (e.i_name) in
+                          if sha_in_head <> e.i_sha then begin
+                            Printf.printf "\tmodified:%s\n" e.i_name;
+                            Hashtbl.remove head e.i_name
+                          end
+                          else Printf.printf "\tadded:\t%s\n" e.i_name
+                      with _ -> ()) index.entries;
+  Hashtbl.iter (fun k _ -> Printf.printf "\tdeleted: %s\n" k) head
+
+let cmd_status_index_worktree () =
+  Printf.printf "Changes not staged for commit\n";
+
+  let index = index_parser () in
+  List.iter (fun e -> if not (Sys.file_exists e.i_name)
+                      then Printf.printf "\tdeleted: %s\n" e.i_name
+                      else begin
+                        let stats = Unix.stat e.i_name in
+                        if (e.i_creation <> stats.st_ctime) || (e.i_last_modif <> stats.st_mtime)
+                        then begin
+                          let new_sha = object_find e.i_name "blob" in
+                          if new_sha <> e.i_sha then
+                            Printf.printf "\tmodified:%s\n" e.i_name
+                        end
+                      end
+              ) index.entries;
+  Printf.printf "Untracked files:\n";
+  let all_files = Array.to_list (Sys.readdir (repo_find ())) in
+  List.iter (fun x -> Printf.printf " %s" x) (give_list_check_ignore all_files)
+
+let compute_status () =
+  cmd_status_branch ();
+  cmd_status_head_index ();
+  cmd_status_index_worktree ()
 
 let f_test () =
   (* fonction de test *)

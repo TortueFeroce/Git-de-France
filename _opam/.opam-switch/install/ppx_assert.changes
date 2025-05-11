@@ -1,0 +1,40 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_assert" {"D"}
+  "doc/ppx_assert/CHANGES.md" {"F:S2089T1746982695.65"}
+  "doc/ppx_assert/LICENSE.md" {"F:S1126T1746982695.65"}
+  "doc/ppx_assert/README.md" {"F:S2743T1746982695.65"}
+  "lib/ppx_assert" {"D"}
+  "lib/ppx_assert/META" {"F:S1289T1746982695.62"}
+  "lib/ppx_assert/dune-package" {"F:S2342T1746982695.62"}
+  "lib/ppx_assert/opam" {"F:S948T1746982695.62"}
+  "lib/ppx_assert/ppx.exe" {"F:S22682864T1746982695.65"}
+  "lib/ppx_assert/ppx_assert.a" {"F:S27048T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cma" {"F:S27044T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cmi" {"F:S193T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cmt" {"F:S65231T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cmti" {"F:S4500T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cmx" {"F:S8265T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cmxa" {"F:S4358T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.cmxs" {"F:S42360T1746982695.65"}
+  "lib/ppx_assert/ppx_assert.ml" {"F:S2183T1746982695.62"}
+  "lib/ppx_assert/ppx_assert.mli" {"F:S0T1746982695.62"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.a" {"F:S20722T1746982695.62"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.cma" {"F:S28006T1746982695.62"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.cmi" {"F:S255T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.cmt" {"F:S2684T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.cmx" {"F:S132T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.cmxa" {"F:S4489T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.cmxs" {"F:S43904T1746982695.65"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib.ml" {"F:S107T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib__Runtime.cmi"
+    {"F:S6924T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib__Runtime.cmt"
+    {"F:S58823T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib__Runtime.cmti"
+    {"F:S22360T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/ppx_assert_lib__Runtime.cmx"
+    {"F:S5270T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/runtime.ml" {"F:S3042T1746982695.63"}
+  "lib/ppx_assert/runtime-lib/runtime.mli" {"F:S1184T1746982695.63"}
+]

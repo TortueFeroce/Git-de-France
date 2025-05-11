@@ -1,0 +1,19 @@
+opam-version: "2.0"
+added: [
+  "bin/ppx-base" {"F:S23963704T1746982696.27"}
+  "doc/ppx_base" {"D"}
+  "doc/ppx_base/LICENSE.md" {"F:S1126T1746982696.3"}
+  "lib/ppx_base" {"D"}
+  "lib/ppx_base/META" {"F:S900T1746982696.27"}
+  "lib/ppx_base/dune-package" {"F:S921T1746982696.27"}
+  "lib/ppx_base/opam" {"F:S1028T1746982696.27"}
+  "lib/ppx_base/ppx.exe" {"F:S23182344T1746982696.3"}
+  "lib/ppx_base/ppx_base.a" {"F:S1982T1746982696.27"}
+  "lib/ppx_base/ppx_base.cma" {"F:S1929T1746982696.27"}
+  "lib/ppx_base/ppx_base.cmi" {"F:S117T1746982696.27"}
+  "lib/ppx_base/ppx_base.cmt" {"F:S2097T1746982696.27"}
+  "lib/ppx_base/ppx_base.cmx" {"F:S99T1746982696.27"}
+  "lib/ppx_base/ppx_base.cmxa" {"F:S105T1746982696.27"}
+  "lib/ppx_base/ppx_base.cmxs" {"F:S16056T1746982696.3"}
+  "lib/ppx_base/ppx_base.ml" {"F:S24T1746982696.27"}
+]

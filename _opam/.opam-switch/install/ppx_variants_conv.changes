@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_variants_conv" {"D"}
+  "doc/ppx_variants_conv/CHANGES.md" {"F:S1094T1746982693.39"}
+  "doc/ppx_variants_conv/LICENSE.md" {"F:S1126T1746982693.39"}
+  "doc/ppx_variants_conv/README.md" {"F:S4016T1746982693.39"}
+  "lib/ppx_variants_conv" {"D"}
+  "lib/ppx_variants_conv/META" {"F:S696T1746982693.38"}
+  "lib/ppx_variants_conv/dune-package" {"F:S1040T1746982693.39"}
+  "lib/ppx_variants_conv/opam" {"F:S844T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.a" {"F:S158952T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cma" {"F:S183493T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cmi" {"F:S3524T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cmt" {"F:S414197T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cmti" {"F:S11043T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cmx" {"F:S11475T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cmxa" {"F:S7590T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.cmxs" {"F:S163080T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.ml" {"F:S26450T1746982693.39"}
+  "lib/ppx_variants_conv/ppx_variants_conv.mli" {"F:S39T1746982693.39"}
+]

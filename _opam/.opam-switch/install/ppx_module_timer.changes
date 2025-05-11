@@ -1,0 +1,41 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_module_timer" {"D"}
+  "doc/ppx_module_timer/LICENSE.md" {"F:S1126T1746982701.78"}
+  "doc/ppx_module_timer/README.md" {"F:S409T1746982701.78"}
+  "lib/ppx_module_timer" {"D"}
+  "lib/ppx_module_timer/META" {"F:S1095T1746982701.75"}
+  "lib/ppx_module_timer/dune-package" {"F:S2216T1746982701.75"}
+  "lib/ppx_module_timer/opam" {"F:S887T1746982701.75"}
+  "lib/ppx_module_timer/ppx.exe" {"F:S21255152T1746982701.78"}
+  "lib/ppx_module_timer/ppx_module_timer.a" {"F:S39342T1746982701.75"}
+  "lib/ppx_module_timer/ppx_module_timer.cma" {"F:S49087T1746982701.75"}
+  "lib/ppx_module_timer/ppx_module_timer.cmi" {"F:S205T1746982701.76"}
+  "lib/ppx_module_timer/ppx_module_timer.cmt" {"F:S94964T1746982701.76"}
+  "lib/ppx_module_timer/ppx_module_timer.cmti" {"F:S4200T1746982701.76"}
+  "lib/ppx_module_timer/ppx_module_timer.cmx" {"F:S8123T1746982701.76"}
+  "lib/ppx_module_timer/ppx_module_timer.cmxa" {"F:S7428T1746982701.76"}
+  "lib/ppx_module_timer/ppx_module_timer.cmxs" {"F:S59240T1746982701.78"}
+  "lib/ppx_module_timer/ppx_module_timer.ml" {"F:S3834T1746982701.76"}
+  "lib/ppx_module_timer/ppx_module_timer.mli" {"F:S45T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.a"
+    {"F:S41054T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cma"
+    {"F:S40520T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cmi"
+    {"F:S5637T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cmt"
+    {"F:S94987T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cmti"
+    {"F:S20275T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cmx"
+    {"F:S8570T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cmxa"
+    {"F:S4880T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.cmxs"
+    {"F:S52040T1746982701.78"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.ml"
+    {"F:S8116T1746982701.76"}
+  "lib/ppx_module_timer/runtime/ppx_module_timer_runtime.mli"
+    {"F:S2658T1746982701.76"}
+]

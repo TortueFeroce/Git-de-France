@@ -1,0 +1,38 @@
+opam-version: "2.0"
+added: [
+  "doc/sexp_pretty" {"D"}
+  "doc/sexp_pretty/CHANGES.md" {"F:S115T1746982698.2"}
+  "doc/sexp_pretty/LICENSE.md" {"F:S1126T1746982698.2"}
+  "doc/sexp_pretty/README.org" {"F:S121T1746982698.2"}
+  "lib/sexp_pretty" {"D"}
+  "lib/sexp_pretty/META" {"F:S318T1746982698.2"}
+  "lib/sexp_pretty/config.ml" {"F:S8880T1746982698.2"}
+  "lib/sexp_pretty/config.mli" {"F:S4395T1746982698.2"}
+  "lib/sexp_pretty/dune-package" {"F:S1900T1746982698.2"}
+  "lib/sexp_pretty/opam" {"F:S867T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.a" {"F:S288590T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cma" {"F:S389571T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cmi" {"F:S8961T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cmt" {"F:S648204T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cmti" {"F:S22025T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cmx" {"F:S36811T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cmxa" {"F:S18407T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.cmxs" {"F:S296272T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.ml" {"F:S42202T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty.mli" {"F:S37T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__.cmi" {"F:S349T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__.cmt" {"F:S3099T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__.cmx" {"F:S160T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__.ml" {"F:S202T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Config.cmi" {"F:S14841T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Config.cmt" {"F:S322359T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Config.cmti" {"F:S54177T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Config.cmx" {"F:S12285T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Sexp_pretty_intf.cmi"
+    {"F:S10012T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Sexp_pretty_intf.cmt"
+    {"F:S32953T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty__Sexp_pretty_intf.cmx"
+    {"F:S5681T1746982698.2"}
+  "lib/sexp_pretty/sexp_pretty_intf.ml" {"F:S1581T1746982698.2"}
+]

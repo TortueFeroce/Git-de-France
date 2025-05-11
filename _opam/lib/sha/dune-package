@@ -1,4 +1,4 @@
-(lang dune 3.17)
+(lang dune 3.18)
 (name sha)
 (version v1.15.4)
 (sections

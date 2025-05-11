@@ -1,0 +1,83 @@
+opam-version: "2.0"
+added: [
+  "doc/expect_test_helpers_core" {"D"}
+  "doc/expect_test_helpers_core/CHANGES.md" {"F:S1147T1746982761.93"}
+  "doc/expect_test_helpers_core/LICENSE.md" {"F:S1126T1746982761.93"}
+  "doc/expect_test_helpers_core/README.md" {"F:S572T1746982761.93"}
+  "lib/expect_test_helpers_core" {"D"}
+  "lib/expect_test_helpers_core/META" {"F:S1615T1746982761.92"}
+  "lib/expect_test_helpers_core/dune-package" {"F:S5604T1746982761.92"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.a"
+    {"F:S115006T1746982761.92"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cma"
+    {"F:S168450T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cmi"
+    {"F:S22505T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cmt"
+    {"F:S285021T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cmti"
+    {"F:S52066T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cmx"
+    {"F:S20056T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cmxa"
+    {"F:S17291T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.cmxs"
+    {"F:S147136T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.ml"
+    {"F:S16694T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base.mli"
+    {"F:S78T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__.cmi"
+    {"F:S397T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__.cmt"
+    {"F:S3069T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__.cmx"
+    {"F:S177T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__.ml"
+    {"F:S193T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__Expect_test_helpers_base_intf.cmi"
+    {"F:S25832T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__Expect_test_helpers_base_intf.cmt"
+    {"F:S140201T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base__Expect_test_helpers_base_intf.cmx"
+    {"F:S8890T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_base/expect_test_helpers_base_intf.ml"
+    {"F:S17800T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.a"
+    {"F:S76810T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cma"
+    {"F:S196540T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cmi"
+    {"F:S30847T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cmt"
+    {"F:S232373T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cmti"
+    {"F:S69556T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cmx"
+    {"F:S26922T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cmxa"
+    {"F:S29386T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.cmxs"
+    {"F:S114680T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.ml"
+    {"F:S9154T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core.mli"
+    {"F:S78T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__.cmi"
+    {"F:S372T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__.cmt"
+    {"F:S2969T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__.cmx"
+    {"F:S177T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__.ml"
+    {"F:S193T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__Expect_test_helpers_core_intf.cmi"
+    {"F:S78510T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__Expect_test_helpers_core_intf.cmt"
+    {"F:S286132T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core__Expect_test_helpers_core_intf.cmx"
+    {"F:S14347T1746982761.93"}
+  "lib/expect_test_helpers_core/expect_test_helpers_core_intf.ml"
+    {"F:S7127T1746982761.93"}
+  "lib/expect_test_helpers_core/opam" {"F:S1157T1746982761.93"}
+]

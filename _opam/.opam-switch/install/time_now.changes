@@ -1,0 +1,22 @@
+opam-version: "2.0"
+added: [
+  "doc/time_now" {"D"}
+  "doc/time_now/LICENSE.md" {"F:S1126T1746982699.57"}
+  "lib/stublibs/dlltime_now_stubs.so" {"F:S17536T1746982699.57"}
+  "lib/time_now" {"D"}
+  "lib/time_now/META" {"F:S342T1746982699.57"}
+  "lib/time_now/dune-package" {"F:S1178T1746982699.57"}
+  "lib/time_now/libtime_now_stubs.a" {"F:S5588T1746982699.57"}
+  "lib/time_now/opam" {"F:S963T1746982699.57"}
+  "lib/time_now/runtime.js" {"F:S435T1746982699.57"}
+  "lib/time_now/time_now.a" {"F:S4784T1746982699.57"}
+  "lib/time_now/time_now.cma" {"F:S7713T1746982699.57"}
+  "lib/time_now/time_now.cmi" {"F:S4314T1746982699.57"}
+  "lib/time_now/time_now.cmt" {"F:S12993T1746982699.57"}
+  "lib/time_now/time_now.cmti" {"F:S12603T1746982699.57"}
+  "lib/time_now/time_now.cmx" {"F:S4318T1746982699.57"}
+  "lib/time_now/time_now.cmxa" {"F:S4242T1746982699.57"}
+  "lib/time_now/time_now.cmxs" {"F:S23616T1746982699.57"}
+  "lib/time_now/time_now.ml" {"F:S688T1746982699.57"}
+  "lib/time_now/time_now.mli" {"F:S63T1746982699.57"}
+]

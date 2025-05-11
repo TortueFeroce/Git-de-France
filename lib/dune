@@ -1,3 +1,3 @@
 (library
- (libraries sha camlzip)
+ (libraries sha camlzip core_unix)
  (name libgdf))

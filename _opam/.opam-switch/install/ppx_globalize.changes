@@ -1,0 +1,20 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_globalize" {"D"}
+  "doc/ppx_globalize/CHANGES.md" {"F:S1T1746982690.03"}
+  "doc/ppx_globalize/LICENSE.md" {"F:S1126T1746982690.03"}
+  "lib/ppx_globalize" {"D"}
+  "lib/ppx_globalize/META" {"F:S550T1746982690.01"}
+  "lib/ppx_globalize/dune-package" {"F:S906T1746982690.01"}
+  "lib/ppx_globalize/opam" {"F:S776T1746982690.01"}
+  "lib/ppx_globalize/ppx_globalize.a" {"F:S116594T1746982690.01"}
+  "lib/ppx_globalize/ppx_globalize.cma" {"F:S697748T1746982690.02"}
+  "lib/ppx_globalize/ppx_globalize.cmi" {"F:S3509T1746982690.02"}
+  "lib/ppx_globalize/ppx_globalize.cmt" {"F:S922448T1746982690.02"}
+  "lib/ppx_globalize/ppx_globalize.cmti" {"F:S10343T1746982690.02"}
+  "lib/ppx_globalize/ppx_globalize.cmx" {"F:S10389T1746982690.02"}
+  "lib/ppx_globalize/ppx_globalize.cmxa" {"F:S7717T1746982690.02"}
+  "lib/ppx_globalize/ppx_globalize.cmxs" {"F:S132960T1746982690.03"}
+  "lib/ppx_globalize/ppx_globalize.ml" {"F:S23615T1746982690.03"}
+  "lib/ppx_globalize/ppx_globalize.mli" {"F:S40T1746982690.03"}
+]

@@ -1,0 +1,18 @@
+opam-version: "2.0"
+compiler: ["ocaml.4.14.1"]
+roots: ["camlzip.1.13" "ocaml.4.14.1" "sha.1.15.4"]
+installed: [
+  "base-bigarray.base"
+  "base-threads.base"
+  "base-unix.base"
+  "camlzip.1.13"
+  "conf-pkg-config.4"
+  "conf-zlib.1"
+  "dune.3.17.2"
+  "ocaml.4.14.1"
+  "ocaml-config.2"
+  "ocaml-system.4.14.1"
+  "ocamlfind.1.9.8"
+  "sha.1.15.4"
+  "stdlib-shims.0.3.0"
+]

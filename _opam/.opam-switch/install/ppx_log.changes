@@ -1,0 +1,40 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_log" {"D"}
+  "doc/ppx_log/LICENSE.md" {"F:S1126T1746982697.87"}
+  "doc/ppx_log/README.md" {"F:S905T1746982697.87"}
+  "lib/ppx_log" {"D"}
+  "lib/ppx_log/META" {"F:S1957T1746982697.82"}
+  "lib/ppx_log/dune-package" {"F:S2455T1746982697.82"}
+  "lib/ppx_log/kernel/ppx.exe" {"F:S22598808T1746982697.85"}
+  "lib/ppx_log/kernel/ppx_log_kernel.a" {"F:S24056T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cma" {"F:S24763T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cmi" {"F:S201T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cmt" {"F:S52150T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cmti" {"F:S4544T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cmx" {"F:S8628T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cmxa" {"F:S7113T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.cmxs" {"F:S46176T1746982697.85"}
+  "lib/ppx_log/kernel/ppx_log_kernel.ml" {"F:S2635T1746982697.82"}
+  "lib/ppx_log/kernel/ppx_log_kernel.mli" {"F:S25T1746982697.82"}
+  "lib/ppx_log/opam" {"F:S969T1746982697.82"}
+  "lib/ppx_log/ppx.exe" {"F:S22599400T1746982697.87"}
+  "lib/ppx_log/ppx_log.a" {"F:S1966T1746982697.82"}
+  "lib/ppx_log/ppx_log.cma" {"F:S2058T1746982697.82"}
+  "lib/ppx_log/ppx_log.cmi" {"F:S187T1746982697.82"}
+  "lib/ppx_log/ppx_log.cmt" {"F:S3778T1746982697.82"}
+  "lib/ppx_log/ppx_log.cmti" {"F:S3925T1746982697.82"}
+  "lib/ppx_log/ppx_log.cmx" {"F:S240T1746982697.82"}
+  "lib/ppx_log/ppx_log.cmxa" {"F:S246T1746982697.82"}
+  "lib/ppx_log/ppx_log.cmxs" {"F:S16192T1746982697.87"}
+  "lib/ppx_log/ppx_log.ml" {"F:S23T1746982697.82"}
+  "lib/ppx_log/ppx_log.mli" {"F:S25T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.a" {"F:S2062T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.cma" {"F:S8712T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.cmi" {"F:S6833T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.cmt" {"F:S19396T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.cmx" {"F:S5567T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.cmxa" {"F:S5573T1746982697.82"}
+  "lib/ppx_log/types/ppx_log_types.cmxs" {"F:S21568T1746982697.87"}
+  "lib/ppx_log/types/ppx_log_types.ml" {"F:S787T1746982697.82"}
+]

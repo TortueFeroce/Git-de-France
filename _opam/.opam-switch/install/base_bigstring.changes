@@ -1,0 +1,23 @@
+opam-version: "2.0"
+added: [
+  "doc/base_bigstring" {"D"}
+  "doc/base_bigstring/CHANGES.md" {"F:S1009T1746982709.52"}
+  "doc/base_bigstring/LICENSE.md" {"F:S1126T1746982709.52"}
+  "lib/base_bigstring" {"D"}
+  "lib/base_bigstring/META" {"F:S687T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.a" {"F:S134830T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cma" {"F:S186283T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cmi" {"F:S36358T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cmt" {"F:S471654T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cmti" {"F:S137904T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cmx" {"F:S41319T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cmxa" {"F:S7206T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.cmxs" {"F:S164136T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.ml" {"F:S26808T1746982709.52"}
+  "lib/base_bigstring/base_bigstring.mli" {"F:S12690T1746982709.52"}
+  "lib/base_bigstring/dune-package" {"F:S1698T1746982709.52"}
+  "lib/base_bigstring/libbase_bigstring_stubs.a" {"F:S29192T1746982709.52"}
+  "lib/base_bigstring/opam" {"F:S832T1746982709.52"}
+  "lib/base_bigstring/runtime.js" {"F:S2958T1746982709.52"}
+  "lib/stublibs/dllbase_bigstring_stubs.so" {"F:S29008T1746982709.52"}
+]

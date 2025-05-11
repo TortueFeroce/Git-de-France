@@ -1,7 +1,7 @@
 .\" Pipe this output to groff -m man -K utf8 -T utf8 | less -R
 .\"
 .mso an.tmac
-.TH "DUNE-INIT" 1 "" "Dune 3.17.2" "Dune Manual"
+.TH "DUNE-INIT" 1 "" "Dune 3.18.2" "Dune Manual"
 .\" Disable hyphenation and ragged-right
 .nh
 .ad l
@@ -11,13 +11,13 @@ dune\N'45'init \N'45' Command group for initializing Dune components\N'46'
 .SH SYNOPSIS
 .sp -1
 .P
-\fBdune init proj NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
+\fBdune init project NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
 .sp -1
 .P
-\fBdune init exec NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
+\fBdune init executable NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
 .sp -1
 .P
-\fBdune init lib NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
+\fBdune init library NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
 .sp -1
 .P
 \fBdune init test NAME [PATH] [OPTION]\N'46'\N'46'\N'46' \fR
@@ -70,21 +70,21 @@ if it was interrupted by a signal\N'46'
 Generate a project skeleton for an executable named `myproj\N'39' in a new directory named `myproj\N'39', depending on the bos library and using inline tests along with ppx_inline_test:
 .P
 .nf
-      dune init proj myproj \N'45'\N'45'libs bos \N'45'\N'45'ppx ppx_inline_test \N'45'\N'45'inline\N'45'tests
+      dune init project myproj \N'45'\N'45'libs bos \N'45'\N'45'ppx ppx_inline_test \N'45'\N'45'inline\N'45'tests
 .fi
 .TP 4
 2\N'46'
 Configure an executable component named `myexe\N'39' in a dune file in the current directory:
 .P
 .nf
-      dune init exe myexe
+      dune init executable myexe
 .fi
 .TP 4
 3\N'46'
 Configure a library component named `mylib\N'39' in a dune file in the \N'46'/src directory depending on the core and cmdliner libraries, the ppx_let and ppx_inline_test preprocessors, and declared as using inline tests:
 .P
 .nf
-      dune init lib mylib src \N'45'\N'45'libs core,cmdliner \N'45'\N'45'ppx ppx_let,ppx_inline_test \N'45'\N'45'inline\N'45'tests
+      dune init library mylib src \N'45'\N'45'libs core,cmdliner \N'45'\N'45'ppx ppx_let,ppx_inline_test \N'45'\N'45'inline\N'45'tests
 .fi
 .TP 4
 4\N'46'

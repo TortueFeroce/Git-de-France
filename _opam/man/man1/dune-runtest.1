@@ -1,7 +1,7 @@
 .\" Pipe this output to groff -m man -K utf8 -T utf8 | less -R
 .\"
 .mso an.tmac
-.TH "DUNE-RUNTEST" 1 "" "Dune 3.17.2" "Dune Manual"
+.TH "DUNE-RUNTEST" 1 "" "Dune 3.18.2" "Dune Manual"
 .\" Disable hyphenation and ragged-right
 .nh
 .ad l
@@ -171,7 +171,7 @@ Select the build profile, for instance \fBdev\fR or \fBrelease\fR\N'46' The defa
 Promote any generated <package>\N'46'install files to the source tree\N'46'
 .TP 4
 \fB\N'45'\N'45'release\fR
-Put \fBdune\fR into a reproducible \fIrelease\fR mode\N'46' Shorthand for \fB\N'45'\N'45'root \N'46' \N'45'\N'45'ignore\N'45'promoted\N'45'rules \N'45'\N'45'no\N'45'config \N'45'\N'45'profile release \N'45'\N'45'always\N'45'show\N'45'command\N'45'line \N'45'\N'45'promote\N'45'install\N'45'files \N'45'\N'45'require\N'45'dune\N'45'project\N'45'file \N'45'\N'45'ignore\N'45'lock\N'45'dir \N'45'\N'45'default\N'45'target @install\fR\N'46' You should use this option for release builds\N'46' For instance, you must use this option in your \fI<package>\N'46'opam\fR files\N'46' Except if you already use \fB\N'45'p\fR, as \fB\N'45'p\fR implies this option\N'46'
+Put \fBdune\fR into a reproducible \fIrelease\fR mode\N'46' Shorthand for \fB\N'45'\N'45'root \N'46' \N'45'\N'45'ignore\N'45'promoted\N'45'rules \N'45'\N'45'no\N'45'config \N'45'\N'45'profile release \N'45'\N'45'always\N'45'show\N'45'command\N'45'line \N'45'\N'45'promote\N'45'install\N'45'files \N'45'\N'45'require\N'45'dune\N'45'project\N'45'file \N'45'\N'45'default\N'45'target @install\fR\N'46' You should use this option for release builds\N'46' For instance, you must use this option in your \fI<package>\N'46'opam\fR files\N'46' Except if you already use \fB\N'45'p\fR, as \fB\N'45'p\fR implies this option\N'46'
 .TP 4
 \fB\N'45'\N'45'require\N'45'dune\N'45'project\N'45'file\fR[=\fIVAL\fR] (default=\fBtrue\fR)
 Fail if a dune\N'45'project file is missing\N'46'

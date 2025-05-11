@@ -1,0 +1,22 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_sexp_value" {"D"}
+  "doc/ppx_sexp_value/CHANGES.md" {"F:S240T1746982695.6"}
+  "doc/ppx_sexp_value/LICENSE.md" {"F:S1126T1746982695.6"}
+  "doc/ppx_sexp_value/README.md" {"F:S3206T1746982695.6"}
+  "lib/ppx_sexp_value" {"D"}
+  "lib/ppx_sexp_value/META" {"F:S855T1746982695.57"}
+  "lib/ppx_sexp_value/dune-package" {"F:S1035T1746982695.57"}
+  "lib/ppx_sexp_value/opam" {"F:S886T1746982695.57"}
+  "lib/ppx_sexp_value/ppx.exe" {"F:S22587944T1746982695.6"}
+  "lib/ppx_sexp_value/ppx_sexp_value.a" {"F:S46018T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cma" {"F:S51840T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cmi" {"F:S201T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cmt" {"F:S114437T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cmti" {"F:S4448T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cmx" {"F:S8533T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cmxa" {"F:S7666T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.cmxs" {"F:S58392T1746982695.6"}
+  "lib/ppx_sexp_value/ppx_sexp_value.ml" {"F:S7874T1746982695.57"}
+  "lib/ppx_sexp_value/ppx_sexp_value.mli" {"F:S0T1746982695.57"}
+]

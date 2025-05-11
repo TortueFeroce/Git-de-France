@@ -22,6 +22,8 @@ let findOptions str = match str with
   | "tag" -> [("-a", Set not_light, "placeholder")]
   | "rev-parse" -> [("-t", Set_string type_rev, "placeholder")] (* TO DO : j'ai pas compris son truc de wyag-type *)
   | "ls-files" -> []
+  | "check-ignore" -> []
+  | "status" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -44,7 +46,7 @@ let () = (Printexc.record_backtrace true;
     | "init", x::[] -> compute_init x
     | "hash-object", x::[] -> let sha = hash_file !doWrite !objType x
                               in print_string sha
-    | "test", [] -> f_test ()
+    | "test", [] -> cmd_status_branch ()
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
     | "log", x :: [] -> compute_log x
     | "checkout", dir :: sha :: [] -> compute_checkout sha dir
@@ -54,6 +56,8 @@ let () = (Printexc.record_backtrace true;
     | "tag", [] -> print_tag ()
     | "rev-parse", name :: [] -> compute_rev_parse name !type_rev
     | "ls-files", [] -> print_index_files ()
+    | "check-ignore", l -> compute_check_ignore l
+    | "status", [] -> ()
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :

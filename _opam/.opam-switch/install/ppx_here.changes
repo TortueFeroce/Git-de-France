@@ -1,0 +1,42 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_here" {"D"}
+  "doc/ppx_here/CHANGES.md" {"F:S200T1746982692.27"}
+  "doc/ppx_here/LICENSE.md" {"F:S1126T1746982692.27"}
+  "doc/ppx_here/README.md" {"F:S1365T1746982692.27"}
+  "lib/ppx_here" {"D"}
+  "lib/ppx_here/META" {"F:S1234T1746982692.21"}
+  "lib/ppx_here/dune-package" {"F:S2668T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.a" {"F:S12798T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cma" {"F:S15859T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cmi" {"F:S3918T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cmt" {"F:S30355T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cmti" {"F:S12659T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cmx" {"F:S7934T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cmxa" {"F:S7179T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.cmxs" {"F:S32912T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.ml" {"F:S1416T1746982692.21"}
+  "lib/ppx_here/expander/ppx_here_expander.mli" {"F:S504T1746982692.21"}
+  "lib/ppx_here/opam" {"F:S710T1746982692.21"}
+  "lib/ppx_here/ppx.exe" {"F:S20402968T1746982692.27"}
+  "lib/ppx_here/ppx_here.a" {"F:S5192T1746982692.21"}
+  "lib/ppx_here/ppx_here.cma" {"F:S6682T1746982692.21"}
+  "lib/ppx_here/ppx_here.cmi" {"F:S189T1746982692.21"}
+  "lib/ppx_here/ppx_here.cmt" {"F:S13072T1746982692.21"}
+  "lib/ppx_here/ppx_here.cmti" {"F:S3542T1746982692.21"}
+  "lib/ppx_here/ppx_here.cmx" {"F:S3716T1746982692.21"}
+  "lib/ppx_here/ppx_here.cmxa" {"F:S3708T1746982692.21"}
+  "lib/ppx_here/ppx_here.cmxs" {"F:S21504T1746982692.27"}
+  "lib/ppx_here/ppx_here.ml" {"F:S251T1746982692.21"}
+  "lib/ppx_here/ppx_here.mli" {"F:S0T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.a" {"F:S2046T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cma" {"F:S2404T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cmi" {"F:S579T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cmt" {"F:S3022T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cmti" {"F:S3580T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cmx" {"F:S210T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cmxa" {"F:S216T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.cmxs" {"F:S16200T1746982692.27"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.ml" {"F:S113T1746982692.21"}
+  "lib/ppx_here/runtime-lib/ppx_here_lib.mli" {"F:S113T1746982692.21"}
+]

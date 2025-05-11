@@ -1,0 +1,22 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_tydi" {"D"}
+  "doc/ppx_tydi/CHANGES.md" {"F:S0T1746982692.68"}
+  "doc/ppx_tydi/LICENSE.md" {"F:S1120T1746982692.68"}
+  "doc/ppx_tydi/README.mdx" {"F:S1388T1746982692.68"}
+  "lib/ppx_tydi" {"D"}
+  "lib/ppx_tydi/META" {"F:S460T1746982692.65"}
+  "lib/ppx_tydi/dune-package" {"F:S811T1746982692.65"}
+  "lib/ppx_tydi/opam" {"F:S906T1746982692.65"}
+  "lib/ppx_tydi/ppx.exe" {"F:S19974256T1746982692.68"}
+  "lib/ppx_tydi/ppx_tydi.a" {"F:S8766T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cma" {"F:S57044T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cmi" {"F:S189T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cmt" {"F:S72052T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cmti" {"F:S3555T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cmx" {"F:S7227T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cmxa" {"F:S7219T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.cmxs" {"F:S31488T1746982692.68"}
+  "lib/ppx_tydi/ppx_tydi.ml" {"F:S853T1746982692.66"}
+  "lib/ppx_tydi/ppx_tydi.mli" {"F:S45T1746982692.66"}
+]

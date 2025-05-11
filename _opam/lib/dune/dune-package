@@ -1,6 +1,6 @@
-(lang dune 3.17)
+(lang dune 3.18)
 (name dune)
-(version 3.17.2)
+(version 3.18.2)
 (sections
  (lib .)
  (bin ../../bin)

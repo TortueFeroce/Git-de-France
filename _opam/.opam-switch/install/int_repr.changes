@@ -1,0 +1,20 @@
+opam-version: "2.0"
+added: [
+  "doc/int_repr" {"D"}
+  "doc/int_repr/CHANGES.md" {"F:S73T1746982708.31"}
+  "doc/int_repr/LICENSE.md" {"F:S1126T1746982708.31"}
+  "lib/int_repr" {"D"}
+  "lib/int_repr/META" {"F:S625T1746982708.31"}
+  "lib/int_repr/dune-package" {"F:S1234T1746982708.31"}
+  "lib/int_repr/int_repr.a" {"F:S268284T1746982708.31"}
+  "lib/int_repr/int_repr.cma" {"F:S381540T1746982708.31"}
+  "lib/int_repr/int_repr.cmi" {"F:S70637T1746982708.31"}
+  "lib/int_repr/int_repr.cmt" {"F:S1047967T1746982708.31"}
+  "lib/int_repr/int_repr.cmti" {"F:S252054T1746982708.31"}
+  "lib/int_repr/int_repr.cmx" {"F:S89951T1746982708.31"}
+  "lib/int_repr/int_repr.cmxa" {"F:S7426T1746982708.31"}
+  "lib/int_repr/int_repr.cmxs" {"F:S248824T1746982708.31"}
+  "lib/int_repr/int_repr.ml" {"F:S45905T1746982708.31"}
+  "lib/int_repr/int_repr.mli" {"F:S9509T1746982708.31"}
+  "lib/int_repr/opam" {"F:S698T1746982708.31"}
+]

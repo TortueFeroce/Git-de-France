@@ -1,0 +1,71 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_stable_witness" {"D"}
+  "doc/ppx_stable_witness/LICENSE.md" {"F:S1126T1746982691.91"}
+  "lib/ppx_stable_witness" {"D"}
+  "lib/ppx_stable_witness/META" {"F:S1352T1746982691.91"}
+  "lib/ppx_stable_witness/dune-package" {"F:S3864T1746982691.91"}
+  "lib/ppx_stable_witness/opam" {"F:S966T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.a" {"F:S80240T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cma" {"F:S189282T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cmi" {"F:S209T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cmt" {"F:S272275T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cmti" {"F:S4232T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cmx" {"F:S10895T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cmxa" {"F:S7793T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.cmxs" {"F:S97464T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.ml" {"F:S10356T1746982691.91"}
+  "lib/ppx_stable_witness/ppx_stable_witness.mli" {"F:S45T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.a"
+    {"F:S2360T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.cma"
+    {"F:S2408T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.cmi"
+    {"F:S354T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.cmt"
+    {"F:S3133T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.cmx"
+    {"F:S207T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.cmxa"
+    {"F:S213T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.cmxs"
+    {"F:S16304T1746982691.91"}
+  "lib/ppx_stable_witness/runtime/ppx_stable_witness_runtime.ml"
+    {"F:S179T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.a"
+    {"F:S15076T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cma"
+    {"F:S19548T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cmi"
+    {"F:S4259T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cmt"
+    {"F:S16199T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cmti"
+    {"F:S11096T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cmx"
+    {"F:S1296T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cmxa"
+    {"F:S667T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.cmxs"
+    {"F:S27896T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.ml"
+    {"F:S1008T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness.mli"
+    {"F:S43T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__.cmi"
+    {"F:S307T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__.cmt"
+    {"F:S2821T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__.cmx"
+    {"F:S147T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__.ml"
+    {"F:S143T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__Stable_witness_intf.cmi"
+    {"F:S4619T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__Stable_witness_intf.cmt"
+    {"F:S29266T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness__Stable_witness_intf.cmx"
+    {"F:S236T1746982691.91"}
+  "lib/ppx_stable_witness/stable_witness/stable_witness_intf.ml"
+    {"F:S3967T1746982691.91"}
+]

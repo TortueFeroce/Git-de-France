@@ -1,0 +1,31 @@
+opam-version: "2.0"
+added: [
+  "doc/ppx_disable_unused_warnings" {"D"}
+  "doc/ppx_disable_unused_warnings/LICENSE.md" {"F:S1126T1746982691.32"}
+  "doc/ppx_disable_unused_warnings/README.md" {"F:S518T1746982691.32"}
+  "lib/ppx_disable_unused_warnings" {"D"}
+  "lib/ppx_disable_unused_warnings/META" {"F:S536T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/dune-package" {"F:S1244T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/opam" {"F:S847T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx.exe" {"F:S20421336T1746982691.32"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.a"
+    {"F:S29524T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cma"
+    {"F:S104667T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cmi"
+    {"F:S3611T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cmt"
+    {"F:S126670T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cmti"
+    {"F:S10662T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cmx"
+    {"F:S7544T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cmxa"
+    {"F:S7265T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.cmxs"
+    {"F:S47280T1746982691.32"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.ml"
+    {"F:S1187T1746982691.29"}
+  "lib/ppx_disable_unused_warnings/ppx_disable_unused_warnings.mli"
+    {"F:S104T1746982691.29"}
+]
