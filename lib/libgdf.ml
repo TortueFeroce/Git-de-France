@@ -50,6 +50,7 @@ type index = {
   version : int
 }  
 
+type ignoring_rules = Usual | Excl | Comment
 
 type obj =
   | Blob of string * string
@@ -113,6 +114,8 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
   let head_channel = Stdlib.open_out "/.gdf/HEAD" in
     write_str_stdlib head_channel "ref: refs/heads/master\n";
+  let index_channel = Stdlib.open_out "/.gdf/index" in
+    write_str_stdlib index_channel "DIRC0000000000000000\n";
   let config_channel = open_out (s^"/.gdf/config") in
     output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
     close_out config_channel
@@ -494,6 +497,7 @@ let compute_rev_parse name fmt =
   Printf.printf "%s" (object_find name fmt)
 
 let bit_string_to_int s =
+  (* Passe du binaire à la base 10 *)
   let n = String.length s in
   let res = ref 0 in
   for i = 0 to n-1 do
@@ -532,15 +536,31 @@ let index_parser () =
   
   ATTENTION : dans le fichier index les bits de poids le plus fort sont le plus 
   à gauche, ie. (1000)_2 = (4)_10 *)
-  
+
   Unix.chdir (repo_find ());
-  let data_ind = extract_data index in (* on suppose que le fichier
+  let data_ind = extract_data "index" in (* on suppose que le fichier
 index n'est pas zippé pour l'instant, il faudra changer cette ligne si on
 choisit de le zipper *)
   let len_ind = String.length data_ind in
-  let version = bit_string_to_int (String.sub data_ind 0 8) in
-  let n_entries = bit_string_to_int (String.sub data_ind 8 12) in
+  let version = bit_string_to_int (String.sub data_ind 4 8) in
+  let n_entries = bit_string_to_int (String.sub data_ind 12 8) in
+  let entries = String.split_on_char '\n' (String.sub data_ind 21 (len_ind - 21)) in
+  {
+    entries = List.map (fun e -> entries_parser e) entries;
+    version = version
+  }
 
+let print_index_files () =
+  (* Fonction qui affiche les noms des fichiers dans index *)
+  let files = List.map (fun e -> e.name) ((index_parser ()).entries)
+  List.iter (fun x -> Printf.printf "%s\n" x) files
+
+let gitignore_parse1 line =
+  if String.length line = 0 then Comment
+  else begin match (String.sub 0 1) with
+    | "#" -> Comment
+    | "!" -> Excl
+    | _ -> Usual
 
 let f_test () =
   (* fonction de test *)
