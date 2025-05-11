@@ -112,10 +112,13 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf/refs") perm_base;
   Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
   Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
+  Unix.mkdir (s^"/.gdf/info") perm_base;
   let head_channel = Stdlib.open_out "/.gdf/HEAD" in
     write_str_stdlib head_channel "ref: refs/heads/master\n";
   let index_channel = Stdlib.open_out "/.gdf/index" in
     write_str_stdlib index_channel "DIRC0000000000000000\n";
+  let exclude_channel = Stdlib.open_out "/.gdf/info/exclude" in
+    write_str_stdlib exclude_channel "";
   let config_channel = open_out (s^"/.gdf/config") in
     output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
     close_out config_channel
@@ -518,15 +521,15 @@ let entries_parser entry =
       size ::
       sha ::
       name :: []
-      -> {i_creation = int_of_string creation;
-      i_last_modif = int_of_string last_modif;
+      -> {i_creation = float_of_string creation;
+      i_last_modif = float_of_string last_modif;
       i_device = int_of_string device;
       i_inode = int_of_string inode;
       i_perms = int_of_string perms;
       i_uid = int_of_string uid;
       i_gid = int_of_string gid;
       i_size = int_of_string size;
-      i_sha = sha
+      i_sha = sha;
       i_name = name}
     | _ -> failwith "wrong format for an entry"
 
@@ -538,12 +541,12 @@ let index_parser () =
   à gauche, ie. (1000)_2 = (4)_10 *)
 
   Unix.chdir (repo_find ());
-  let data_ind = extract_data "index" in (* on suppose que le fichier
+  let data_ind = extract_data ".gdf/index" in (* on suppose que le fichier
 index n'est pas zippé pour l'instant, il faudra changer cette ligne si on
 choisit de le zipper *)
   let len_ind = String.length data_ind in
   let version = bit_string_to_int (String.sub data_ind 4 8) in
-  let n_entries = bit_string_to_int (String.sub data_ind 12 8) in
+  let _ = bit_string_to_int (String.sub data_ind 12 8) in
   let entries = String.split_on_char '\n' (String.sub data_ind 21 (len_ind - 21)) in
   {
     entries = List.map (fun e -> entries_parser e) entries;
@@ -552,16 +555,48 @@ choisit de le zipper *)
 
 let print_index_files () =
   (* Fonction qui affiche les noms des fichiers dans index *)
-  let files = List.map (fun e -> e.name) ((index_parser ()).entries) in
+  let files = List.map (fun e -> e.i_name) ((index_parser ()).entries) in
   List.iter (fun x -> Printf.printf "%s\n" x) files
 
-let gitignore_parse1 line =
-  if String.length line = 0 then Comment
-  else begin match (String.sub 0 1) with
-    | "#" -> Comment
-    | "!" -> Excl
-    | _ -> Usual
-end
+let gitignore_parse lines =
+  List.map (fun line -> 
+  if String.length line = 0 then (Comment,"")
+  else begin match (String.sub line 0 1) with
+    | "#" -> (Comment,"")
+    | "!" -> (Excl, String.sub line 1 (String.length line - 1))
+    | _ -> (Usual, String.sub line 1 (String.length line - 1))
+end) lines
+
+let get_rules_from_file file =
+  let data = extract_data file in
+  let lines = String.split_on_char '\n' data in
+  gitignore_parse lines
+
+let go_into_dir_where_file_is file =
+  let lst = String.split_on_char '/' file in
+  let rec aux l = match l with
+    | _::[] -> []
+    | x::q -> x::(aux q)
+    | _ -> failwith "le fichier n'est pas un fichier"
+  in String.concat "/" (aux lst)
+
+let get_rules_for_file file =
+  let repo = repo_find () in
+  Unix.chdir (go_into_dir_where_file_is file);
+  let rec aux () =
+    if Unix.getcwd () = repo then begin
+      if Sys.file_exists ".gdfignore" then
+      (get_rules_from_file (repo^"/.gdf/info/exclude"))@(get_rules_from_file ".gdfignore")
+      else (get_rules_from_file (repo^"/.gdf/info/exclude"))
+    end
+    else begin
+      Unix.chdir ("../"^(Unix.getcwd ()));
+      if Sys.file_exists ".gdfignore" then
+        (aux ())@(get_rules_from_file ".gdfignore")
+      else aux ()
+    end
+  in aux ()
+
 
 let f_test () =
   (* fonction de test *)
