@@ -1,0 +1,83 @@
+(lang dune 3.18)
+(name timezone)
+(version v0.16.0)
+(sections (lib .) (libexec .) (doc ../../doc/timezone))
+(files
+ (lib
+  (META
+   dune-package
+   opam
+   runtime.js
+   timezone.a
+   timezone.cma
+   timezone.cmi
+   timezone.cmt
+   timezone.cmti
+   timezone.cmx
+   timezone.cmxa
+   timezone.ml
+   timezone.mli
+   timezone__.cmi
+   timezone__.cmt
+   timezone__.cmx
+   timezone__.ml
+   timezone__Timezone_intf.cmi
+   timezone__Timezone_intf.cmt
+   timezone__Timezone_intf.cmx
+   timezone_intf.ml))
+ (libexec (timezone.cmxs))
+ (doc (LICENSE.md README.md)))
+(library
+ (name timezone)
+ (kind normal)
+ (archives (byte timezone.cma) (native timezone.cmxa))
+ (plugins (byte timezone.cma) (native timezone.cmxs))
+ (native_archives timezone.a)
+ (jsoo_runtime runtime.js)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Timezone)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name timezone__)
+     (visibility public)
+     (kind alias)
+     (source (path Timezone__) (impl (path timezone__.ml-gen))))
+    (name Timezone)
+    (modules
+     (module
+      (obj_name timezone)
+      (visibility public)
+      (source
+       (path Timezone)
+       (intf (path timezone.mli))
+       (impl (path timezone.ml))))
+     (module
+      (obj_name timezone__Timezone_intf)
+      (visibility public)
+      (source (path Timezone_intf) (impl (path timezone_intf.ml))))))
+   (wrapped true))))

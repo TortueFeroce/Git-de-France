@@ -1,0 +1,2382 @@
+(lang dune 3.18)
+(name core_kernel)
+(version v0.16.0)
+(sections
+ (lib .)
+ (libexec .)
+ (doc ../../doc/core_kernel)
+ (stublibs ../stublibs))
+(files
+ (lib
+  (META
+   ansi_kernel/ansi_kernel.a
+   ansi_kernel/ansi_kernel.cma
+   ansi_kernel/ansi_kernel.cmi
+   ansi_kernel/ansi_kernel.cmt
+   ansi_kernel/ansi_kernel.cmti
+   ansi_kernel/ansi_kernel.cmx
+   ansi_kernel/ansi_kernel.cmxa
+   ansi_kernel/ansi_kernel.ml
+   ansi_kernel/ansi_kernel.mli
+   ansi_kernel/ansi_kernel__.cmi
+   ansi_kernel/ansi_kernel__.cmt
+   ansi_kernel/ansi_kernel__.cmx
+   ansi_kernel/ansi_kernel__.ml
+   ansi_kernel/ansi_kernel__Color_256.cmi
+   ansi_kernel/ansi_kernel__Color_256.cmt
+   ansi_kernel/ansi_kernel__Color_256.cmti
+   ansi_kernel/ansi_kernel__Color_256.cmx
+   ansi_kernel/color_256.ml
+   ansi_kernel/color_256.mli
+   balanced_reducer/balanced_reducer.a
+   balanced_reducer/balanced_reducer.cma
+   balanced_reducer/balanced_reducer.cmi
+   balanced_reducer/balanced_reducer.cmt
+   balanced_reducer/balanced_reducer.cmti
+   balanced_reducer/balanced_reducer.cmx
+   balanced_reducer/balanced_reducer.cmxa
+   balanced_reducer/balanced_reducer.ml
+   balanced_reducer/balanced_reducer.mli
+   binary_packing/binary_packing.a
+   binary_packing/binary_packing.cma
+   binary_packing/binary_packing.cmi
+   binary_packing/binary_packing.cmt
+   binary_packing/binary_packing.cmti
+   binary_packing/binary_packing.cmx
+   binary_packing/binary_packing.cmxa
+   binary_packing/binary_packing.ml
+   binary_packing/binary_packing.mli
+   binary_packing/binary_packing__.cmi
+   binary_packing/binary_packing__.cmt
+   binary_packing/binary_packing__.cmx
+   binary_packing/binary_packing__.ml
+   binary_packing/binary_packing__Import.cmi
+   binary_packing/binary_packing__Import.cmt
+   binary_packing/binary_packing__Import.cmx
+   binary_packing/import.ml
+   bounded_int_table/bounded_int_table.a
+   bounded_int_table/bounded_int_table.cma
+   bounded_int_table/bounded_int_table.cmi
+   bounded_int_table/bounded_int_table.cmt
+   bounded_int_table/bounded_int_table.cmti
+   bounded_int_table/bounded_int_table.cmx
+   bounded_int_table/bounded_int_table.cmxa
+   bounded_int_table/bounded_int_table.ml
+   bounded_int_table/bounded_int_table.mli
+   bus/bus.a
+   bus/bus.cma
+   bus/bus.cmi
+   bus/bus.cmt
+   bus/bus.cmti
+   bus/bus.cmx
+   bus/bus.cmxa
+   bus/bus.ml
+   bus/bus.mli
+   caml_threads/caml_threads.a
+   caml_threads/caml_threads.cma
+   caml_threads/caml_threads.cmi
+   caml_threads/caml_threads.cmt
+   caml_threads/caml_threads.cmx
+   caml_threads/caml_threads.cmxa
+   caml_threads/caml_threads.ml
+   caml_unix/caml_unix.a
+   caml_unix/caml_unix.cma
+   caml_unix/caml_unix.cmi
+   caml_unix/caml_unix.cmt
+   caml_unix/caml_unix.cmx
+   caml_unix/caml_unix.cmxa
+   caml_unix/caml_unix.ml
+   composition_infix/composition_infix.a
+   composition_infix/composition_infix.cma
+   composition_infix/composition_infix.cmi
+   composition_infix/composition_infix.cmt
+   composition_infix/composition_infix.cmti
+   composition_infix/composition_infix.cmx
+   composition_infix/composition_infix.cmxa
+   composition_infix/composition_infix.ml
+   composition_infix/composition_infix.mli
+   core_kernel.a
+   core_kernel.cma
+   core_kernel.cmi
+   core_kernel.cmt
+   core_kernel.cmx
+   core_kernel.cmxa
+   core_kernel.ml
+   dune-package
+   enum/enum.a
+   enum/enum.cma
+   enum/enum.cmi
+   enum/enum.cmt
+   enum/enum.cmti
+   enum/enum.cmx
+   enum/enum.cmxa
+   enum/enum.ml
+   enum/enum.mli
+   enum/enum__.cmi
+   enum/enum__.cmt
+   enum/enum__.cmx
+   enum/enum__.ml
+   enum/enum__Enum_intf.cmi
+   enum/enum__Enum_intf.cmt
+   enum/enum__Enum_intf.cmx
+   enum/enum_intf.ml
+   fheap/fheap.a
+   fheap/fheap.cma
+   fheap/fheap.cmi
+   fheap/fheap.cmt
+   fheap/fheap.cmti
+   fheap/fheap.cmx
+   fheap/fheap.cmxa
+   fheap/fheap.ml
+   fheap/fheap.mli
+   flags/flags.a
+   flags/flags.cma
+   flags/flags.cmi
+   flags/flags.cmt
+   flags/flags.cmti
+   flags/flags.cmx
+   flags/flags.cmxa
+   flags/flags.ml
+   flags/flags.mli
+   flags/flags__.cmi
+   flags/flags__.cmt
+   flags/flags__.cmx
+   flags/flags__.ml
+   flags/flags__Flags_intf.cmi
+   flags/flags__Flags_intf.cmt
+   flags/flags__Flags_intf.cmx
+   flags/flags_intf.ml
+   force_once/force_once.a
+   force_once/force_once.cma
+   force_once/force_once.cmi
+   force_once/force_once.cmt
+   force_once/force_once.cmti
+   force_once/force_once.cmx
+   force_once/force_once.cmxa
+   force_once/force_once.ml
+   force_once/force_once.mli
+   force_once/force_once__.cmi
+   force_once/force_once__.cmt
+   force_once/force_once__.cmx
+   force_once/force_once__.ml
+   force_once/force_once__Import.cmi
+   force_once/force_once__Import.cmt
+   force_once/force_once__Import.cmx
+   force_once/import.ml
+   hash_heap/hash_heap.a
+   hash_heap/hash_heap.cma
+   hash_heap/hash_heap.cmi
+   hash_heap/hash_heap.cmt
+   hash_heap/hash_heap.cmti
+   hash_heap/hash_heap.cmx
+   hash_heap/hash_heap.cmxa
+   hash_heap/hash_heap.ml
+   hash_heap/hash_heap.mli
+   hash_heap/hash_heap__.cmi
+   hash_heap/hash_heap__.cmt
+   hash_heap/hash_heap__.cmx
+   hash_heap/hash_heap__.ml
+   hash_heap/hash_heap__Hash_heap_intf.cmi
+   hash_heap/hash_heap__Hash_heap_intf.cmt
+   hash_heap/hash_heap__Hash_heap_intf.cmx
+   hash_heap/hash_heap__Import.cmi
+   hash_heap/hash_heap__Import.cmt
+   hash_heap/hash_heap__Import.cmx
+   hash_heap/hash_heap_intf.ml
+   hash_heap/import.ml
+   int_set/import.ml
+   int_set/int_set.a
+   int_set/int_set.cma
+   int_set/int_set.cmi
+   int_set/int_set.cmt
+   int_set/int_set.cmti
+   int_set/int_set.cmx
+   int_set/int_set.cmxa
+   int_set/int_set.ml
+   int_set/int_set.mli
+   int_set/int_set__.cmi
+   int_set/int_set__.cmt
+   int_set/int_set__.cmx
+   int_set/int_set__.ml
+   int_set/int_set__Import.cmi
+   int_set/int_set__Import.cmt
+   int_set/int_set__Import.cmx
+   iobuf/iobuf.a
+   iobuf/iobuf.cma
+   iobuf/iobuf.cmi
+   iobuf/iobuf.cmt
+   iobuf/iobuf.cmti
+   iobuf/iobuf.cmx
+   iobuf/iobuf.cmxa
+   iobuf/iobuf.ml
+   iobuf/iobuf.mli
+   iobuf/iobuf__.cmi
+   iobuf/iobuf__.cmt
+   iobuf/iobuf__.cmx
+   iobuf/iobuf__.ml
+   iobuf/iobuf__Iobuf_intf.cmi
+   iobuf/iobuf__Iobuf_intf.cmt
+   iobuf/iobuf__Iobuf_intf.cmx
+   iobuf/iobuf_intf.ml
+   limiter/import.ml
+   limiter/limiter.a
+   limiter/limiter.cma
+   limiter/limiter.cmi
+   limiter/limiter.cmt
+   limiter/limiter.cmti
+   limiter/limiter.cmx
+   limiter/limiter.cmxa
+   limiter/limiter.ml
+   limiter/limiter.mli
+   limiter/limiter__.cmi
+   limiter/limiter__.cmt
+   limiter/limiter__.cmx
+   limiter/limiter__.ml
+   limiter/limiter__Import.cmi
+   limiter/limiter__Import.cmt
+   limiter/limiter__Import.cmx
+   moption/import.ml
+   moption/moption.a
+   moption/moption.cma
+   moption/moption.cmi
+   moption/moption.cmt
+   moption/moption.cmti
+   moption/moption.cmx
+   moption/moption.cmxa
+   moption/moption.ml
+   moption/moption.mli
+   moption/moption__.cmi
+   moption/moption__.cmt
+   moption/moption__.cmx
+   moption/moption__.ml
+   moption/moption__Import.cmi
+   moption/moption__Import.cmt
+   moption/moption__Import.cmx
+   nonempty_list/nonempty_list.a
+   nonempty_list/nonempty_list.cma
+   nonempty_list/nonempty_list.cmi
+   nonempty_list/nonempty_list.cmt
+   nonempty_list/nonempty_list.cmti
+   nonempty_list/nonempty_list.cmx
+   nonempty_list/nonempty_list.cmxa
+   nonempty_list/nonempty_list.ml
+   nonempty_list/nonempty_list.mli
+   opam
+   pairing_heap/pairing_heap.a
+   pairing_heap/pairing_heap.cma
+   pairing_heap/pairing_heap.cmi
+   pairing_heap/pairing_heap.cmt
+   pairing_heap/pairing_heap.cmti
+   pairing_heap/pairing_heap.cmx
+   pairing_heap/pairing_heap.cmxa
+   pairing_heap/pairing_heap.ml
+   pairing_heap/pairing_heap.mli
+   pooled_hashtbl/import.ml
+   pooled_hashtbl/pooled_hashtbl.a
+   pooled_hashtbl/pooled_hashtbl.cma
+   pooled_hashtbl/pooled_hashtbl.cmi
+   pooled_hashtbl/pooled_hashtbl.cmt
+   pooled_hashtbl/pooled_hashtbl.cmti
+   pooled_hashtbl/pooled_hashtbl.cmx
+   pooled_hashtbl/pooled_hashtbl.cmxa
+   pooled_hashtbl/pooled_hashtbl.ml
+   pooled_hashtbl/pooled_hashtbl.mli
+   pooled_hashtbl/pooled_hashtbl__.cmi
+   pooled_hashtbl/pooled_hashtbl__.cmt
+   pooled_hashtbl/pooled_hashtbl__.cmx
+   pooled_hashtbl/pooled_hashtbl__.ml
+   pooled_hashtbl/pooled_hashtbl__Import.cmi
+   pooled_hashtbl/pooled_hashtbl__Import.cmt
+   pooled_hashtbl/pooled_hashtbl__Import.cmx
+   reversed_list/reversed_list.a
+   reversed_list/reversed_list.cma
+   reversed_list/reversed_list.cmi
+   reversed_list/reversed_list.cmt
+   reversed_list/reversed_list.cmti
+   reversed_list/reversed_list.cmx
+   reversed_list/reversed_list.cmxa
+   reversed_list/reversed_list.ml
+   reversed_list/reversed_list.mli
+   sexp_hidden_in_test/sexp_hidden_in_test.a
+   sexp_hidden_in_test/sexp_hidden_in_test.cma
+   sexp_hidden_in_test/sexp_hidden_in_test.cmi
+   sexp_hidden_in_test/sexp_hidden_in_test.cmt
+   sexp_hidden_in_test/sexp_hidden_in_test.cmti
+   sexp_hidden_in_test/sexp_hidden_in_test.cmx
+   sexp_hidden_in_test/sexp_hidden_in_test.cmxa
+   sexp_hidden_in_test/sexp_hidden_in_test.ml
+   sexp_hidden_in_test/sexp_hidden_in_test.mli
+   thread_pool_cpu_affinity/import.ml
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.a
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cma
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmi
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmt
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmti
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmx
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmxa
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.ml
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.mli
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__.cmi
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__.cmt
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__.cmx
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__.ml
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__Import.cmi
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__Import.cmt
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity__Import.cmx
+   thread_safe_queue/import.ml
+   thread_safe_queue/thread_safe_queue.a
+   thread_safe_queue/thread_safe_queue.cma
+   thread_safe_queue/thread_safe_queue.cmi
+   thread_safe_queue/thread_safe_queue.cmt
+   thread_safe_queue/thread_safe_queue.cmti
+   thread_safe_queue/thread_safe_queue.cmx
+   thread_safe_queue/thread_safe_queue.cmxa
+   thread_safe_queue/thread_safe_queue.ml
+   thread_safe_queue/thread_safe_queue.mli
+   thread_safe_queue/thread_safe_queue__.cmi
+   thread_safe_queue/thread_safe_queue__.cmt
+   thread_safe_queue/thread_safe_queue__.cmx
+   thread_safe_queue/thread_safe_queue__.ml
+   thread_safe_queue/thread_safe_queue__Import.cmi
+   thread_safe_queue/thread_safe_queue__Import.cmt
+   thread_safe_queue/thread_safe_queue__Import.cmx
+   timing_wheel/import.ml
+   timing_wheel/timing_wheel.a
+   timing_wheel/timing_wheel.cma
+   timing_wheel/timing_wheel.cmi
+   timing_wheel/timing_wheel.cmt
+   timing_wheel/timing_wheel.cmti
+   timing_wheel/timing_wheel.cmx
+   timing_wheel/timing_wheel.cmxa
+   timing_wheel/timing_wheel.ml
+   timing_wheel/timing_wheel.mli
+   timing_wheel/timing_wheel__.cmi
+   timing_wheel/timing_wheel__.cmt
+   timing_wheel/timing_wheel__.cmx
+   timing_wheel/timing_wheel__.ml
+   timing_wheel/timing_wheel__Import.cmi
+   timing_wheel/timing_wheel__Import.cmt
+   timing_wheel/timing_wheel__Import.cmx
+   timing_wheel/timing_wheel__Timing_wheel_intf.cmi
+   timing_wheel/timing_wheel__Timing_wheel_intf.cmt
+   timing_wheel/timing_wheel__Timing_wheel_intf.cmx
+   timing_wheel/timing_wheel_intf.ml
+   total_map/enumeration.ml
+   total_map/enumeration.mli
+   total_map/enumeration_intf.ml
+   total_map/import.ml
+   total_map/total_map.a
+   total_map/total_map.cma
+   total_map/total_map.cmi
+   total_map/total_map.cmt
+   total_map/total_map.cmti
+   total_map/total_map.cmx
+   total_map/total_map.cmxa
+   total_map/total_map.ml
+   total_map/total_map.mli
+   total_map/total_map__.cmi
+   total_map/total_map__.cmt
+   total_map/total_map__.cmx
+   total_map/total_map__.ml
+   total_map/total_map__Enumeration.cmi
+   total_map/total_map__Enumeration.cmt
+   total_map/total_map__Enumeration.cmti
+   total_map/total_map__Enumeration.cmx
+   total_map/total_map__Enumeration_intf.cmi
+   total_map/total_map__Enumeration_intf.cmt
+   total_map/total_map__Enumeration_intf.cmx
+   total_map/total_map__Import.cmi
+   total_map/total_map__Import.cmt
+   total_map/total_map__Import.cmx
+   total_map/total_map__Total_map_intf.cmi
+   total_map/total_map__Total_map_intf.cmt
+   total_map/total_map__Total_map_intf.cmx
+   total_map/total_map_intf.ml
+   tuple_pool/import.ml
+   tuple_pool/tuple_pool.a
+   tuple_pool/tuple_pool.cma
+   tuple_pool/tuple_pool.cmi
+   tuple_pool/tuple_pool.cmt
+   tuple_pool/tuple_pool.cmti
+   tuple_pool/tuple_pool.cmx
+   tuple_pool/tuple_pool.cmxa
+   tuple_pool/tuple_pool.ml
+   tuple_pool/tuple_pool.mli
+   tuple_pool/tuple_pool__.cmi
+   tuple_pool/tuple_pool__.cmt
+   tuple_pool/tuple_pool__.cmx
+   tuple_pool/tuple_pool__.ml
+   tuple_pool/tuple_pool__Import.cmi
+   tuple_pool/tuple_pool__Import.cmt
+   tuple_pool/tuple_pool__Import.cmx
+   tuple_pool/tuple_pool__Tuple_pool_intf.cmi
+   tuple_pool/tuple_pool__Tuple_pool_intf.cmt
+   tuple_pool/tuple_pool__Tuple_pool_intf.cmx
+   tuple_pool/tuple_pool__Tuple_type.cmi
+   tuple_pool/tuple_pool__Tuple_type.cmt
+   tuple_pool/tuple_pool__Tuple_type.cmti
+   tuple_pool/tuple_pool__Tuple_type.cmx
+   tuple_pool/tuple_pool__Tuple_type_intf.cmi
+   tuple_pool/tuple_pool__Tuple_type_intf.cmt
+   tuple_pool/tuple_pool__Tuple_type_intf.cmx
+   tuple_pool/tuple_pool_intf.ml
+   tuple_pool/tuple_type.ml
+   tuple_pool/tuple_type.mli
+   tuple_pool/tuple_type_intf.ml
+   univ/import.ml
+   univ/univ.a
+   univ/univ.cma
+   univ/univ.cmi
+   univ/univ.cmt
+   univ/univ.cmti
+   univ/univ.cmx
+   univ/univ.cmxa
+   univ/univ.ml
+   univ/univ.mli
+   univ/univ__.cmi
+   univ/univ__.cmt
+   univ/univ__.cmx
+   univ/univ__.ml
+   univ/univ__Import.cmi
+   univ/univ__Import.cmt
+   univ/univ__Import.cmx
+   unpack_buffer/import.ml
+   unpack_buffer/unpack_buffer.a
+   unpack_buffer/unpack_buffer.cma
+   unpack_buffer/unpack_buffer.cmi
+   unpack_buffer/unpack_buffer.cmt
+   unpack_buffer/unpack_buffer.cmti
+   unpack_buffer/unpack_buffer.cmx
+   unpack_buffer/unpack_buffer.cmxa
+   unpack_buffer/unpack_buffer.ml
+   unpack_buffer/unpack_buffer.mli
+   unpack_buffer/unpack_buffer__.cmi
+   unpack_buffer/unpack_buffer__.cmt
+   unpack_buffer/unpack_buffer__.cmx
+   unpack_buffer/unpack_buffer__.ml
+   unpack_buffer/unpack_buffer__Import.cmi
+   unpack_buffer/unpack_buffer__Import.cmt
+   unpack_buffer/unpack_buffer__Import.cmx
+   uopt/uopt.a
+   uopt/uopt.cma
+   uopt/uopt.cmi
+   uopt/uopt.cmt
+   uopt/uopt.cmti
+   uopt/uopt.cmx
+   uopt/uopt.cmxa
+   uopt/uopt.ml
+   uopt/uopt.mli
+   uuid/uuid.a
+   uuid/uuid.cma
+   uuid/uuid.cmi
+   uuid/uuid.cmt
+   uuid/uuid.cmti
+   uuid/uuid.cmx
+   uuid/uuid.cmxa
+   uuid/uuid.ml
+   uuid/uuid.mli
+   vec/vec.a
+   vec/vec.cma
+   vec/vec.cmi
+   vec/vec.cmt
+   vec/vec.cmti
+   vec/vec.cmx
+   vec/vec.cmxa
+   vec/vec.ml
+   vec/vec.mli
+   vec/vec__.cmi
+   vec/vec__.cmt
+   vec/vec__.cmx
+   vec/vec__.ml
+   vec/vec__Vec_intf.cmi
+   vec/vec__Vec_intf.cmt
+   vec/vec__Vec_intf.cmx
+   vec/vec_intf.ml
+   version_util/libversion_util_stubs.a
+   version_util/version_util.a
+   version_util/version_util.cma
+   version_util/version_util.cmi
+   version_util/version_util.cmt
+   version_util/version_util.cmti
+   version_util/version_util.cmx
+   version_util/version_util.cmxa
+   version_util/version_util.js
+   version_util/version_util.ml
+   version_util/version_util.mli
+   weak_array/weak_array.a
+   weak_array/weak_array.cma
+   weak_array/weak_array.cmi
+   weak_array/weak_array.cmt
+   weak_array/weak_array.cmti
+   weak_array/weak_array.cmx
+   weak_array/weak_array.cmxa
+   weak_array/weak_array.ml
+   weak_array/weak_array.mli
+   weak_hashtbl/weak_hashtbl.a
+   weak_hashtbl/weak_hashtbl.cma
+   weak_hashtbl/weak_hashtbl.cmi
+   weak_hashtbl/weak_hashtbl.cmt
+   weak_hashtbl/weak_hashtbl.cmti
+   weak_hashtbl/weak_hashtbl.cmx
+   weak_hashtbl/weak_hashtbl.cmxa
+   weak_hashtbl/weak_hashtbl.ml
+   weak_hashtbl/weak_hashtbl.mli
+   weak_pointer/weak_pointer.a
+   weak_pointer/weak_pointer.cma
+   weak_pointer/weak_pointer.cmi
+   weak_pointer/weak_pointer.cmt
+   weak_pointer/weak_pointer.cmti
+   weak_pointer/weak_pointer.cmx
+   weak_pointer/weak_pointer.cmxa
+   weak_pointer/weak_pointer.ml
+   weak_pointer/weak_pointer.mli))
+ (libexec
+  (ansi_kernel/ansi_kernel.cmxs
+   balanced_reducer/balanced_reducer.cmxs
+   binary_packing/binary_packing.cmxs
+   bounded_int_table/bounded_int_table.cmxs
+   bus/bus.cmxs
+   caml_threads/caml_threads.cmxs
+   caml_unix/caml_unix.cmxs
+   composition_infix/composition_infix.cmxs
+   core_kernel.cmxs
+   enum/enum.cmxs
+   fheap/fheap.cmxs
+   flags/flags.cmxs
+   force_once/force_once.cmxs
+   hash_heap/hash_heap.cmxs
+   int_set/int_set.cmxs
+   iobuf/iobuf.cmxs
+   limiter/limiter.cmxs
+   moption/moption.cmxs
+   nonempty_list/nonempty_list.cmxs
+   pairing_heap/pairing_heap.cmxs
+   pooled_hashtbl/pooled_hashtbl.cmxs
+   reversed_list/reversed_list.cmxs
+   sexp_hidden_in_test/sexp_hidden_in_test.cmxs
+   thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmxs
+   thread_safe_queue/thread_safe_queue.cmxs
+   timing_wheel/timing_wheel.cmxs
+   total_map/total_map.cmxs
+   tuple_pool/tuple_pool.cmxs
+   univ/univ.cmxs
+   unpack_buffer/unpack_buffer.cmxs
+   uopt/uopt.cmxs
+   uuid/uuid.cmxs
+   vec/vec.cmxs
+   version_util/version_util.cmxs
+   weak_array/weak_array.cmxs
+   weak_hashtbl/weak_hashtbl.cmxs
+   weak_pointer/weak_pointer.cmxs))
+ (doc (CHANGES.md LICENSE.md))
+ (stublibs (dllversion_util_stubs.so)))
+(library
+ (name core_kernel)
+ (kind normal)
+ (archives (byte core_kernel.cma) (native core_kernel.cmxa))
+ (plugins (byte core_kernel.cma) (native core_kernel.cmxs))
+ (native_archives core_kernel.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Core_kernel)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name core_kernel)
+   (visibility public)
+   (source (path Core_kernel) (impl (path core_kernel.ml))))))
+(library
+ (name core_kernel.ansi_kernel)
+ (kind normal)
+ (archives
+  (byte ansi_kernel/ansi_kernel.cma)
+  (native ansi_kernel/ansi_kernel.cmxa))
+ (plugins
+  (byte ansi_kernel/ansi_kernel.cma)
+  (native ansi_kernel/ansi_kernel.cmxs))
+ (native_archives ansi_kernel/ansi_kernel.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Ansi_kernel)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name ansi_kernel__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Ansi_kernel__)
+      (impl (path ansi_kernel/ansi_kernel__.ml-gen))))
+    (name Ansi_kernel)
+    (modules
+     (module
+      (obj_name ansi_kernel)
+      (visibility public)
+      (source
+       (path Ansi_kernel)
+       (intf (path ansi_kernel/ansi_kernel.mli))
+       (impl (path ansi_kernel/ansi_kernel.ml))))
+     (module
+      (obj_name ansi_kernel__Color_256)
+      (visibility public)
+      (source
+       (path Color_256)
+       (intf (path ansi_kernel/color_256.mli))
+       (impl (path ansi_kernel/color_256.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.balanced_reducer)
+ (kind normal)
+ (archives
+  (byte balanced_reducer/balanced_reducer.cma)
+  (native balanced_reducer/balanced_reducer.cmxa))
+ (plugins
+  (byte balanced_reducer/balanced_reducer.cma)
+  (native balanced_reducer/balanced_reducer.cmxs))
+ (native_archives balanced_reducer/balanced_reducer.a)
+ (requires
+  base
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Balanced_reducer)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name balanced_reducer)
+   (visibility public)
+   (source
+    (path Balanced_reducer)
+    (intf (path balanced_reducer/balanced_reducer.mli))
+    (impl (path balanced_reducer/balanced_reducer.ml))))))
+(library
+ (name core_kernel.binary_packing)
+ (kind normal)
+ (archives
+  (byte binary_packing/binary_packing.cma)
+  (native binary_packing/binary_packing.cmxa))
+ (plugins
+  (byte binary_packing/binary_packing.cma)
+  (native binary_packing/binary_packing.cmxs))
+ (native_archives binary_packing/binary_packing.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Binary_packing)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name binary_packing__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Binary_packing__)
+      (impl (path binary_packing/binary_packing__.ml-gen))))
+    (name Binary_packing)
+    (modules
+     (module
+      (obj_name binary_packing)
+      (visibility public)
+      (source
+       (path Binary_packing)
+       (intf (path binary_packing/binary_packing.mli))
+       (impl (path binary_packing/binary_packing.ml))))
+     (module
+      (obj_name binary_packing__Import)
+      (visibility public)
+      (source (path Import) (impl (path binary_packing/import.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.bounded_int_table)
+ (kind normal)
+ (archives
+  (byte bounded_int_table/bounded_int_table.cma)
+  (native bounded_int_table/bounded_int_table.cmxa))
+ (plugins
+  (byte bounded_int_table/bounded_int_table.cma)
+  (native bounded_int_table/bounded_int_table.cmxs))
+ (native_archives bounded_int_table/bounded_int_table.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Bounded_int_table)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name bounded_int_table)
+   (visibility public)
+   (source
+    (path Bounded_int_table)
+    (intf (path bounded_int_table/bounded_int_table.mli))
+    (impl (path bounded_int_table/bounded_int_table.ml))))))
+(library
+ (name core_kernel.bus)
+ (kind normal)
+ (archives (byte bus/bus.cma) (native bus/bus.cmxa))
+ (plugins (byte bus/bus.cma) (native bus/bus.cmxs))
+ (native_archives bus/bus.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Bus)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name bus)
+   (visibility public)
+   (source (path Bus) (intf (path bus/bus.mli)) (impl (path bus/bus.ml))))))
+(library
+ (name core_kernel.caml_threads)
+ (kind normal)
+ (archives
+  (byte caml_threads/caml_threads.cma)
+  (native caml_threads/caml_threads.cmxa))
+ (plugins
+  (byte caml_threads/caml_threads.cma)
+  (native caml_threads/caml_threads.cmxs))
+ (native_archives caml_threads/caml_threads.a)
+ (requires threads)
+ (main_module_name Caml_threads)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name caml_threads)
+   (visibility public)
+   (source (path Caml_threads) (impl (path caml_threads/caml_threads.ml))))))
+(library
+ (name core_kernel.caml_unix)
+ (kind normal)
+ (archives (byte caml_unix/caml_unix.cma) (native caml_unix/caml_unix.cmxa))
+ (plugins (byte caml_unix/caml_unix.cma) (native caml_unix/caml_unix.cmxs))
+ (native_archives caml_unix/caml_unix.a)
+ (requires unix)
+ (main_module_name Caml_unix)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name caml_unix)
+   (visibility public)
+   (source (path Caml_unix) (impl (path caml_unix/caml_unix.ml))))))
+(library
+ (name core_kernel.composition_infix)
+ (kind normal)
+ (archives
+  (byte composition_infix/composition_infix.cma)
+  (native composition_infix/composition_infix.cmxa))
+ (plugins
+  (byte composition_infix/composition_infix.cma)
+  (native composition_infix/composition_infix.cmxs))
+ (native_archives composition_infix/composition_infix.a)
+ (requires
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Composition_infix)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name composition_infix)
+   (visibility public)
+   (source
+    (path Composition_infix)
+    (intf (path composition_infix/composition_infix.mli))
+    (impl (path composition_infix/composition_infix.ml))))))
+(library
+ (name core_kernel.enum)
+ (kind normal)
+ (archives (byte enum/enum.cma) (native enum/enum.cmxa))
+ (plugins (byte enum/enum.cma) (native enum/enum.cmxs))
+ (native_archives enum/enum.a)
+ (requires
+  base
+  core.command
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Enum)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name enum__)
+     (visibility public)
+     (kind alias)
+     (source (path Enum__) (impl (path enum/enum__.ml-gen))))
+    (name Enum)
+    (modules
+     (module
+      (obj_name enum)
+      (visibility public)
+      (source
+       (path Enum)
+       (intf (path enum/enum.mli))
+       (impl (path enum/enum.ml))))
+     (module
+      (obj_name enum__Enum_intf)
+      (visibility public)
+      (source (path Enum_intf) (impl (path enum/enum_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.fheap)
+ (kind normal)
+ (archives (byte fheap/fheap.cma) (native fheap/fheap.cmxa))
+ (plugins (byte fheap/fheap.cma) (native fheap/fheap.cmxs))
+ (native_archives fheap/fheap.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Fheap)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name fheap)
+   (visibility public)
+   (source
+    (path Fheap)
+    (intf (path fheap/fheap.mli))
+    (impl (path fheap/fheap.ml))))))
+(library
+ (name core_kernel.flags)
+ (kind normal)
+ (archives (byte flags/flags.cma) (native flags/flags.cmxa))
+ (plugins (byte flags/flags.cma) (native flags/flags.cmxs))
+ (native_archives flags/flags.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Flags)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name flags__)
+     (visibility public)
+     (kind alias)
+     (source (path Flags__) (impl (path flags/flags__.ml-gen))))
+    (name Flags)
+    (modules
+     (module
+      (obj_name flags)
+      (visibility public)
+      (source
+       (path Flags)
+       (intf (path flags/flags.mli))
+       (impl (path flags/flags.ml))))
+     (module
+      (obj_name flags__Flags_intf)
+      (visibility public)
+      (source (path Flags_intf) (impl (path flags/flags_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.force_once)
+ (kind normal)
+ (archives
+  (byte force_once/force_once.cma)
+  (native force_once/force_once.cmxa))
+ (plugins
+  (byte force_once/force_once.cma)
+  (native force_once/force_once.cmxs))
+ (native_archives force_once/force_once.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Force_once)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name force_once__)
+     (visibility public)
+     (kind alias)
+     (source (path Force_once__) (impl (path force_once/force_once__.ml-gen))))
+    (name Force_once)
+    (modules
+     (module
+      (obj_name force_once)
+      (visibility public)
+      (source
+       (path Force_once)
+       (intf (path force_once/force_once.mli))
+       (impl (path force_once/force_once.ml))))
+     (module
+      (obj_name force_once__Import)
+      (visibility public)
+      (source (path Import) (impl (path force_once/import.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.hash_heap)
+ (kind normal)
+ (archives (byte hash_heap/hash_heap.cma) (native hash_heap/hash_heap.cmxa))
+ (plugins (byte hash_heap/hash_heap.cma) (native hash_heap/hash_heap.cmxs))
+ (native_archives hash_heap/hash_heap.a)
+ (requires
+  core
+  core_kernel.pairing_heap
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Hash_heap)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name hash_heap__)
+     (visibility public)
+     (kind alias)
+     (source (path Hash_heap__) (impl (path hash_heap/hash_heap__.ml-gen))))
+    (name Hash_heap)
+    (modules
+     (module
+      (obj_name hash_heap)
+      (visibility public)
+      (source
+       (path Hash_heap)
+       (intf (path hash_heap/hash_heap.mli))
+       (impl (path hash_heap/hash_heap.ml))))
+     (module
+      (obj_name hash_heap__Hash_heap_intf)
+      (visibility public)
+      (source (path Hash_heap_intf) (impl (path hash_heap/hash_heap_intf.ml))))
+     (module
+      (obj_name hash_heap__Import)
+      (visibility public)
+      (source (path Import) (impl (path hash_heap/import.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.int_set)
+ (kind normal)
+ (archives (byte int_set/int_set.cma) (native int_set/int_set.cmxa))
+ (plugins (byte int_set/int_set.cma) (native int_set/int_set.cmxs))
+ (native_archives int_set/int_set.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Int_set)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name int_set__)
+     (visibility public)
+     (kind alias)
+     (source (path Int_set__) (impl (path int_set/int_set__.ml-gen))))
+    (name Int_set)
+    (modules
+     (module
+      (obj_name int_set__Import)
+      (visibility public)
+      (source (path Import) (impl (path int_set/import.ml))))
+     (module
+      (obj_name int_set)
+      (visibility public)
+      (source
+       (path Int_set)
+       (intf (path int_set/int_set.mli))
+       (impl (path int_set/int_set.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.iobuf)
+ (kind normal)
+ (archives (byte iobuf/iobuf.cma) (native iobuf/iobuf.cmxa))
+ (plugins (byte iobuf/iobuf.cma) (native iobuf/iobuf.cmxs))
+ (native_archives iobuf/iobuf.a)
+ (requires
+  core.base_for_tests
+  core
+  int_repr
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Iobuf)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name iobuf__)
+     (visibility public)
+     (kind alias)
+     (source (path Iobuf__) (impl (path iobuf/iobuf__.ml-gen))))
+    (name Iobuf)
+    (modules
+     (module
+      (obj_name iobuf)
+      (visibility public)
+      (source
+       (path Iobuf)
+       (intf (path iobuf/iobuf.mli))
+       (impl (path iobuf/iobuf.ml))))
+     (module
+      (obj_name iobuf__Iobuf_intf)
+      (visibility public)
+      (source (path Iobuf_intf) (impl (path iobuf/iobuf_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.limiter)
+ (kind normal)
+ (archives (byte limiter/limiter.cma) (native limiter/limiter.cmxa))
+ (plugins (byte limiter/limiter.cma) (native limiter/limiter.cmxs))
+ (native_archives limiter/limiter.a)
+ (requires
+  core
+  core_kernel.moption
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Limiter)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name limiter__)
+     (visibility public)
+     (kind alias)
+     (source (path Limiter__) (impl (path limiter/limiter__.ml-gen))))
+    (name Limiter)
+    (modules
+     (module
+      (obj_name limiter__Import)
+      (visibility public)
+      (source (path Import) (impl (path limiter/import.ml))))
+     (module
+      (obj_name limiter)
+      (visibility public)
+      (source
+       (path Limiter)
+       (intf (path limiter/limiter.mli))
+       (impl (path limiter/limiter.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.moption)
+ (kind normal)
+ (archives (byte moption/moption.cma) (native moption/moption.cmxa))
+ (plugins (byte moption/moption.cma) (native moption/moption.cmxs))
+ (native_archives moption/moption.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Moption)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name moption__)
+     (visibility public)
+     (kind alias)
+     (source (path Moption__) (impl (path moption/moption__.ml-gen))))
+    (name Moption)
+    (modules
+     (module
+      (obj_name moption__Import)
+      (visibility public)
+      (source (path Import) (impl (path moption/import.ml))))
+     (module
+      (obj_name moption)
+      (visibility public)
+      (source
+       (path Moption)
+       (intf (path moption/moption.mli))
+       (impl (path moption/moption.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.nonempty_list)
+ (kind normal)
+ (archives
+  (byte nonempty_list/nonempty_list.cma)
+  (native nonempty_list/nonempty_list.cmxa))
+ (plugins
+  (byte nonempty_list/nonempty_list.cma)
+  (native nonempty_list/nonempty_list.cmxs))
+ (native_archives nonempty_list/nonempty_list.a)
+ (requires
+  core
+  core_kernel.reversed_list
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Nonempty_list)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name nonempty_list)
+   (visibility public)
+   (source
+    (path Nonempty_list)
+    (intf (path nonempty_list/nonempty_list.mli))
+    (impl (path nonempty_list/nonempty_list.ml))))))
+(library
+ (name core_kernel.pairing_heap)
+ (kind normal)
+ (archives
+  (byte pairing_heap/pairing_heap.cma)
+  (native pairing_heap/pairing_heap.cmxa))
+ (plugins
+  (byte pairing_heap/pairing_heap.cma)
+  (native pairing_heap/pairing_heap.cmxs))
+ (native_archives pairing_heap/pairing_heap.a)
+ (requires
+  core
+  core_kernel.tuple_pool
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Pairing_heap)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name pairing_heap)
+   (visibility public)
+   (source
+    (path Pairing_heap)
+    (intf (path pairing_heap/pairing_heap.mli))
+    (impl (path pairing_heap/pairing_heap.ml))))))
+(library
+ (name core_kernel.pooled_hashtbl)
+ (kind normal)
+ (archives
+  (byte pooled_hashtbl/pooled_hashtbl.cma)
+  (native pooled_hashtbl/pooled_hashtbl.cmxa))
+ (plugins
+  (byte pooled_hashtbl/pooled_hashtbl.cma)
+  (native pooled_hashtbl/pooled_hashtbl.cmxs))
+ (native_archives pooled_hashtbl/pooled_hashtbl.a)
+ (requires
+  core
+  core_kernel.tuple_pool
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Pooled_hashtbl)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name pooled_hashtbl__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Pooled_hashtbl__)
+      (impl (path pooled_hashtbl/pooled_hashtbl__.ml-gen))))
+    (name Pooled_hashtbl)
+    (modules
+     (module
+      (obj_name pooled_hashtbl__Import)
+      (visibility public)
+      (source (path Import) (impl (path pooled_hashtbl/import.ml))))
+     (module
+      (obj_name pooled_hashtbl)
+      (visibility public)
+      (source
+       (path Pooled_hashtbl)
+       (intf (path pooled_hashtbl/pooled_hashtbl.mli))
+       (impl (path pooled_hashtbl/pooled_hashtbl.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.reversed_list)
+ (kind normal)
+ (archives
+  (byte reversed_list/reversed_list.cma)
+  (native reversed_list/reversed_list.cmxa))
+ (plugins
+  (byte reversed_list/reversed_list.cma)
+  (native reversed_list/reversed_list.cmxs))
+ (native_archives reversed_list/reversed_list.a)
+ (requires
+  base
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Reversed_list)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name reversed_list)
+   (visibility public)
+   (source
+    (path Reversed_list)
+    (intf (path reversed_list/reversed_list.mli))
+    (impl (path reversed_list/reversed_list.ml))))))
+(library
+ (name core_kernel.sexp_hidden_in_test)
+ (kind normal)
+ (archives
+  (byte sexp_hidden_in_test/sexp_hidden_in_test.cma)
+  (native sexp_hidden_in_test/sexp_hidden_in_test.cmxa))
+ (plugins
+  (byte sexp_hidden_in_test/sexp_hidden_in_test.cma)
+  (native sexp_hidden_in_test/sexp_hidden_in_test.cmxs))
+ (native_archives sexp_hidden_in_test/sexp_hidden_in_test.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Sexp_hidden_in_test)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name sexp_hidden_in_test)
+   (visibility public)
+   (source
+    (path Sexp_hidden_in_test)
+    (intf (path sexp_hidden_in_test/sexp_hidden_in_test.mli))
+    (impl (path sexp_hidden_in_test/sexp_hidden_in_test.ml))))))
+(library
+ (name core_kernel.thread_pool_cpu_affinity)
+ (kind normal)
+ (archives
+  (byte thread_pool_cpu_affinity/thread_pool_cpu_affinity.cma)
+  (native thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmxa))
+ (plugins
+  (byte thread_pool_cpu_affinity/thread_pool_cpu_affinity.cma)
+  (native thread_pool_cpu_affinity/thread_pool_cpu_affinity.cmxs))
+ (native_archives thread_pool_cpu_affinity/thread_pool_cpu_affinity.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Thread_pool_cpu_affinity)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name thread_pool_cpu_affinity__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Thread_pool_cpu_affinity__)
+      (impl (path thread_pool_cpu_affinity/thread_pool_cpu_affinity__.ml-gen))))
+    (name Thread_pool_cpu_affinity)
+    (modules
+     (module
+      (obj_name thread_pool_cpu_affinity__Import)
+      (visibility public)
+      (source (path Import) (impl (path thread_pool_cpu_affinity/import.ml))))
+     (module
+      (obj_name thread_pool_cpu_affinity)
+      (visibility public)
+      (source
+       (path Thread_pool_cpu_affinity)
+       (intf (path thread_pool_cpu_affinity/thread_pool_cpu_affinity.mli))
+       (impl (path thread_pool_cpu_affinity/thread_pool_cpu_affinity.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.thread_safe_queue)
+ (kind normal)
+ (archives
+  (byte thread_safe_queue/thread_safe_queue.cma)
+  (native thread_safe_queue/thread_safe_queue.cmxa))
+ (plugins
+  (byte thread_safe_queue/thread_safe_queue.cma)
+  (native thread_safe_queue/thread_safe_queue.cmxs))
+ (native_archives thread_safe_queue/thread_safe_queue.a)
+ (requires
+  core
+  core_kernel.uopt
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Thread_safe_queue)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name thread_safe_queue__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Thread_safe_queue__)
+      (impl (path thread_safe_queue/thread_safe_queue__.ml-gen))))
+    (name Thread_safe_queue)
+    (modules
+     (module
+      (obj_name thread_safe_queue__Import)
+      (visibility public)
+      (source (path Import) (impl (path thread_safe_queue/import.ml))))
+     (module
+      (obj_name thread_safe_queue)
+      (visibility public)
+      (source
+       (path Thread_safe_queue)
+       (intf (path thread_safe_queue/thread_safe_queue.mli))
+       (impl (path thread_safe_queue/thread_safe_queue.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.timing_wheel)
+ (kind normal)
+ (archives
+  (byte timing_wheel/timing_wheel.cma)
+  (native timing_wheel/timing_wheel.cmxa))
+ (plugins
+  (byte timing_wheel/timing_wheel.cma)
+  (native timing_wheel/timing_wheel.cmxs))
+ (native_archives timing_wheel/timing_wheel.a)
+ (requires
+  core
+  core_kernel.tuple_pool
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Timing_wheel)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name timing_wheel__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Timing_wheel__)
+      (impl (path timing_wheel/timing_wheel__.ml-gen))))
+    (name Timing_wheel)
+    (modules
+     (module
+      (obj_name timing_wheel__Import)
+      (visibility public)
+      (source (path Import) (impl (path timing_wheel/import.ml))))
+     (module
+      (obj_name timing_wheel)
+      (visibility public)
+      (source
+       (path Timing_wheel)
+       (intf (path timing_wheel/timing_wheel.mli))
+       (impl (path timing_wheel/timing_wheel.ml))))
+     (module
+      (obj_name timing_wheel__Timing_wheel_intf)
+      (visibility public)
+      (source
+       (path Timing_wheel_intf)
+       (impl (path timing_wheel/timing_wheel_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.total_map)
+ (kind normal)
+ (archives (byte total_map/total_map.cma) (native total_map/total_map.cmxa))
+ (plugins (byte total_map/total_map.cma) (native total_map/total_map.cmxs))
+ (native_archives total_map/total_map.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Total_map)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name total_map__)
+     (visibility public)
+     (kind alias)
+     (source (path Total_map__) (impl (path total_map/total_map__.ml-gen))))
+    (name Total_map)
+    (modules
+     (module
+      (obj_name total_map__Enumeration)
+      (visibility public)
+      (source
+       (path Enumeration)
+       (intf (path total_map/enumeration.mli))
+       (impl (path total_map/enumeration.ml))))
+     (module
+      (obj_name total_map__Enumeration_intf)
+      (visibility public)
+      (source
+       (path Enumeration_intf)
+       (impl (path total_map/enumeration_intf.ml))))
+     (module
+      (obj_name total_map__Import)
+      (visibility public)
+      (source (path Import) (impl (path total_map/import.ml))))
+     (module
+      (obj_name total_map)
+      (visibility public)
+      (source
+       (path Total_map)
+       (intf (path total_map/total_map.mli))
+       (impl (path total_map/total_map.ml))))
+     (module
+      (obj_name total_map__Total_map_intf)
+      (visibility public)
+      (source (path Total_map_intf) (impl (path total_map/total_map_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.tuple_pool)
+ (kind normal)
+ (archives
+  (byte tuple_pool/tuple_pool.cma)
+  (native tuple_pool/tuple_pool.cmxa))
+ (plugins
+  (byte tuple_pool/tuple_pool.cma)
+  (native tuple_pool/tuple_pool.cmxs))
+ (native_archives tuple_pool/tuple_pool.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Tuple_pool)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name tuple_pool__)
+     (visibility public)
+     (kind alias)
+     (source (path Tuple_pool__) (impl (path tuple_pool/tuple_pool__.ml-gen))))
+    (name Tuple_pool)
+    (modules
+     (module
+      (obj_name tuple_pool__Import)
+      (visibility public)
+      (source (path Import) (impl (path tuple_pool/import.ml))))
+     (module
+      (obj_name tuple_pool)
+      (visibility public)
+      (source
+       (path Tuple_pool)
+       (intf (path tuple_pool/tuple_pool.mli))
+       (impl (path tuple_pool/tuple_pool.ml))))
+     (module
+      (obj_name tuple_pool__Tuple_pool_intf)
+      (visibility public)
+      (source
+       (path Tuple_pool_intf)
+       (impl (path tuple_pool/tuple_pool_intf.ml))))
+     (module
+      (obj_name tuple_pool__Tuple_type)
+      (visibility public)
+      (source
+       (path Tuple_type)
+       (intf (path tuple_pool/tuple_type.mli))
+       (impl (path tuple_pool/tuple_type.ml))))
+     (module
+      (obj_name tuple_pool__Tuple_type_intf)
+      (visibility public)
+      (source
+       (path Tuple_type_intf)
+       (impl (path tuple_pool/tuple_type_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.univ)
+ (kind normal)
+ (archives (byte univ/univ.cma) (native univ/univ.cmxa))
+ (plugins (byte univ/univ.cma) (native univ/univ.cmxs))
+ (native_archives univ/univ.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Univ)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name univ__)
+     (visibility public)
+     (kind alias)
+     (source (path Univ__) (impl (path univ/univ__.ml-gen))))
+    (name Univ)
+    (modules
+     (module
+      (obj_name univ__Import)
+      (visibility public)
+      (source (path Import) (impl (path univ/import.ml))))
+     (module
+      (obj_name univ)
+      (visibility public)
+      (source
+       (path Univ)
+       (intf (path univ/univ.mli))
+       (impl (path univ/univ.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.unpack_buffer)
+ (kind normal)
+ (archives
+  (byte unpack_buffer/unpack_buffer.cma)
+  (native unpack_buffer/unpack_buffer.cmxa))
+ (plugins
+  (byte unpack_buffer/unpack_buffer.cma)
+  (native unpack_buffer/unpack_buffer.cmxs))
+ (native_archives unpack_buffer/unpack_buffer.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Unpack_buffer)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name unpack_buffer__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Unpack_buffer__)
+      (impl (path unpack_buffer/unpack_buffer__.ml-gen))))
+    (name Unpack_buffer)
+    (modules
+     (module
+      (obj_name unpack_buffer__Import)
+      (visibility public)
+      (source (path Import) (impl (path unpack_buffer/import.ml))))
+     (module
+      (obj_name unpack_buffer)
+      (visibility public)
+      (source
+       (path Unpack_buffer)
+       (intf (path unpack_buffer/unpack_buffer.mli))
+       (impl (path unpack_buffer/unpack_buffer.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.uopt)
+ (kind normal)
+ (archives (byte uopt/uopt.cma) (native uopt/uopt.cmxa))
+ (plugins (byte uopt/uopt.cma) (native uopt/uopt.cmxs))
+ (native_archives uopt/uopt.a)
+ (requires
+  base
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Uopt)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name uopt)
+   (visibility public)
+   (source (path Uopt) (intf (path uopt/uopt.mli)) (impl (path uopt/uopt.ml))))))
+(library
+ (name core_kernel.uuid)
+ (kind normal)
+ (archives (byte uuid/uuid.cma) (native uuid/uuid.cmxa))
+ (plugins (byte uuid/uuid.cma) (native uuid/uuid.cmxs))
+ (native_archives uuid/uuid.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Uuid)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name uuid)
+   (visibility public)
+   (source (path Uuid) (intf (path uuid/uuid.mli)) (impl (path uuid/uuid.ml))))))
+(library
+ (name core_kernel.vec)
+ (kind normal)
+ (archives (byte vec/vec.cma) (native vec/vec.cmxa))
+ (plugins (byte vec/vec.cma) (native vec/vec.cmxs))
+ (native_archives vec/vec.a)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Vec)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name vec__)
+     (visibility public)
+     (kind alias)
+     (source (path Vec__) (impl (path vec/vec__.ml-gen))))
+    (name Vec)
+    (modules
+     (module
+      (obj_name vec)
+      (visibility public)
+      (source (path Vec) (intf (path vec/vec.mli)) (impl (path vec/vec.ml))))
+     (module
+      (obj_name vec__Vec_intf)
+      (visibility public)
+      (source (path Vec_intf) (impl (path vec/vec_intf.ml))))))
+   (wrapped true))))
+(library
+ (name core_kernel.version_util)
+ (kind normal)
+ (archives
+  (byte version_util/version_util.cma)
+  (native version_util/version_util.cmxa))
+ (plugins
+  (byte version_util/version_util.cma)
+  (native version_util/version_util.cmxs))
+ (foreign_objects version_util/version_util_fallback_stubs.o)
+ (foreign_archives
+  (archives (for all) (files version_util/libversion_util_stubs.a)))
+ (foreign_dll_files ../stublibs/dllversion_util_stubs.so)
+ (native_archives version_util/version_util.a)
+ (jsoo_runtime version_util/version_util.js)
+ (requires
+  core
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Version_util)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name version_util)
+   (visibility public)
+   (source
+    (path Version_util)
+    (intf (path version_util/version_util.mli))
+    (impl (path version_util/version_util.ml))))))
+(library
+ (name core_kernel.weak_array)
+ (kind normal)
+ (archives
+  (byte weak_array/weak_array.cma)
+  (native weak_array/weak_array.cmxa))
+ (plugins
+  (byte weak_array/weak_array.cma)
+  (native weak_array/weak_array.cmxs))
+ (native_archives weak_array/weak_array.a)
+ (requires
+  base
+  core.heap_block
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Weak_array)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name weak_array)
+   (visibility public)
+   (source
+    (path Weak_array)
+    (intf (path weak_array/weak_array.mli))
+    (impl (path weak_array/weak_array.ml))))))
+(library
+ (name core_kernel.weak_hashtbl)
+ (kind normal)
+ (archives
+  (byte weak_hashtbl/weak_hashtbl.cma)
+  (native weak_hashtbl/weak_hashtbl.cmxa))
+ (plugins
+  (byte weak_hashtbl/weak_hashtbl.cma)
+  (native weak_hashtbl/weak_hashtbl.cmxs))
+ (native_archives weak_hashtbl/weak_hashtbl.a)
+ (requires
+  base
+  core.heap_block
+  core_kernel.thread_safe_queue
+  core_kernel.weak_pointer
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Weak_hashtbl)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name weak_hashtbl)
+   (visibility public)
+   (source
+    (path Weak_hashtbl)
+    (intf (path weak_hashtbl/weak_hashtbl.mli))
+    (impl (path weak_hashtbl/weak_hashtbl.ml))))))
+(library
+ (name core_kernel.weak_pointer)
+ (kind normal)
+ (archives
+  (byte weak_pointer/weak_pointer.cma)
+  (native weak_pointer/weak_pointer.cmxa))
+ (plugins
+  (byte weak_pointer/weak_pointer.cma)
+  (native weak_pointer/weak_pointer.cmxs))
+ (native_archives weak_pointer/weak_pointer.a)
+ (requires
+  base
+  core_kernel.weak_array
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Weak_pointer)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name weak_pointer)
+   (visibility public)
+   (source
+    (path Weak_pointer)
+    (intf (path weak_pointer/weak_pointer.mli))
+    (impl (path weak_pointer/weak_pointer.ml))))))

@@ -1,0 +1,77 @@
+(lang dune 3.18)
+(name sexp_pretty)
+(version v0.16.0)
+(sections (lib .) (libexec .) (doc ../../doc/sexp_pretty))
+(files
+ (lib
+  (META
+   config.ml
+   config.mli
+   dune-package
+   opam
+   sexp_pretty.a
+   sexp_pretty.cma
+   sexp_pretty.cmi
+   sexp_pretty.cmt
+   sexp_pretty.cmti
+   sexp_pretty.cmx
+   sexp_pretty.cmxa
+   sexp_pretty.ml
+   sexp_pretty.mli
+   sexp_pretty__.cmi
+   sexp_pretty__.cmt
+   sexp_pretty__.cmx
+   sexp_pretty__.ml
+   sexp_pretty__Config.cmi
+   sexp_pretty__Config.cmt
+   sexp_pretty__Config.cmti
+   sexp_pretty__Config.cmx
+   sexp_pretty__Sexp_pretty_intf.cmi
+   sexp_pretty__Sexp_pretty_intf.cmt
+   sexp_pretty__Sexp_pretty_intf.cmx
+   sexp_pretty_intf.ml))
+ (libexec (sexp_pretty.cmxs))
+ (doc (CHANGES.md LICENSE.md README.org)))
+(library
+ (name sexp_pretty)
+ (kind normal)
+ (archives (byte sexp_pretty.cma) (native sexp_pretty.cmxa))
+ (plugins (byte sexp_pretty.cma) (native sexp_pretty.cmxs))
+ (native_archives sexp_pretty.a)
+ (requires
+  base
+  re
+  sexplib
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib)
+ (main_module_name Sexp_pretty)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name sexp_pretty__)
+     (visibility public)
+     (kind alias)
+     (source (path Sexp_pretty__) (impl (path sexp_pretty__.ml-gen))))
+    (name Sexp_pretty)
+    (modules
+     (module
+      (obj_name sexp_pretty__Config)
+      (visibility public)
+      (source (path Config) (intf (path config.mli)) (impl (path config.ml))))
+     (module
+      (obj_name sexp_pretty)
+      (visibility public)
+      (source
+       (path Sexp_pretty)
+       (intf (path sexp_pretty.mli))
+       (impl (path sexp_pretty.ml))))
+     (module
+      (obj_name sexp_pretty__Sexp_pretty_intf)
+      (visibility public)
+      (source (path Sexp_pretty_intf) (impl (path sexp_pretty_intf.ml))))))
+   (wrapped true))))

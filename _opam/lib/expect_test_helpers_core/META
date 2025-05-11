@@ -1,0 +1,67 @@
+version = "v0.16.0"
+description = ""
+requires =
+"base_quickcheck
+ base_quickcheck.ppx_quickcheck.runtime
+ bin_prot
+ core
+ expect_test_helpers_core.expect_test_helpers_base
+ fieldslib
+ ppx_assert.runtime-lib
+ ppx_bench.runtime-lib
+ ppx_compare.runtime-lib
+ ppx_enumerate.runtime-lib
+ ppx_expect.collector
+ ppx_expect.config
+ ppx_hash.runtime-lib
+ ppx_here.runtime-lib
+ ppx_inline_test.config
+ ppx_inline_test.runtime-lib
+ ppx_log.types
+ ppx_module_timer.runtime
+ ppx_sexp_conv.runtime-lib
+ ppx_stable_witness.runtime
+ re
+ sexp_pretty
+ sexplib0
+ typerep
+ variantslib"
+archive(byte) = "expect_test_helpers_core.cma"
+archive(native) = "expect_test_helpers_core.cmxa"
+plugin(byte) = "expect_test_helpers_core.cma"
+plugin(native) = "expect_test_helpers_core.cmxs"
+package "expect_test_helpers_base" (
+  directory = "expect_test_helpers_base"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   re
+   sexp_pretty
+   sexplib0
+   stdio
+   typerep
+   variantslib"
+  archive(byte) = "expect_test_helpers_base.cma"
+  archive(native) = "expect_test_helpers_base.cmxa"
+  plugin(byte) = "expect_test_helpers_base.cma"
+  plugin(native) = "expect_test_helpers_base.cmxs"
+)

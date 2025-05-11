@@ -1,0 +1,7 @@
+version = "v0.16.2"
+description = ""
+requires = ""
+archive(byte) = "ocaml_intrinsics.cma"
+archive(native) = "ocaml_intrinsics.cmxa"
+plugin(byte) = "ocaml_intrinsics.cma"
+plugin(native) = "ocaml_intrinsics.cmxs"

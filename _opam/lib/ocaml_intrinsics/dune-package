@@ -1,0 +1,200 @@
+(lang dune 3.18)
+(name ocaml_intrinsics)
+(version v0.16.2)
+(sections
+ (lib .)
+ (libexec .)
+ (doc ../../doc/ocaml_intrinsics)
+ (stublibs ../stublibs))
+(files
+ (lib
+  (META
+   atomic.ml
+   atomic.mli
+   atomic_expert.ml
+   bigstring_intf.ml
+   conditional.ml
+   crc.ml
+   crc.mli
+   dune-package
+   ext_pointer.ml
+   fences.ml
+   float.ml
+   float.mli
+   int.ml
+   int32.ml
+   int64.ml
+   libocaml_intrinsics_stubs.a
+   native_pointer.ml
+   native_pointer.mli
+   nativeint.ml
+   ocaml_intrinsics.a
+   ocaml_intrinsics.cma
+   ocaml_intrinsics.cmi
+   ocaml_intrinsics.cmt
+   ocaml_intrinsics.cmx
+   ocaml_intrinsics.cmxa
+   ocaml_intrinsics.ml
+   ocaml_intrinsics__Atomic.cmi
+   ocaml_intrinsics__Atomic.cmt
+   ocaml_intrinsics__Atomic.cmti
+   ocaml_intrinsics__Atomic.cmx
+   ocaml_intrinsics__Atomic_expert.cmi
+   ocaml_intrinsics__Atomic_expert.cmt
+   ocaml_intrinsics__Atomic_expert.cmx
+   ocaml_intrinsics__Bigstring_intf.cmi
+   ocaml_intrinsics__Bigstring_intf.cmt
+   ocaml_intrinsics__Bigstring_intf.cmx
+   ocaml_intrinsics__Conditional.cmi
+   ocaml_intrinsics__Conditional.cmt
+   ocaml_intrinsics__Conditional.cmx
+   ocaml_intrinsics__Crc.cmi
+   ocaml_intrinsics__Crc.cmt
+   ocaml_intrinsics__Crc.cmti
+   ocaml_intrinsics__Crc.cmx
+   ocaml_intrinsics__Ext_pointer.cmi
+   ocaml_intrinsics__Ext_pointer.cmt
+   ocaml_intrinsics__Ext_pointer.cmx
+   ocaml_intrinsics__Fences.cmi
+   ocaml_intrinsics__Fences.cmt
+   ocaml_intrinsics__Fences.cmx
+   ocaml_intrinsics__Float.cmi
+   ocaml_intrinsics__Float.cmt
+   ocaml_intrinsics__Float.cmti
+   ocaml_intrinsics__Float.cmx
+   ocaml_intrinsics__Int.cmi
+   ocaml_intrinsics__Int.cmt
+   ocaml_intrinsics__Int.cmx
+   ocaml_intrinsics__Int32.cmi
+   ocaml_intrinsics__Int32.cmt
+   ocaml_intrinsics__Int32.cmx
+   ocaml_intrinsics__Int64.cmi
+   ocaml_intrinsics__Int64.cmt
+   ocaml_intrinsics__Int64.cmx
+   ocaml_intrinsics__Native_pointer.cmi
+   ocaml_intrinsics__Native_pointer.cmt
+   ocaml_intrinsics__Native_pointer.cmti
+   ocaml_intrinsics__Native_pointer.cmx
+   ocaml_intrinsics__Nativeint.cmi
+   ocaml_intrinsics__Nativeint.cmt
+   ocaml_intrinsics__Nativeint.cmx
+   ocaml_intrinsics__Perfmon.cmi
+   ocaml_intrinsics__Perfmon.cmt
+   ocaml_intrinsics__Perfmon.cmx
+   ocaml_intrinsics__Prefetch.cmi
+   ocaml_intrinsics__Prefetch.cmt
+   ocaml_intrinsics__Prefetch.cmti
+   ocaml_intrinsics__Prefetch.cmx
+   ocaml_intrinsics__Prefetch_expert.cmi
+   ocaml_intrinsics__Prefetch_expert.cmt
+   ocaml_intrinsics__Prefetch_expert.cmx
+   opam
+   perfmon.ml
+   prefetch.ml
+   prefetch.mli
+   prefetch_expert.ml))
+ (libexec (ocaml_intrinsics.cmxs))
+ (doc (LICENSE.md README.md))
+ (stublibs (dllocaml_intrinsics_stubs.so)))
+(library
+ (name ocaml_intrinsics)
+ (kind normal)
+ (archives (byte ocaml_intrinsics.cma) (native ocaml_intrinsics.cmxa))
+ (plugins (byte ocaml_intrinsics.cma) (native ocaml_intrinsics.cmxs))
+ (foreign_objects
+  atomic_stubs.o
+  conditional_stubs.o
+  crc_stubs.o
+  ext_pointer_stubs.o
+  fences_stubs.o
+  float_stubs.o
+  int_stubs.o
+  native_pointer_stubs.o
+  perfmon_stubs.o
+  prefetch_stubs.o)
+ (foreign_archives (archives (for all) (files libocaml_intrinsics_stubs.a)))
+ (foreign_dll_files ../stublibs/dllocaml_intrinsics_stubs.so)
+ (native_archives ocaml_intrinsics.a)
+ (main_module_name Ocaml_intrinsics)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name ocaml_intrinsics)
+     (visibility public)
+     (kind alias)
+     (source (path Ocaml_intrinsics) (impl (path ocaml_intrinsics.ml-gen))))
+    (name Ocaml_intrinsics)
+    (modules
+     (module
+      (obj_name ocaml_intrinsics__Atomic)
+      (visibility public)
+      (source (path Atomic) (intf (path atomic.mli)) (impl (path atomic.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Atomic_expert)
+      (visibility public)
+      (source (path Atomic_expert) (impl (path atomic_expert.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Bigstring_intf)
+      (visibility public)
+      (source (path Bigstring_intf) (impl (path bigstring_intf.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Conditional)
+      (visibility public)
+      (source (path Conditional) (impl (path conditional.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Crc)
+      (visibility public)
+      (source (path Crc) (intf (path crc.mli)) (impl (path crc.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Ext_pointer)
+      (visibility public)
+      (source (path Ext_pointer) (impl (path ext_pointer.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Fences)
+      (visibility public)
+      (source (path Fences) (impl (path fences.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Float)
+      (visibility public)
+      (source (path Float) (intf (path float.mli)) (impl (path float.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Int)
+      (visibility public)
+      (source (path Int) (impl (path int.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Int32)
+      (visibility public)
+      (source (path Int32) (impl (path int32.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Int64)
+      (visibility public)
+      (source (path Int64) (impl (path int64.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Native_pointer)
+      (visibility public)
+      (source
+       (path Native_pointer)
+       (intf (path native_pointer.mli))
+       (impl (path native_pointer.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Nativeint)
+      (visibility public)
+      (source (path Nativeint) (impl (path nativeint.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Perfmon)
+      (visibility public)
+      (source (path Perfmon) (impl (path perfmon.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Prefetch)
+      (visibility public)
+      (source
+       (path Prefetch)
+       (intf (path prefetch.mli))
+       (impl (path prefetch.ml))))
+     (module
+      (obj_name ocaml_intrinsics__Prefetch_expert)
+      (visibility public)
+      (source (path Prefetch_expert) (impl (path prefetch_expert.ml))))))
+   (wrapped true))))

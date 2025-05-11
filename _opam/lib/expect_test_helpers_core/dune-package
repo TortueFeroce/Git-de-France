@@ -1,0 +1,175 @@
+(lang dune 3.18)
+(name expect_test_helpers_core)
+(version v0.16.0)
+(sections (lib .) (libexec .) (doc ../../doc/expect_test_helpers_core))
+(files
+ (lib
+  (META
+   dune-package
+   expect_test_helpers_base/expect_test_helpers_base.a
+   expect_test_helpers_base/expect_test_helpers_base.cma
+   expect_test_helpers_base/expect_test_helpers_base.cmi
+   expect_test_helpers_base/expect_test_helpers_base.cmt
+   expect_test_helpers_base/expect_test_helpers_base.cmti
+   expect_test_helpers_base/expect_test_helpers_base.cmx
+   expect_test_helpers_base/expect_test_helpers_base.cmxa
+   expect_test_helpers_base/expect_test_helpers_base.ml
+   expect_test_helpers_base/expect_test_helpers_base.mli
+   expect_test_helpers_base/expect_test_helpers_base__.cmi
+   expect_test_helpers_base/expect_test_helpers_base__.cmt
+   expect_test_helpers_base/expect_test_helpers_base__.cmx
+   expect_test_helpers_base/expect_test_helpers_base__.ml
+   expect_test_helpers_base/expect_test_helpers_base__Expect_test_helpers_base_intf.cmi
+   expect_test_helpers_base/expect_test_helpers_base__Expect_test_helpers_base_intf.cmt
+   expect_test_helpers_base/expect_test_helpers_base__Expect_test_helpers_base_intf.cmx
+   expect_test_helpers_base/expect_test_helpers_base_intf.ml
+   expect_test_helpers_core.a
+   expect_test_helpers_core.cma
+   expect_test_helpers_core.cmi
+   expect_test_helpers_core.cmt
+   expect_test_helpers_core.cmti
+   expect_test_helpers_core.cmx
+   expect_test_helpers_core.cmxa
+   expect_test_helpers_core.ml
+   expect_test_helpers_core.mli
+   expect_test_helpers_core__.cmi
+   expect_test_helpers_core__.cmt
+   expect_test_helpers_core__.cmx
+   expect_test_helpers_core__.ml
+   expect_test_helpers_core__Expect_test_helpers_core_intf.cmi
+   expect_test_helpers_core__Expect_test_helpers_core_intf.cmt
+   expect_test_helpers_core__Expect_test_helpers_core_intf.cmx
+   expect_test_helpers_core_intf.ml
+   opam))
+ (libexec
+  (expect_test_helpers_base/expect_test_helpers_base.cmxs
+   expect_test_helpers_core.cmxs))
+ (doc (CHANGES.md LICENSE.md README.md)))
+(library
+ (name expect_test_helpers_core)
+ (kind normal)
+ (archives
+  (byte expect_test_helpers_core.cma)
+  (native expect_test_helpers_core.cmxa))
+ (plugins
+  (byte expect_test_helpers_core.cma)
+  (native expect_test_helpers_core.cmxs))
+ (native_archives expect_test_helpers_core.a)
+ (requires
+  core
+  expect_test_helpers_core.expect_test_helpers_base
+  re
+  sexp_pretty
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime
+  base_quickcheck)
+ (main_module_name Expect_test_helpers_core)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name expect_test_helpers_core__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Expect_test_helpers_core__)
+      (impl (path expect_test_helpers_core__.ml-gen))))
+    (name Expect_test_helpers_core)
+    (modules
+     (module
+      (obj_name expect_test_helpers_core)
+      (visibility public)
+      (source
+       (path Expect_test_helpers_core)
+       (intf (path expect_test_helpers_core.mli))
+       (impl (path expect_test_helpers_core.ml))))
+     (module
+      (obj_name expect_test_helpers_core__Expect_test_helpers_core_intf)
+      (visibility public)
+      (source
+       (path Expect_test_helpers_core_intf)
+       (impl (path expect_test_helpers_core_intf.ml))))))
+   (wrapped true))))
+(library
+ (name expect_test_helpers_core.expect_test_helpers_base)
+ (kind normal)
+ (archives
+  (byte expect_test_helpers_base/expect_test_helpers_base.cma)
+  (native expect_test_helpers_base/expect_test_helpers_base.cmxa))
+ (plugins
+  (byte expect_test_helpers_base/expect_test_helpers_base.cma)
+  (native expect_test_helpers_base/expect_test_helpers_base.cmxs))
+ (native_archives expect_test_helpers_base/expect_test_helpers_base.a)
+ (requires
+  base
+  base_quickcheck
+  re
+  sexp_pretty
+  stdio
+  ppx_sexp_conv.runtime-lib
+  sexplib0
+  ppx_compare.runtime-lib
+  ppx_enumerate.runtime-lib
+  ppx_hash.runtime-lib
+  ppx_here.runtime-lib
+  ppx_assert.runtime-lib
+  ppx_bench.runtime-lib
+  bin_prot
+  fieldslib
+  ppx_inline_test.config
+  ppx_inline_test.runtime-lib
+  ppx_module_timer.runtime
+  ppx_stable_witness.runtime
+  typerep
+  variantslib
+  ppx_expect.collector
+  ppx_expect.config
+  ppx_log.types
+  base_quickcheck.ppx_quickcheck.runtime)
+ (main_module_name Expect_test_helpers_base)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name expect_test_helpers_base__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Expect_test_helpers_base__)
+      (impl (path expect_test_helpers_base/expect_test_helpers_base__.ml-gen))))
+    (name Expect_test_helpers_base)
+    (modules
+     (module
+      (obj_name expect_test_helpers_base)
+      (visibility public)
+      (source
+       (path Expect_test_helpers_base)
+       (intf (path expect_test_helpers_base/expect_test_helpers_base.mli))
+       (impl (path expect_test_helpers_base/expect_test_helpers_base.ml))))
+     (module
+      (obj_name expect_test_helpers_base__Expect_test_helpers_base_intf)
+      (visibility public)
+      (source
+       (path Expect_test_helpers_base_intf)
+       (impl (path expect_test_helpers_base/expect_test_helpers_base_intf.ml))))))
+   (wrapped true))))

@@ -1,0 +1,1152 @@
+version = "v0.16.0"
+description = ""
+requires =
+"base_quickcheck
+ base_quickcheck.ppx_quickcheck.runtime
+ bin_prot
+ core
+ fieldslib
+ ppx_assert.runtime-lib
+ ppx_bench.runtime-lib
+ ppx_compare.runtime-lib
+ ppx_enumerate.runtime-lib
+ ppx_expect.collector
+ ppx_expect.config
+ ppx_hash.runtime-lib
+ ppx_here.runtime-lib
+ ppx_inline_test.config
+ ppx_inline_test.runtime-lib
+ ppx_log.types
+ ppx_module_timer.runtime
+ ppx_sexp_conv.runtime-lib
+ ppx_stable_witness.runtime
+ sexplib0
+ typerep
+ variantslib"
+archive(byte) = "core_kernel.cma"
+archive(native) = "core_kernel.cmxa"
+plugin(byte) = "core_kernel.cma"
+plugin(native) = "core_kernel.cmxs"
+package "ansi_kernel" (
+  directory = "ansi_kernel"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "ansi_kernel.cma"
+  archive(native) = "ansi_kernel.cmxa"
+  plugin(byte) = "ansi_kernel.cma"
+  plugin(native) = "ansi_kernel.cmxs"
+)
+package "balanced_reducer" (
+  directory = "balanced_reducer"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "balanced_reducer.cma"
+  archive(native) = "balanced_reducer.cmxa"
+  plugin(byte) = "balanced_reducer.cma"
+  plugin(native) = "balanced_reducer.cmxs"
+)
+package "binary_packing" (
+  directory = "binary_packing"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "binary_packing.cma"
+  archive(native) = "binary_packing.cmxa"
+  plugin(byte) = "binary_packing.cma"
+  plugin(native) = "binary_packing.cmxs"
+)
+package "bounded_int_table" (
+  directory = "bounded_int_table"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "bounded_int_table.cma"
+  archive(native) = "bounded_int_table.cmxa"
+  plugin(byte) = "bounded_int_table.cma"
+  plugin(native) = "bounded_int_table.cmxs"
+)
+package "bus" (
+  directory = "bus"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "bus.cma"
+  archive(native) = "bus.cmxa"
+  plugin(byte) = "bus.cma"
+  plugin(native) = "bus.cmxs"
+)
+package "caml_threads" (
+  directory = "caml_threads"
+  version = "v0.16.0"
+  description = ""
+  requires = "threads"
+  archive(byte) = "caml_threads.cma"
+  archive(native) = "caml_threads.cmxa"
+  plugin(byte) = "caml_threads.cma"
+  plugin(native) = "caml_threads.cmxs"
+)
+package "caml_unix" (
+  directory = "caml_unix"
+  version = "v0.16.0"
+  description = ""
+  requires = "unix"
+  archive(byte) = "caml_unix.cma"
+  archive(native) = "caml_unix.cmxa"
+  plugin(byte) = "caml_unix.cma"
+  plugin(native) = "caml_unix.cmxs"
+)
+package "composition_infix" (
+  directory = "composition_infix"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "composition_infix.cma"
+  archive(native) = "composition_infix.cmxa"
+  plugin(byte) = "composition_infix.cma"
+  plugin(native) = "composition_infix.cmxs"
+)
+package "enum" (
+  directory = "enum"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core.command
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "enum.cma"
+  archive(native) = "enum.cmxa"
+  plugin(byte) = "enum.cma"
+  plugin(native) = "enum.cmxs"
+)
+package "fheap" (
+  directory = "fheap"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "fheap.cma"
+  archive(native) = "fheap.cmxa"
+  plugin(byte) = "fheap.cma"
+  plugin(native) = "fheap.cmxs"
+)
+package "flags" (
+  directory = "flags"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "flags.cma"
+  archive(native) = "flags.cmxa"
+  plugin(byte) = "flags.cma"
+  plugin(native) = "flags.cmxs"
+)
+package "force_once" (
+  directory = "force_once"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "force_once.cma"
+  archive(native) = "force_once.cmxa"
+  plugin(byte) = "force_once.cma"
+  plugin(native) = "force_once.cmxs"
+)
+package "hash_heap" (
+  directory = "hash_heap"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.pairing_heap
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "hash_heap.cma"
+  archive(native) = "hash_heap.cmxa"
+  plugin(byte) = "hash_heap.cma"
+  plugin(native) = "hash_heap.cmxs"
+)
+package "int_set" (
+  directory = "int_set"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "int_set.cma"
+  archive(native) = "int_set.cmxa"
+  plugin(byte) = "int_set.cma"
+  plugin(native) = "int_set.cmxs"
+)
+package "iobuf" (
+  directory = "iobuf"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core.base_for_tests
+   fieldslib
+   int_repr
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "iobuf.cma"
+  archive(native) = "iobuf.cmxa"
+  plugin(byte) = "iobuf.cma"
+  plugin(native) = "iobuf.cmxs"
+)
+package "limiter" (
+  directory = "limiter"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.moption
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "limiter.cma"
+  archive(native) = "limiter.cmxa"
+  plugin(byte) = "limiter.cma"
+  plugin(native) = "limiter.cmxs"
+)
+package "moption" (
+  directory = "moption"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "moption.cma"
+  archive(native) = "moption.cmxa"
+  plugin(byte) = "moption.cma"
+  plugin(native) = "moption.cmxs"
+)
+package "nonempty_list" (
+  directory = "nonempty_list"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.reversed_list
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "nonempty_list.cma"
+  archive(native) = "nonempty_list.cmxa"
+  plugin(byte) = "nonempty_list.cma"
+  plugin(native) = "nonempty_list.cmxs"
+)
+package "pairing_heap" (
+  directory = "pairing_heap"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.tuple_pool
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "pairing_heap.cma"
+  archive(native) = "pairing_heap.cmxa"
+  plugin(byte) = "pairing_heap.cma"
+  plugin(native) = "pairing_heap.cmxs"
+)
+package "pooled_hashtbl" (
+  directory = "pooled_hashtbl"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.tuple_pool
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "pooled_hashtbl.cma"
+  archive(native) = "pooled_hashtbl.cmxa"
+  plugin(byte) = "pooled_hashtbl.cma"
+  plugin(native) = "pooled_hashtbl.cmxs"
+)
+package "reversed_list" (
+  directory = "reversed_list"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "reversed_list.cma"
+  archive(native) = "reversed_list.cmxa"
+  plugin(byte) = "reversed_list.cma"
+  plugin(native) = "reversed_list.cmxs"
+)
+package "sexp_hidden_in_test" (
+  directory = "sexp_hidden_in_test"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "sexp_hidden_in_test.cma"
+  archive(native) = "sexp_hidden_in_test.cmxa"
+  plugin(byte) = "sexp_hidden_in_test.cma"
+  plugin(native) = "sexp_hidden_in_test.cmxs"
+)
+package "thread_pool_cpu_affinity" (
+  directory = "thread_pool_cpu_affinity"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "thread_pool_cpu_affinity.cma"
+  archive(native) = "thread_pool_cpu_affinity.cmxa"
+  plugin(byte) = "thread_pool_cpu_affinity.cma"
+  plugin(native) = "thread_pool_cpu_affinity.cmxs"
+)
+package "thread_safe_queue" (
+  directory = "thread_safe_queue"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.uopt
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "thread_safe_queue.cma"
+  archive(native) = "thread_safe_queue.cmxa"
+  plugin(byte) = "thread_safe_queue.cma"
+  plugin(native) = "thread_safe_queue.cmxs"
+)
+package "timing_wheel" (
+  directory = "timing_wheel"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   core_kernel.tuple_pool
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "timing_wheel.cma"
+  archive(native) = "timing_wheel.cmxa"
+  plugin(byte) = "timing_wheel.cma"
+  plugin(native) = "timing_wheel.cmxs"
+)
+package "total_map" (
+  directory = "total_map"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "total_map.cma"
+  archive(native) = "total_map.cmxa"
+  plugin(byte) = "total_map.cma"
+  plugin(native) = "total_map.cmxs"
+)
+package "tuple_pool" (
+  directory = "tuple_pool"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "tuple_pool.cma"
+  archive(native) = "tuple_pool.cmxa"
+  plugin(byte) = "tuple_pool.cma"
+  plugin(native) = "tuple_pool.cmxs"
+)
+package "univ" (
+  directory = "univ"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "univ.cma"
+  archive(native) = "univ.cmxa"
+  plugin(byte) = "univ.cma"
+  plugin(native) = "univ.cmxs"
+)
+package "unpack_buffer" (
+  directory = "unpack_buffer"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "unpack_buffer.cma"
+  archive(native) = "unpack_buffer.cmxa"
+  plugin(byte) = "unpack_buffer.cma"
+  plugin(native) = "unpack_buffer.cmxs"
+)
+package "uopt" (
+  directory = "uopt"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "uopt.cma"
+  archive(native) = "uopt.cmxa"
+  plugin(byte) = "uopt.cma"
+  plugin(native) = "uopt.cmxs"
+)
+package "uuid" (
+  directory = "uuid"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "uuid.cma"
+  archive(native) = "uuid.cmxa"
+  plugin(byte) = "uuid.cma"
+  plugin(native) = "uuid.cmxs"
+)
+package "vec" (
+  directory = "vec"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "vec.cma"
+  archive(native) = "vec.cmxa"
+  plugin(byte) = "vec.cma"
+  plugin(native) = "vec.cmxs"
+)
+package "version_util" (
+  directory = "version_util"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "version_util.cma"
+  archive(native) = "version_util.cmxa"
+  plugin(byte) = "version_util.cma"
+  plugin(native) = "version_util.cmxs"
+  jsoo_runtime = "version_util.js"
+)
+package "weak_array" (
+  directory = "weak_array"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core.heap_block
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "weak_array.cma"
+  archive(native) = "weak_array.cmxa"
+  plugin(byte) = "weak_array.cma"
+  plugin(native) = "weak_array.cmxs"
+)
+package "weak_hashtbl" (
+  directory = "weak_hashtbl"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core.heap_block
+   core_kernel.thread_safe_queue
+   core_kernel.weak_pointer
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "weak_hashtbl.cma"
+  archive(native) = "weak_hashtbl.cmxa"
+  plugin(byte) = "weak_hashtbl.cma"
+  plugin(native) = "weak_hashtbl.cmxs"
+)
+package "weak_pointer" (
+  directory = "weak_pointer"
+  version = "v0.16.0"
+  description = ""
+  requires =
+  "base
+   base_quickcheck
+   base_quickcheck.ppx_quickcheck.runtime
+   bin_prot
+   core_kernel.weak_array
+   fieldslib
+   ppx_assert.runtime-lib
+   ppx_bench.runtime-lib
+   ppx_compare.runtime-lib
+   ppx_enumerate.runtime-lib
+   ppx_expect.collector
+   ppx_expect.config
+   ppx_hash.runtime-lib
+   ppx_here.runtime-lib
+   ppx_inline_test.config
+   ppx_inline_test.runtime-lib
+   ppx_log.types
+   ppx_module_timer.runtime
+   ppx_sexp_conv.runtime-lib
+   ppx_stable_witness.runtime
+   sexplib0
+   typerep
+   variantslib"
+  archive(byte) = "weak_pointer.cma"
+  archive(native) = "weak_pointer.cmxa"
+  plugin(byte) = "weak_pointer.cma"
+  plugin(native) = "weak_pointer.cmxs"
+)
