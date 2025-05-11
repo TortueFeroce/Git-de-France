@@ -501,7 +501,7 @@ let bit_string_to_int s =
   let n = String.length s in
   let res = ref 0 in
   for i = 0 to n-1 do
-    res := 2*(!res) + s.[i]
+    res := 2*(!res) + int_of_string (Char.escaped s.[i])
   done;
   !res
 
@@ -552,7 +552,7 @@ choisit de le zipper *)
 
 let print_index_files () =
   (* Fonction qui affiche les noms des fichiers dans index *)
-  let files = List.map (fun e -> e.name) ((index_parser ()).entries)
+  let files = List.map (fun e -> e.name) ((index_parser ()).entries) in
   List.iter (fun x -> Printf.printf "%s\n" x) files
 
 let gitignore_parse1 line =
@@ -561,6 +561,7 @@ let gitignore_parse1 line =
     | "#" -> Comment
     | "!" -> Excl
     | _ -> Usual
+end
 
 let f_test () =
   (* fonction de test *)
