@@ -32,6 +32,24 @@ type commit = {
   size : int
 }
 
+type entries = {
+  i_creation : float;
+  i_last_modif : float;
+  i_device : int;
+  i_inode : int;
+  i_perms : int;
+  i_uid : int;
+  i_gid : int;
+  i_size : int;
+  i_sha : string;
+  i_name : string;
+}
+
+type index = {
+  entries : entries list;
+  version : int
+}  
+
 
 type obj =
   | Blob of string * string
@@ -41,6 +59,8 @@ type obj =
 module StringSet = Set.Make(String)
 
 let perm_base = 0o777
+
+let chr0 = Char.chr 0
 
 let check_init s =
   (* Fonction qui regarde si les conditions sont remplies pour
@@ -384,11 +404,8 @@ let rec ref_resolve ref =
   correspondant finalement à cette ref *)
   let path = (repo_find ())^("/.gdf/")^ref in
   try (let data = extract_data path in
-  Printf.printf "%s\n" data;
   let first_bits = String.sub data 0 5 in
-  Printf.printf "je suis ici\n";
   let lasts_bits = String.sub data 5 (String.length data - 5) in
-  Printf.printf "je suis ici\n";
   match first_bits with
     | "ref: " -> ref_resolve lasts_bits
     | _       -> data)
@@ -453,7 +470,6 @@ let object_resolve name = match name with
 
 let object_find name fmt =
   (* fonction qui renvoie le sha d'un objet dont le nom est name *)
-  (* utiliser find_type sha *)
   let list_resolve = object_resolve name in
   if fmt = "" then begin
     if List.length list_resolve <> 1
@@ -476,6 +492,55 @@ let object_find name fmt =
 
 let compute_rev_parse name fmt =
   Printf.printf "%s" (object_find name fmt)
+
+let bit_string_to_int s =
+  let n = String.length s in
+  let res = ref 0 in
+  for i = 0 to n-1 do
+    res := 2*(!res) + s.[i]
+  done;
+  !res
+
+let entries_parser entry =
+  let content_list = String.split_on_char chr0 entry in
+  match content_list with
+    | creation ::
+      last_modif ::
+      device ::
+      inode ::
+      perms ::
+      uid ::
+      gid ::
+      size ::
+      sha ::
+      name :: []
+      -> {i_creation = creation;
+      i_last_modif = last_modif;
+      i_device = device;
+      i_inode = inode;
+      i_perms = perms;
+      i_uid = uid;
+      i_gid = gid;
+      i_size = size;
+      i_sha = sha
+      i_name = name}
+    | _ -> failwith "wrong format for an entry"
+
+let index_parser () = 
+  (* fonction qui parse le fichier index dans .gdf
+  plus précisémment, renvoie un type index 
+  
+  ATTENTION : dans le fichier index les bits de poids le plus fort sont le plus 
+  à gauche, ie. (1000)_2 = (4)_10 *)
+  
+  Unix.chdir (repo_find ());
+  let data_ind = extract_data index in (* on suppose que le fichier
+index n'est pas zippé pour l'instant, il faudra changer cette ligne si on
+choisit de le zipper *)
+  let len_ind = String.length data_ind in
+  let version = bit_string_to_int (String.sub data_ind 0 8) in
+  let n_entries = bit_string_to_int (String.sub data_ind 8 12) in
+
 
 let f_test () =
   (* fonction de test *)

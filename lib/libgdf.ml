@@ -33,13 +33,16 @@ type commit = {
 }
 
 type entries = {
-  name : string;
-  f_type : string;
-  sha : string;
-  creation : string;
-  last_modif : string;
-  device : int;
-  inode : int
+  i_creation : float;
+  i_last_modif : float;
+  i_device : int;
+  i_inode : int;
+  i_perms : int;
+  i_uid : int;
+  i_gid : int;
+  i_size : int;
+  i_sha : string;
+  i_name : string;
 }
 
 type index = {
@@ -56,6 +59,8 @@ type obj =
 module StringSet = Set.Make(String)
 
 let perm_base = 0o777
+
+let chr0 = Char.chr 0
 
 let check_init s =
   (* Fonction qui regarde si les conditions sont remplies pour
@@ -493,8 +498,33 @@ let bit_string_to_int s =
   let res = ref 0 in
   for i = 0 to n-1 do
     res := 2*(!res) + s.[i]
-  done
+  done;
   !res
+
+let entries_parser entry =
+  let content_list = String.split_on_char chr0 entry in
+  match content_list with
+    | creation ::
+      last_modif ::
+      device ::
+      inode ::
+      perms ::
+      uid ::
+      gid ::
+      size ::
+      sha ::
+      name :: []
+      -> {i_creation = creation;
+      i_last_modif = last_modif;
+      i_device = device;
+      i_inode = inode;
+      i_perms = perms;
+      i_uid = uid;
+      i_gid = gid;
+      i_size = size;
+      i_sha = sha
+      i_name = name}
+    | _ -> failwith "wrong format for an entry"
 
 let index_parser () = 
   (* fonction qui parse le fichier index dans .gdf
