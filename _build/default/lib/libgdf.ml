@@ -384,8 +384,11 @@ let rec ref_resolve ref =
   correspondant finalement à cette ref *)
   let path = (repo_find ())^("/.gdf/")^ref in
   try (let data = extract_data path in
+  Printf.printf "%s\n" data;
   let first_bits = String.sub data 0 5 in
+  Printf.printf "je suis ici\n";
   let lasts_bits = String.sub data 5 (String.length data - 5) in
+  Printf.printf "je suis ici\n";
   match first_bits with
     | "ref: " -> ref_resolve lasts_bits
     | _       -> data)
@@ -424,7 +427,7 @@ let object_resolve name = match name with
    sous forme de liste de string *)
     | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
     à un haché")
-    | "HEAD" -> ["head",ref_resolve "HEAD"]
+    | "HEAD" -> [("head",ref_resolve "HEAD")]
     | _ -> (let possibilities = ref [] in
           let name_len = String.length name in
           if name_len >= 4 then begin
@@ -460,6 +463,7 @@ let object_find name fmt =
   else begin
     let rec aux list_resolve fmt = match list_resolve, fmt with
     | [],_ -> raise (GdfError "aucune occurence trouvée")
+    | ("head",x)::_,_ -> x
     | (_,x)::_,_ when (find_type x = fmt) -> x
     | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
     | (_,x)::_,"tree" when (find_type x = "commit") -> (*c'est pas tres beau mais ça doit marcher*)
@@ -469,6 +473,9 @@ let object_find name fmt =
     | _::q,_ -> aux q fmt
   in aux list_resolve fmt
   end
+
+let compute_rev_parse name fmt =
+  Printf.printf "%s" (object_find name fmt)
 
 let f_test () =
   (* fonction de test *)

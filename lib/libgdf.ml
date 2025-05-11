@@ -32,6 +32,21 @@ type commit = {
   size : int
 }
 
+type entries = {
+  name : string;
+  f_type : string;
+  sha : string;
+  creation : string;
+  last_modif : string;
+  device : int;
+  inode : int
+}
+
+type index = {
+  entries : entries list;
+  version : int
+}  
+
 
 type obj =
   | Blob of string * string
@@ -424,7 +439,7 @@ let object_resolve name = match name with
    sous forme de liste de string *)
     | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
     à un haché")
-    | "HEAD" -> ["head",ref_resolve "HEAD"]
+    | "HEAD" -> [("head",ref_resolve "HEAD")]
     | _ -> (let possibilities = ref [] in
           let name_len = String.length name in
           if name_len >= 4 then begin
@@ -450,7 +465,6 @@ let object_resolve name = match name with
 
 let object_find name fmt =
   (* fonction qui renvoie le sha d'un objet dont le nom est name *)
-  (* utiliser find_type sha *)
   let list_resolve = object_resolve name in
   if fmt = "" then begin
     if List.length list_resolve <> 1
@@ -460,6 +474,7 @@ let object_find name fmt =
   else begin
     let rec aux list_resolve fmt = match list_resolve, fmt with
     | [],_ -> raise (GdfError "aucune occurence trouvée")
+    | ("head",x)::_,_ -> x
     | (_,x)::_,_ when (find_type x = fmt) -> x
     | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
     | (_,x)::_,"tree" when (find_type x = "commit") -> (*c'est pas tres beau mais ça doit marcher*)
@@ -469,6 +484,33 @@ let object_find name fmt =
     | _::q,_ -> aux q fmt
   in aux list_resolve fmt
   end
+
+let compute_rev_parse name fmt =
+  Printf.printf "%s" (object_find name fmt)
+
+let bit_string_to_int s =
+  let n = String.length s in
+  let res = ref 0 in
+  for i = 0 to n-1 do
+    res := 2*(!res) + s.[i]
+  done
+  !res
+
+let index_parser () = 
+  (* fonction qui parse le fichier index dans .gdf
+  plus précisémment, renvoie un type index 
+  
+  ATTENTION : dans le fichier index les bits de poids le plus fort sont le plus 
+  à gauche, ie. (1000)_2 = (4)_10 *)
+  
+  Unix.chdir (repo_find ());
+  let data_ind = extract_data index in (* on suppose que le fichier
+index n'est pas zippé pour l'instant, il faudra changer cette ligne si on
+choisit de le zipper *)
+  let len_ind = String.length data_ind in
+  let version = bit_string_to_int (String.sub data_ind 0 8) in
+  let n_entries = bit_string_to_int (String.sub data_ind 8 12) in
+
 
 let f_test () =
   (* fonction de test *)
