@@ -521,17 +521,6 @@ let int_to_bit_string n =
   let paddington = String.make (8 - len_base) '0' in
   paddington ^ base_str
 
-(* 
-let int_to_bit_string n = 
-  let rec aux i acc = match i with (*si je me suis trompé sur ça comment c'est trop la honte*)
-    | 0 -> acc
-    | _ -> aux (i / 2) ((10 * acc) + (i mod 2))
-  in let base_str = string_of_int (aux n 0) in
-  let len_base = String.length base_str in
-  assert (len_base <= 8);
-  let paddington = String.make (8 - len_base) '0' in
-  paddington ^ base_str *)
-
 let entries_parser entry =
   let content_list = String.split_on_char chr0 entry in
   match content_list with
@@ -819,6 +808,50 @@ let compute_add paths delete skip_missing =
     entries = !entries;
     version = cur_index.version
   } in index_write new_index
+
+let tree_from_index index =
+  let contents = Hashtbl.create 32 in
+  Hashtbl.add contents "" [];
+
+  let add_to_contents entry =
+    let dirname = ref entry.i_name in
+    while !dirname <> "" do
+      (if not (Hashtbl.mem contents !dirname) then
+        Hashtbl.add contents !dirname []);
+      dirname := Filename.dirname !dirname
+    done;
+    let dir = (Filename.dirname entry.i_name) in
+    let entry_list = Hashtbl.find contents dir in
+    Hashtbl.replace contents dir (entry :: entry_list)
+
+  in List.iter add_to_contents index.entries;
+
+  let sorted_paths = List.rev (List.sort compare (List.of_seq (Hashtbl.to_seq_keys contents))) in (*quelle horreur. mais ça marche (normalement...)*)
+  let sha = ref "" in
+
+  let create_tree path =
+    let make_leaf entry =
+      let leaf_mode = entry.i_perms in
+      (string_of_int leaf_mode, entry.i_sha, Filename.basename entry.i_name) (*TODO : ecrire les perms en octal, pas en decimal comme je le fais la*)
+    in let tree = Tree (List.map make_leaf (Hashtbl.find contents path)) in
+    sha := write_object tree true;
+    let fake_entry = {
+      i_creation = 0.;
+      i_last_modif = 0.;
+      i_device = 0;
+      i_inode = 0;
+      i_perms = 0o40000;
+      i_uid = 0;
+      i_gid = 0;
+      i_size = 0;
+      i_sha = !sha;
+      i_name = Filename.basename path;
+    } in
+    let entry_list = Hashtbl.find contents (Filename.dirname path) in
+    Hashtbl.replace contents (Filename.dirname path) (fake_entry :: entry_list)
+
+  in List.iter create_tree sorted_paths;
+  !sha
   
 let f_test () =
   (* fonction de test *)
