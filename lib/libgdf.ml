@@ -700,6 +700,43 @@ let compute_status () =
   cmd_status_head_index ();
   cmd_status_index_worktree ()
 
+let create_entry path fmt =
+  (* Fonction qui prend un path et un format et qui
+  renvoie une entrée qui correspond à ce fichier *)
+  let stats = Unix.stat path in
+  {
+    i_creation = stats.st_ctime;
+    i_last_modif = stats.st_mtime;
+    i_device = stats.st_dev;
+    i_inode = stats.st_ino;
+    i_perms = stats.st_perm;
+    i_uid = stats.st_uid;
+    i_gid = stats.st_gid;
+    i_size = stats.st_size;
+    i_sha = object_find path fmt;
+    i_name = path;
+  }
+
+let compute_add paths delete skip_missing =
+  (* ajoute les fichiers dans paths dans l'index *)
+  compute_rm paths delete false true;
+  let repo = repo_find () in
+  let list_clean = ref [] in
+  List.iter (fun path -> let abs_path = repo^"/"^path in
+                         if not (Sys.file_exists abs_path)
+                         then raise (GdfError ("le fichier "^path^" n'existe pas
+                         ou n'est pas dans le worktree"))
+                         else list_clean := abs_path::(!list_clean)) paths;
+  let cur_index = index_parser () in
+  let entries = ref cur_index.entries in
+  List.iter (fun x ->
+    let entry = create_entry x "blob" in
+    entries := entry::(!entries)) list_clean;
+  let new_index = {
+    entries = !entries;
+    version = cur_index.version
+  } in index_write new_index
+
 let f_test () =
   (* fonction de test *)
   let sha = write_object (Blob("test", "test test test")) true in
