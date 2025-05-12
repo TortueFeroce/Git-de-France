@@ -57,7 +57,7 @@ let () = (Printexc.record_backtrace true;
     | "rev-parse", name :: [] -> compute_rev_parse name !type_rev
     | "ls-files", [] -> print_index_files ()
     | "check-ignore", l -> compute_check_ignore l
-    | "status", [] -> ()
+    | "status", [] -> compute_status ()
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
