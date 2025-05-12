@@ -57,8 +57,6 @@ type obj =
   | Commit of commit (* ah ouais en fait c'est pas très beau ce que j'ai fait là :'( *)
   | Tree of (string * string * string) list 
 
-module StringSet = Set.Make(String)
-
 let perm_base = 0o777
 
 let chr0 = Char.chr 0
@@ -116,7 +114,7 @@ let compute_init s =
   let head_channel = Stdlib.open_out "/.gdf/HEAD" in
     write_str_stdlib head_channel "ref: refs/heads/master\n";
   let index_channel = Stdlib.open_out "/.gdf/index" in
-    write_str_stdlib index_channel "DIRC0000000000000000\n";
+    write_str_stdlib index_channel "DIRC0000000000000000";
   let exclude_channel = Stdlib.open_out "/.gdf/info/exclude" in
     write_str_stdlib exclude_channel "";
   let config_channel = open_out (s^"/.gdf/config") in
@@ -366,9 +364,9 @@ let hash_file do_write typfile f_name =
 let compute_log sha = 
   (*alors la, il faut qu'on en parle. cette fonction donne l'arbre des commits en format .dot direct dans la console. okok pas de soucis. sauf que 1) on donne pas tout le log juste l'historique des commits passés en argument, 2) on peut passer qu'un seul commit en argument, 3) ya pas de merge. ?????? c'est juste une ligne ton log??? fin je vois pas l'interet de se casser les couilles avec graphviz pour faire juste une liste dans l'ordre. au passage, l'abscence de merge rends plein de trucs obsolètes, style la possibilité d'avoir >1 parents. apres, si thibault polge demande moi j'execute. mais ça sert a rien. en vrai peut etre on peut donner la possibilté d'avoir une liste d'arguments plus tard? ça serait rigolo au moins un peu. ou alors peut etre je suis juste con et j'ai mal compris. au passage tu sais ce que c'est une mite à l'envers? c'est une co-mite (commit). c'est pas grave si t'as pas compris je sais que mon humour est un peu trop subtil pour beaucoup de gens. bon allez je vais me log la gueule c'est tipar (parti en verlan)*)
   Printf.printf "digraph wyaglog{\n\tnode[shape=rect]";
-  let seen_commits = ref StringSet.empty in (*hmm, c'est pas beau. ya surement un module mieux mais raph est pas la pour me dire que en fait c'est pas comme ça qu'on fait*)
-  let rec log_graphviz comm = if not (StringSet.mem comm.name !seen_commits) then
-      seen_commits := StringSet.add comm.name !seen_commits;
+  let seen_commits = Hashtbl.create 64 in (*hmm, c'est pas beau. ya surement un module mieux mais raph est pas la pour me dire que en fait c'est pas comme ça qu'on fait*)
+  let rec log_graphviz comm = if not (Hashtbl.mem seen_commits comm.name) then
+      Hashtbl.add seen_commits comm.name true;
       match comm.parent with
         | [] -> ()
         | l -> List.iter (fun x -> 
@@ -509,6 +507,16 @@ let bit_string_to_int s =
     res := 2*(!res) + int_of_string (Char.escaped s.[i])
   done;
   !res
+
+let int_to_bit_string n = 
+  let rec aux i acc = match i with (*si je me suis trompé sur ça comment c'est trop la honte*)
+    | 0 -> acc
+    | _ -> aux (i / 2) ((10 * acc) + (i mod 2))
+  in let base_str = string_of_int (aux n 0) in
+  let len_base = String.length base_str in
+  assert (len_base <= 8);
+  let paddington = String.make (8 - len_base) '0' in
+  paddington ^ base_str
 
 let entries_parser entry =
   let content_list = String.split_on_char chr0 entry in
@@ -694,6 +702,64 @@ let cmd_status_index_worktree () =
   Printf.printf "Untracked files:\n";
   let all_files = Array.to_list (Sys.readdir (repo_find ())) in
   List.iter (fun x -> Printf.printf " %s" x) (give_list_check_ignore all_files)
+
+let compute_status () =
+  cmd_status_branch ();
+  cmd_status_head_index ();
+  cmd_status_index_worktree ()
+
+let write_entry channel entry =
+  let write_0 () = Stdlib.output_char channel chr0 in
+  Stdlib.output_char channel '\n';
+  write_str_stdlib channel (string_of_float entry.i_creation);
+  write_0 ();
+  write_str_stdlib channel (string_of_float entry.i_last_modif);
+  write_0 ();
+  write_str_stdlib channel (string_of_int entry.i_device);
+  write_0 ();
+  write_str_stdlib channel (string_of_int entry.i_inode);
+  write_0 ();
+  write_str_stdlib channel (string_of_int entry.i_perms);
+  write_0 ();
+  write_str_stdlib channel (string_of_int entry.i_uid);
+  write_0 ();
+  write_str_stdlib channel (string_of_int entry.i_gid);
+  write_0 ();
+  write_str_stdlib channel (string_of_int entry.i_size);
+  write_0 ();
+  write_str_stdlib channel entry.i_sha;
+  write_0 ();
+  write_str_stdlib channel entry.i_name
+
+let index_write index = 
+  (*écrit l'index. ça djoufara l'index d'avant, fais gaffe ma gueule*)
+  let index_channel = Stdlib.open_out ".gdf/index" in
+    write_str_stdlib index_channel "DIRC";
+    write_str_stdlib index_channel (int_to_bit_string index.version);
+    write_str_stdlib index_channel (int_to_bit_string (List.length index.entries));
+    List.iter (write_entry index_channel) index.entries; (*poualala la curryfication ça me donne envie de manger indien*)
+    Stdlib.close_out index_channel (*je l'ai pas oublié cette fois ci quel boss*)
+
+let compute_rm path_list do_delete skip_missing =
+  let index = index_parser () in
+  let repo = (repo_find ()) ^ "/" in
+  let abs_paths = Hashtbl.create 16 in
+  List.iter (fun path -> 
+    let absolute = Unix.realpath path in
+      assert (not (String.starts_with ~prefix:repo absolute));
+      Hashtbl.add abs_paths absolute true) path_list;
+  let kept_entries = ref [] in
+  let remove = ref [] in
+  List.iter (fun entry -> let full_path = repo ^ entry.i_name in
+    if Hashtbl.mem abs_paths full_path then
+      (remove := full_path :: !remove;
+      Hashtbl.remove abs_paths full_path)
+    else
+      kept_entries := entry :: !kept_entries) index.entries;
+  if (Hashtbl.length abs_paths > 0) && (not skip_missing) then failwith "cannot remove paths absent from index";
+  (if do_delete then
+    List.iter Unix.unlink !remove);
+  index_write ({entries = !kept_entries; version = index.version})
 
 let f_test () =
   (* fonction de test *)
