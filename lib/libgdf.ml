@@ -725,26 +725,6 @@ let create_entry path fmt =
     i_name = path;
   }
 
-let compute_add paths delete skip_missing =
-  (* ajoute les fichiers dans paths dans l'index *)
-  compute_rm paths delete false true;
-  let repo = repo_find () in
-  let list_clean = ref [] in
-  List.iter (fun path -> let abs_path = repo^"/"^path in
-                         if not (Sys.file_exists abs_path)
-                         then raise (GdfError ("le fichier "^path^" n'existe pas
-                         ou n'est pas dans le worktree"))
-                         else list_clean := abs_path::(!list_clean)) paths;
-  let cur_index = index_parser () in
-  let entries = ref cur_index.entries in
-  List.iter (fun x ->
-    let entry = create_entry x "blob" in
-    entries := entry::(!entries)) list_clean;
-  let new_index = {
-    entries = !entries;
-    version = cur_index.version
-  } in index_write new_index
-
 let write_entry channel entry =
   let write_0 () = Stdlib.output_char channel chr0 in
   Stdlib.output_char channel '\n';
@@ -798,6 +778,26 @@ let compute_rm path_list do_delete skip_missing =
     List.iter Unix.unlink !remove);
   index_write ({entries = !kept_entries; version = index.version})
 
+let compute_add paths delete skip_missing =
+  (* ajoute les fichiers dans paths dans l'index *)
+  compute_rm paths delete skip_missing;
+  let repo = repo_find () in
+  let list_clean = ref [] in
+  List.iter (fun path -> let abs_path = repo^"/"^path in
+                         if not (Sys.file_exists abs_path)
+                         then raise (GdfError ("le fichier "^path^" n'existe pas
+                         ou n'est pas dans le worktree"))
+                         else list_clean := abs_path::(!list_clean)) paths;
+  let cur_index = index_parser () in
+  let entries = ref cur_index.entries in
+  List.iter (fun x ->
+    let entry = create_entry x "blob" in
+    entries := entry::(!entries)) !list_clean;
+  let new_index = {
+    entries = !entries;
+    version = cur_index.version
+  } in index_write new_index
+  
 let f_test () =
   (* fonction de test *)
   let sha = write_object (Blob("test", "test test test")) true in
