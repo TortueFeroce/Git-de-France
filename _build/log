@@ -1,9 +1,9 @@
 # dune build ./bin/gdf.exe
 # OCAMLPARAM: unset
-# Shared cache: disabled
-# Shared cache location: /data/cache/24/info/bhornero/dune/db
-# Workspace root: /users/24/info/bhornero/Documents/Info/OS/Git-de-France
-# Auto-detected concurrency: 20
+# Shared cache: enabled-except-user-rules
+# Shared cache location: /home/axel/.cache/dune/db
+# Workspace root: /home/axel/Cours/Informatique/L3/OS/Git-de-France
+# Auto-detected concurrency: 16
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -13,4 +13,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /bin/ocamlc.opt -config > /tmp/dune_5508aa_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_d30bb6_output

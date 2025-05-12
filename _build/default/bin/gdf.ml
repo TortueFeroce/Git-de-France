@@ -25,6 +25,7 @@ let findOptions str = match str with
   | "check-ignore" -> []
   | "status" -> []
   | "rm" -> [] (*pas d'options?*)
+  | "add" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -60,6 +61,7 @@ let () = (Printexc.record_backtrace true;
     | "check-ignore", l -> compute_check_ignore l
     | "status", [] -> compute_status ()
     | "rm", l -> compute_rm l true false
+    | "add", l -> compute_add l false true (* TO DO : faire mieux *)
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :

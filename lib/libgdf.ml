@@ -451,7 +451,8 @@ let object_resolve name = match name with
     | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
     à un haché")
     | "HEAD" -> [("head",ref_resolve "HEAD")]
-    | _ -> (let possibilities = ref [] in
+    | _ -> (Printf.printf "name : %s\n" name;
+          let possibilities = ref [] in
           let name_len = String.length name in
           if name_len >= 4 then begin
             let prefix = String.sub name 0 2 in
@@ -508,11 +509,13 @@ let bit_string_to_int s =
   done;
   !res
 
-let int_to_bit_string n = 
-  let rec aux i acc = match i with (*si je me suis trompé sur ça comment c'est trop la honte*)
-    | 0 -> acc
-    | _ -> aux (i / 2) ((10 * acc) + (i mod 2))
-  in let base_str = string_of_int (aux n 0) in
+let int_to_bit_string n =
+  let rec aux i s = match i with
+    | 0 -> s
+    | _ -> let r = i mod 2 in
+           if r = 0 then aux (i/2) ("0"^s)
+           else aux (i/2) ("1"^s)
+  in let base_str = aux n "" in
   let len_base = String.length base_str in
   assert (len_base <= 8);
   let paddington = String.make (8 - len_base) '0' in
@@ -557,11 +560,16 @@ choisit de le zipper *)
   let len_ind = String.length data_ind in
   let version = bit_string_to_int (String.sub data_ind 4 8) in
   let _ = bit_string_to_int (String.sub data_ind 12 8) in
-  let entries = String.split_on_char '\n' (String.sub data_ind 21 (len_ind - 21)) in
+  if len_ind = 20 then
+  {
+    entries = [];
+    version = version
+  }
+  else begin let entries = String.split_on_char '\n' (String.sub data_ind 21 (len_ind - 21)) in
   {
     entries = List.map (fun e -> entries_parser e) entries;
     version = version
-  }
+  } end
 
 let get_index_files () =
   (* Fonction qui renvoie les fichiers qui ont été staged dans index *)
@@ -708,10 +716,13 @@ let compute_status () =
   cmd_status_head_index ();
   cmd_status_index_worktree ()
 
-let create_entry path fmt =
+let create_entry path _ =
   (* Fonction qui prend un path et un format et qui
   renvoie une entrée qui correspond à ce fichier *)
   let stats = Unix.stat path in
+  let repo = (repo_find ())^"/" in
+  let len_repo = String.length repo in
+  let len_path = String.length path in
   {
     i_creation = stats.st_ctime;
     i_last_modif = stats.st_mtime;
@@ -721,8 +732,8 @@ let create_entry path fmt =
     i_uid = stats.st_uid;
     i_gid = stats.st_gid;
     i_size = stats.st_size;
-    i_sha = object_find path fmt;
-    i_name = path;
+    i_sha = hash_file false "blob" path;
+    i_name = String.sub path len_repo (len_path - len_repo);
   }
 
 let write_entry channel entry =
@@ -763,7 +774,7 @@ let compute_rm path_list do_delete skip_missing =
   let abs_paths = Hashtbl.create 16 in
   List.iter (fun path -> 
     let absolute = Unix.realpath path in
-      assert (not (String.starts_with ~prefix:repo absolute));
+      assert (String.starts_with ~prefix:repo absolute);
       Hashtbl.add abs_paths absolute true) path_list;
   let kept_entries = ref [] in
   let remove = ref [] in
