@@ -24,6 +24,7 @@ let findOptions str = match str with
   | "ls-files" -> []
   | "check-ignore" -> []
   | "status" -> []
+  | "rm" -> [] (*pas d'options?*)
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -57,7 +58,8 @@ let () = (Printexc.record_backtrace true;
     | "rev-parse", name :: [] -> compute_rev_parse name !type_rev
     | "ls-files", [] -> print_index_files ()
     | "check-ignore", l -> compute_check_ignore l
-    | "status", [] -> ()
+    | "status", [] -> compute_status ()
+    | "rm", l -> compute_rm l true false
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
