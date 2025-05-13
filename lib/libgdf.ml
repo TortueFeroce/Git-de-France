@@ -852,7 +852,35 @@ let tree_from_index index =
 
   in List.iter create_tree sorted_paths;
   !sha
+
+let commit_create tree parent author message =
+  let new_commit = {
+    tree = tree;
+    parent = parent;
+    author = author;
+    committer = author;
+    gpgsig = ""; (* on pourrait peut-être en mettre une mais c'est pas le plus urgent *)
+    name = message;
+    size = 0 (* TO DO : changer ça *)
+  } in
+  write_object (Commit(new_commit)) true
   
+let compute_commit message =
+  let repo = repo_find () in
+  let index = index_parser () in
+  let tree = tree_from_index index in
+  let commit = commit_create tree [object_find "HEAD" ""] "" message in
+  let branch = are_we_on_branch () in 
+  match branch with
+    | "" ->let branch_channel = Stdlib.open_out (repo^"/.gdf/HEAD") in
+            write_str_stdlib branch_channel "\n";
+            Stdlib.close_out branch_channel
+    | _ -> let branch_channel = Stdlib.open_out (repo^"/.gdf/refs/heads/"^branch) in
+            write_str_stdlib branch_channel (commit^"\n");
+                        Stdlib.close_out branch_channel
+
+
+
 let f_test () =
   (* fonction de test *)
   let sha = write_object (Blob("test", "test test test")) true in

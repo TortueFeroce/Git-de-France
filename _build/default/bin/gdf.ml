@@ -26,6 +26,7 @@ let findOptions str = match str with
   | "status" -> []
   | "rm" -> [] (*pas d'options?*)
   | "add" -> []
+  | "commit" -> []
   | "test" -> []
   | _ -> failwith "loserrrr"
 
@@ -62,6 +63,7 @@ let () = (Printexc.record_backtrace true;
     | "status", [] -> compute_status ()
     | "rm", l -> compute_rm l true false
     | "add", l -> compute_add l false true (* TO DO : faire mieux *)
+    | "commit", m::[] -> compute_commit m
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
