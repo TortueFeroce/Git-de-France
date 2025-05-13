@@ -809,6 +809,11 @@ let compute_add paths delete skip_missing =
     version = cur_index.version
   } in index_write new_index
 
+let true_dirname file = 
+  match (Filename.dirname file) with
+    | "." -> ""
+    | unautrestringnimportelequel -> unautrestringnimportelequel
+
 let tree_from_index index =
   let contents = Hashtbl.create 32 in
   Hashtbl.add contents "" [];
@@ -818,10 +823,10 @@ let tree_from_index index =
     while !dirname <> "" do
       (if not (Hashtbl.mem contents !dirname) then
         Hashtbl.add contents !dirname []);
-      dirname := Filename.dirname !dirname
+      dirname := true_dirname !dirname;
     done;
-    let dir = (Filename.dirname entry.i_name) in
-    let entry_list = Hashtbl.find contents dir in
+    let dir = true_dirname entry.i_name
+    in let entry_list = Hashtbl.find contents dir in
     Hashtbl.replace contents dir (entry :: entry_list)
 
   in List.iter add_to_contents index.entries;
@@ -847,8 +852,8 @@ let tree_from_index index =
       i_sha = !sha;
       i_name = Filename.basename path;
     } in
-    let entry_list = Hashtbl.find contents (Filename.dirname path) in
-    Hashtbl.replace contents (Filename.dirname path) (fake_entry :: entry_list)
+    let entry_list = Hashtbl.find contents (true_dirname path) in
+    Hashtbl.replace contents (true_dirname path) (fake_entry :: entry_list)
 
   in List.iter create_tree sorted_paths;
   !sha
