@@ -215,12 +215,12 @@ let commit_parser obj_content =
                     tree := s;
                     compute_data q "tree"
                   | "tree"::_                               ->
-                    raise (GdfError "mauvais format pour un tree")
+                    raise (GdfError "Mauvais format pour un tree")
                   | "parent"::s::[]                         -> 
                     parent := s::[];
                     compute_data q "parent"
                   | "parent"::_                             ->
-                    raise (GdfError "mauvais format pour un parent")
+                    raise (GdfError "Mauvais format pour un parent")
                   | "author"::a                             -> author := String.concat " " a;
                     compute_data q "author"
                   | "committer"::c                          -> committer := String.concat " " c;
@@ -271,7 +271,7 @@ let tree_parser data =
   let rec aux x = match x with
     | [] -> []
     | mode :: sha :: path :: q -> (mode, sha, path) :: aux q
-    | _ -> failwith "ya un souci qqpart a mon avis"
+    | _ -> raise (GdfError "Mauvais format pour un tree")
   in Tree(aux data)
 
 let find_type sha = 
@@ -296,7 +296,7 @@ let deserialize str =
                   (* TO DO : la taille ça marche pas *)
                   Commit(commit_parser (String.concat "\n" q))
       | "tree" :: _ :: q -> tree_parser q (*il peut pas y avoir de \n random dans un tree normalement donc la liste q c'est exactement ce qu'on veut*)
-      | _ -> failwith "ta gueule le compilateur ocaml, ce cas n'arrive jamais (en fait si si tu tapes un sha qui existe pas mais la c'est toi qui trolle)"
+      | _ -> raise (GdfError "Mauvais format de données")
 
 let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
   match obj with
@@ -359,7 +359,7 @@ let hash_file do_write typfile f_name =
     | "tree" -> 
       let tree_contents = String.split_on_char '\n' data in
       write_object (tree_parser tree_contents) do_write
-    | _ -> failwith "hash_file à faire pour les autres types"
+    | _ -> raise (GdfError (typfile ^ " n'est pas un type de fichier valide"))
 
 let compute_log sha = 
   (*alors la, il faut qu'on en parle. cette fonction donne l'arbre des commits en format .dot direct dans la console. okok pas de soucis. sauf que 1) on donne pas tout le log juste l'historique des commits passés en argument, 2) on peut passer qu'un seul commit en argument, 3) ya pas de merge. ?????? c'est juste une ligne ton log??? fin je vois pas l'interet de se casser les couilles avec graphviz pour faire juste une liste dans l'ordre. au passage, l'abscence de merge rends plein de trucs obsolètes, style la possibilité d'avoir >1 parents. apres, si thibault polge demande moi j'execute. mais ça sert a rien. en vrai peut etre on peut donner la possibilté d'avoir une liste d'arguments plus tard? ça serait rigolo au moins un peu. ou alors peut etre je suis juste con et j'ai mal compris. au passage tu sais ce que c'est une mite à l'envers? c'est une co-mite (commit). c'est pas grave si t'as pas compris je sais que mon humour est un peu trop subtil pour beaucoup de gens. bon allez je vais me log la gueule c'est tipar (parti en verlan)*)
@@ -374,10 +374,10 @@ let compute_log sha =
               | Commit(c) -> 
                   Printf.printf "%s -> %s" c.name comm.name;
                   log_graphviz c
-              | _ -> failwith "not a commit") l
+              | _ -> raise (GdfError "L'objet n'est pas un commit")) l
   in match deserialize sha with (*le prochain match que je dois ecrire ou ya un seul cas qui fonctionne je me defenestre*)
     | Commit(coucou) -> log_graphviz coucou; Printf.printf "}"
-    | _ -> failwith "not a commit, sorry :)"
+    | _ -> raise (GdfError (sha ^ " n'est pas un commit"))
 
 let rec tree_checkout tree path = 
   let item (_, sha, file) =
@@ -387,20 +387,20 @@ let rec tree_checkout tree path =
       | Blob(file_name, file_data) -> 
         let channel = Stdlib.open_out file_name in
         Stdlib.output_string channel file_data; Stdlib.close_out channel
-      | _ -> failwith "nope"
+      | _ -> raise (GdfError "Mauvais type de fichier pour un objet dans un tree")
   in match tree with
     | Tree(l) -> List.iter item l
-    | _ -> failwith "alors celle la d'erreur si elle arrive je me coupe une couille"
+    | _ -> raise (GdfError "Mauvais type d'objet - un tree était attendu")
 
 let compute_checkout sha dir =
   let obj = read_object sha in
   let tree = match obj with
     | Commit(c) -> read_object c.tree
-    | _ -> failwith "t'es malin toi"
+    | _ -> raise (GdfError (sha ^ " is not a commit"))
   (*c'est pas tres beau trois if de suite mais ça permet de gérer les erreurs un peu mieux*)
   in if (Sys.file_exists dir) then
-    if not (Sys.is_directory dir) then failwith "File isn't a directory";
-    if Sys.readdir dir <> [||] then failwith "Directory isn't empty"
+    if not (Sys.is_directory dir) then raise (GdfError ("Le fichier " ^ dir ^ " n'est pas un dossier"));
+    if Sys.readdir dir <> [||] then raise (GdfError ("Le dossier " ^ dir ^ " n'est pas vide"))
   else Unix.mkdir dir perm_base;
   tree_checkout tree (Unix.realpath dir)
   
@@ -414,7 +414,7 @@ let rec ref_resolve ref =
   match first_bits with
     | "ref: " -> ref_resolve lasts_bits
     | _       -> data)
-  with _ -> raise (GdfError "le nom donné ne correspond pas à une ref")
+  with _ -> raise (GdfError "Le nom donné ne correspond pas à une ref")
 
 let print_refs () =
   Unix.chdir ((repo_find ())^"/.gdf/");
@@ -439,7 +439,7 @@ let compute_tag name obj =
   let data_obj = extract_data obj in
   let sha = Sha1.to_hex (Sha1.string data_obj) in
   Unix.chdir ((repo_find ())^"/.gdf/refs/tags");
-  if Sys.file_exists name then raise (GdfError ("le tag "^name^" existe déjà"))
+  if Sys.file_exists name then raise (GdfError ("Le tag "^name^" existe déjà"))
   else begin
   let f_channel = Stdlib.open_out name in
   write_str_stdlib f_channel sha;
@@ -448,7 +448,7 @@ let compute_tag name obj =
 let object_resolve name = match name with
 (* Fonction qui renvoie les possibilités pour un nom donné, un tag ou un sha
    sous forme de liste de string *)
-    | "" -> raise (GdfError "le nom est vide et ne peut donc pas correspondre
+    | "" -> raise (GdfError "Le nom est vide et ne peut donc pas correspondre
     à un haché")
     | "HEAD" -> [("head",ref_resolve "HEAD")]
     | _ -> (Printf.printf "name : %s\n" name;
@@ -480,19 +480,19 @@ let object_find name fmt =
   let list_resolve = object_resolve name in
   if fmt = "" then begin
     if List.length list_resolve <> 1
-    then raise (GdfError ("le nom : "^name^" ne correspond pas à une occurence valide
+    then raise (GdfError ("Le nom : "^name^" ne correspond pas à une occurence valide
   ou correspond à plusieurs occurences")) (* TO DO : faire une meilleure erreur *)
     else let (_,y) = List.hd list_resolve in y end
   else begin
     let rec aux list_resolve fmt = match list_resolve, fmt with
-    | [],_ -> raise (GdfError "aucune occurence trouvée")
+    | [],_ -> raise (GdfError "Aucune occurence trouvée")
     | ("head",x)::_,_ -> x
     | (_,x)::_,_ when (find_type x = fmt) -> x
     | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
     | (_,x)::_,"tree" when (find_type x = "commit") -> (*c'est pas tres beau mais ça doit marcher*)
       let obj = read_object x in (match obj with
         | Commit c -> c.tree
-        | _ -> failwith "peut pas arriver ou alors ya un gros souci qqpart")
+        | _ -> raise (GdfError "Mauvais type de fichier"))
     | _::q,_ -> aux q fmt
   in aux list_resolve fmt
   end
@@ -544,7 +544,7 @@ let entries_parser entry =
       i_size = int_of_string size;
       i_sha = sha;
       i_name = name}
-    | _ -> failwith "wrong format for an entry"
+    | _ -> raise (GdfError "Mauvais format pour une entrée de l'index")
 
 let index_parser () = 
   (* fonction qui parse le fichier index dans .gdf
@@ -598,7 +598,7 @@ let go_into_dir_where_file_is file =
   let rec aux l = match l with
     | _::[] -> []
     | x::q -> x::(aux q)
-    | _ -> failwith "le fichier n'est pas un fichier"
+    | _ -> raise (GdfError "Le fichier n'est pas un fichier") (*ça veut rien dire...*)
   in String.concat "/" (aux lst)
 
 let get_rules_for_file file =
@@ -784,7 +784,7 @@ let compute_rm path_list do_delete skip_missing =
       Hashtbl.remove abs_paths full_path)
     else
       kept_entries := entry :: !kept_entries) index.entries;
-  if (Hashtbl.length abs_paths > 0) && (not skip_missing) then failwith "cannot remove paths absent from index";
+  if (Hashtbl.length abs_paths > 0) && (not skip_missing) then raise (GdfError "Impossible de supprimer des fichiers absents de l'index");
   (if do_delete then
     List.iter Unix.unlink !remove);
   index_write ({entries = !kept_entries; version = index.version})
@@ -796,7 +796,7 @@ let compute_add paths delete skip_missing =
   let list_clean = ref [] in
   List.iter (fun path -> let abs_path = repo^"/"^path in
                          if not (Sys.file_exists abs_path)
-                         then raise (GdfError ("le fichier "^path^" n'existe pas
+                         then raise (GdfError ("Le fichier "^path^" n'existe pas
                          ou n'est pas dans le worktree"))
                          else list_clean := abs_path::(!list_clean)) paths;
   let cur_index = index_parser () in
