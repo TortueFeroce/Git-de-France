@@ -13,22 +13,22 @@ let type_rev = ref ""
 let options = ref []
 
 let findOptions str = match str with
-  | "init" -> [("-f", Set force, "placeholder")]
-  | "hash-object" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
-  | "cat-file" -> []
-  | "log" -> []
-  | "checkout" -> []
-  | "show-refs" -> []
-  | "tag" -> [("-a", Set not_light, "placeholder")]
-  | "rev-parse" -> [("-t", Set_string type_rev, "placeholder")] (* TO DO : j'ai pas compris son truc de wyag-type *)
-  | "ls-files" -> []
-  | "check-ignore" -> []
-  | "status" -> []
-  | "rm" -> [] (*pas d'options?*)
-  | "add" -> []
-  | "commit" -> []
+  | "initier" -> [("-f", Set force, "placeholder")]
+  | "hacher-objet" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
+  | "concatener-fichier" -> []
+  | "enregistrer" -> []
+  | "verifier" -> []
+  | "montrer-references" -> []
+  | "etiqueter" -> [("-a", Set not_light, "placeholder")]
+  | "analyser-revision" -> [("-t", Set_string type_rev, "placeholder")] (* TO DO : j'ai pas compris son truc de wyag-type *)
+  | "enumerer-fichiers" -> []
+  | "verifier-ignorer" -> []
+  | "statut" -> []
+  | "supprimer" -> [] (*pas d'options?*)
+  | "ajouter" -> []
+  | "commettre" -> []
   | "test" -> []
-  | _ -> failwith "loserrrr"
+  | _ -> failwith "Cette commande n'existe pas"
 
 let isSubcomm = ref true
 
@@ -43,28 +43,29 @@ let read_option () =
   "Voici les commandes disponibles pour git-de-France :";
   (!args, !command_name)
   
-let () = (Printexc.record_backtrace true;
+let () = try (Printexc.record_backtrace true;
   let found_args, c_name = read_option () in
   match c_name, found_args with
-    | "init", x::[] -> compute_init x
-    | "hash-object", x::[] -> let sha = hash_file !doWrite !objType x
+    | "initier", x::[] -> compute_init x
+    | "hacher-objet", x::[] -> let sha = hash_file !doWrite !objType x
                               in print_string sha
-    | "cat-file", sha :: typ :: [] -> cat_file typ sha
-    | "log", x :: [] -> compute_log x
-    | "checkout", dir :: sha :: [] -> compute_checkout sha dir
-    | "show-refs", [] -> print_refs ()
-    | "tag", obj :: name :: [] -> compute_tag name obj
-    | "tag", name :: [] -> compute_tag name "HEAD"
-    | "tag", [] -> print_tag ()
-    | "rev-parse", name :: [] -> compute_rev_parse name !type_rev
-    | "ls-files", [] -> print_index_files ()
-    | "check-ignore", l -> compute_check_ignore l
-    | "status", [] -> compute_status ()
-    | "rm", l -> compute_rm l true false
+    | "concatener-fichier", sha :: typ :: [] -> cat_file typ sha
+    | "enregistrer", x :: [] -> compute_log x
+    | "verifier", dir :: sha :: [] -> compute_checkout sha dir
+    | "montrer-references", [] -> print_refs ()
+    | "etiqueter", obj :: name :: [] -> compute_tag name obj
+    | "etiqueter", name :: [] -> compute_tag name "HEAD"
+    | "etiqueter", [] -> print_tag ()
+    | "analyser-revision", name :: [] -> compute_rev_parse name !type_rev
+    | "enumerer-fichiers", [] -> print_index_files ()
+    | "verifier-ignorer", l -> compute_check_ignore l
+    | "statut", [] -> compute_status ()
+    | "supprimer", l -> compute_rm l true false
     | "add", l -> compute_add l false true (* TO DO : faire mieux *)
-    | "commit", m::[] -> compute_commit m
+    | "ajouter", m::[] -> compute_commit m
     | "test", [] -> f_test ()
-    | _ -> failwith "commande pas implémentée")
+    | _ -> failwith "Mauvais arguments")
+  with (GdfError str) -> Printf.printf "Erreur : %s" str
 
 (* Test pour le parser des commits :
 let () = (let commit = commit_parser "24commit_test" in
