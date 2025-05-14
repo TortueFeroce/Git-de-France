@@ -49,7 +49,6 @@ let () = (Printexc.record_backtrace true;
     | "init", x::[] -> compute_init x
     | "hash-object", x::[] -> let sha = hash_file !doWrite !objType x
                               in print_string sha
-    | "test", [] -> cmd_status_branch ()
     | "cat-file", sha :: typ :: [] -> cat_file typ sha
     | "log", x :: [] -> compute_log x
     | "checkout", dir :: sha :: [] -> compute_checkout sha dir
@@ -64,6 +63,7 @@ let () = (Printexc.record_backtrace true;
     | "rm", l -> compute_rm l true false
     | "add", l -> compute_add l false true (* TO DO : faire mieux *)
     | "commit", m::[] -> compute_commit m
+    | "test", [] -> f_test ()
     | _ -> failwith "commande pas implémentée")
 
 (* Test pour le parser des commits :
