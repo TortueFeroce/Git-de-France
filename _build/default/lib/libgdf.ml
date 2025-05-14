@@ -111,11 +111,11 @@ let compute_init s =
   Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
   Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
   Unix.mkdir (s^"/.gdf/info") perm_base;
-  let head_channel = Stdlib.open_out "/.gdf/HEAD" in
+  let head_channel = Stdlib.open_out (s^"/.gdf/HEAD") in
     write_str_stdlib head_channel "ref: refs/heads/master";
-  let index_channel = Stdlib.open_out "/.gdf/index" in
+  let index_channel = Stdlib.open_out (s^"/.gdf/index") in
     write_str_stdlib index_channel "DIRC0000000000000000";
-  let exclude_channel = Stdlib.open_out "/.gdf/info/exclude" in
+  let exclude_channel = Stdlib.open_out (s^"/.gdf/info/exclude") in
     write_str_stdlib exclude_channel "";
   let config_channel = open_out (s^"/.gdf/config") in
     output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
