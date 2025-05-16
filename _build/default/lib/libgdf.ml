@@ -8,15 +8,15 @@ exception GdfError of string
 
 type path = string list
 
-type worktree = path
+type workbaliveau = path
 
 type git_directory = path
 
-type commit = {
-  tree : string;
-  parent : string list;
-  author : string;
-  committer : string;
+type commettre = {
+  baliveau : string;
+  aieul : string list;
+  auteur : string;
+  commetteur : string;
   gpgsig : string;
   name : string;
   size : int
@@ -35,7 +35,7 @@ type entries = {
   i_name : string
 }
 
-type index = {
+type indice = {
   entries : entries list;
   version : int
 }  
@@ -53,8 +53,8 @@ type ignoring_rules = Usual | Excl | Comment
 
 type obj =
   | Blob of string * string
-  | Commit of commit (* ah ouais en fait c'est pas très beau ce que j'ai fait là :'( *)
-  | Tree of (string * string * string) list 
+  | Commettre of commettre (* ah ouais en fait c'est pas très beau ce que j'ai fait là :'( *)
+  | Baliveau of (string * string * string) list 
 
 let perm_base = 0o777
 
@@ -105,20 +105,20 @@ let compute_init s =
     Unix.mkdir s perm_base;
   with Unix.Unix_error(_) -> () );
   Unix.mkdir (s^"/.gdf") perm_base;
-  Unix.mkdir (s^"/.gdf/objects") perm_base;
+  Unix.mkdir (s^"/.gdf/objets") perm_base;
   Unix.mkdir (s^"/.gdf/refs") perm_base;
-  Unix.mkdir (s^"/.gdf/refs/tags") perm_base;
-  Unix.mkdir (s^"/.gdf/refs/heads") perm_base; (* pour mettre les branches *)
+  Unix.mkdir (s^"/.gdf/refs/etiquettes") perm_base;
+  Unix.mkdir (s^"/.gdf/refs/tetes") perm_base; (* pour mettre les branches *)
   Unix.mkdir (s^"/.gdf/info") perm_base;
-  let head_channel = Stdlib.open_out (s^"/.gdf/HEAD") in
-    write_str_stdlib head_channel "ref: refs/heads/master";
-  let index_channel = Stdlib.open_out (s^"/.gdf/index") in
-    write_str_stdlib index_channel "DIRC0000000000000000";
-  let exclude_channel = Stdlib.open_out (s^"/.gdf/info/exclude") in
-    write_str_stdlib exclude_channel "";
+  let tete_channel = Stdlib.open_out (s^"/.gdf/TETE") in
+    write_str_stdlib tete_channel "ref: refs/tetes/maitre";
+  let indice_channel = Stdlib.open_out (s^"/.gdf/indice") in
+    write_str_stdlib indice_channel "DIRC0000000000000000";
+  let exclus_channel = Stdlib.open_out (s^"/.gdf/info/exclus") in
+    write_str_stdlib exclus_channel "";
   let config_channel = open_out (s^"/.gdf/config") in
     output_string config_channel "";
-    close_out config_channel; close_out index_channel; close_out head_channel
+    close_out config_channel; close_out indice_channel; close_out tete_channel
 
   
 let repo_find () = (
@@ -131,7 +131,7 @@ let repo_find () = (
       let () = Unix.chdir "../" in
       let new_name = Unix.getcwd () in
       if new_name = cur_name then
-        raise (GdfError "Pas un repo gdf");
+        raise (GdfError "Pas un entrepôt git-de-France");
         aux ()))
       in aux ())
 
@@ -141,16 +141,16 @@ let compute_object_name name =
   let len_name = String.length name in
   let dir = String.sub name 0 2 in
   let obj_name = String.sub name 2 (len_name - 2) in
-  (repo_name^"/.gdf/objects/"^dir^"/"^obj_name)
+  (repo_name^"/.gdf/objets/"^dir^"/"^obj_name)
 
 let extract_data obj =
-  (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
+  (* Renvoie le contenu d'un fichier qui n'est pas dans objets sous forme de string *)
   let f_channel = Stdlib.open_in obj in
   let str = read_str_until_eof_stdlib f_channel in
   str
 
 let extract_data_zip obj =
-  (* Renvoie le contenu d'un fichier qui n'est pas dans objects sous forme de string *)
+  (* Renvoie le contenu d'un fichier qui n'est pas dans objets sous forme de string *)
   let f_channel = Gzip.open_in obj in
   read_str_until_eof f_channel
 
@@ -171,12 +171,12 @@ let computed_list_sig s =
     | [] -> []
   in aux list_sig
 
-let concat_list_commit c =
-  let concat_p_list = match c.parent with
-  | [] -> ["parent "]
+let concat_list_commettre c =
+  let concat_p_list = match c.aieul with
+  | [] -> ["aieul "]
   | x::q -> 
-  ["parent "^x]@(List.map (fun e -> " "^e) q) in
-  ["tree "^(c.tree)]@concat_p_list@["author "^(c.author);"committer "^(c.committer);
+  ["aieul "^x]@(List.map (fun e -> " "^e) q) in
+  ["baliveau "^(c.baliveau)]@concat_p_list@["auteur "^(c.auteur);"commetteur "^(c.commetteur);
   "gpgsig -----BEGIN PGP SIGNATURE-----";""]@(computed_list_sig c.gpgsig)@
   [" -----END PGP SIGNATURE-----";"";(c.name)]
   (* miam *)
@@ -228,14 +228,14 @@ let config_parser () =
   in List.iter parse config_list;
   {utilisateur = !user}
 
-let commit_parser obj_content =
-  (* Parser pour les commits, dsl c'est immonde *) (
+let commettre_parser obj_content =
+  (* Parser pour les commettres, dsl c'est immonde *) (
   let data_list = String.split_on_char '\n' obj_content in
   let size = String.length obj_content in
-  let tree = ref "" in
-  let parent = ref [] in
-  let author = ref "" in
-  let committer = ref "" in
+  let baliveau = ref "" in
+  let aieul = ref [] in
+  let auteur = ref "" in
+  let commetteur = ref "" in
   let gpgsig = ref "" in 
   let name = ref "" in
   let rec compute_data lst cur_section = (match lst with
@@ -244,20 +244,20 @@ let commit_parser obj_content =
               if line_list = [""] then compute_data q cur_section
               else if List.hd line_list <> "" then begin
                 (match line_list with 
-                  | "tree"::s::[]                           ->
-                    tree := s;
-                    compute_data q "tree"
-                  | "tree"::_                               ->
-                    raise (GdfError "Mauvais format pour un tree")
-                  | "parent"::s::[]                         -> 
-                    parent := s::[];
-                    compute_data q "parent"
-                  | "parent"::_                             ->
-                    raise (GdfError "Mauvais format pour un parent")
-                  | "author"::a                             -> author := String.concat " " a;
-                    compute_data q "author"
-                  | "committer"::c                          -> committer := String.concat " " c;
-                    compute_data q "committer"
+                  | "baliveau"::s::[]                           ->
+                    baliveau := s;
+                    compute_data q "baliveau"
+                  | "baliveau"::_                               ->
+                    raise (GdfError "Mauvais format pour un baliveau")
+                  | "aieul"::s::[]                         -> 
+                    aieul := s::[];
+                    compute_data q "aieul"
+                  | "aieul"::_                             ->
+                    raise (GdfError "Mauvais format pour un aïeul")
+                  | "auteur"::a                             -> auteur := String.concat " " a;
+                    compute_data q "auteur"
+                  | "commetteur"::c                          -> commetteur := String.concat " " c;
+                    compute_data q "commetteur"
                   | "gpgsig"::_                             ->
                     compute_data q "gpgsig"
                   | ""::"-----END"::"PGP"::"SIGNATURE-----"::[] -> 
@@ -271,41 +271,39 @@ let commit_parser obj_content =
                   | y::[] -> y
                   | ""::"-----END"::"PGP"::"SIGNATURE-----"::[] ->
                       let () = compute_data q "name" in ""  
-                  | _ -> failwith ("impossible mais le compilateur ocaml est un peu
-                  con sur les bords (c'est pas le couteau le plus aiguisé du tiroir si
-                  vous voulez mon avis)")) in
+                  | _ -> failwith ("ne devrait pas arriver si le reste du code est correct")) in
                 let data_len = String.length data in
                 if data_len >= 1 then
                 (match cur_section with
-                  | "parent" -> parent := data::(!parent);
-                                compute_data q "parent"
+                  | "aieul" -> aieul := data::(!aieul);
+                                compute_data q "aieul"
                   | "gpgsig" -> gpgsig := (!gpgsig)^(" "^data);
                                 compute_data q "gpgsig";
                   | "name"   -> name := String.concat "\n" (x::q)
                   | _        -> failwith "oula c'est pas normal")
               end)
-  in compute_data data_list "tree";
+  in compute_data data_list "baliveau";
 
-  let commit = {
-    tree = !tree;
-    parent = !parent;
-    author = !author;
-    committer = !committer;
+  let commettre = {
+    baliveau = !baliveau;
+    aieul = !aieul;
+    auteur = !auteur;
+    commetteur = !commetteur;
     gpgsig = !gpgsig;
     name = !name;
     size = size
-  } in commit)
+  } in commettre)
 
-let parse_pregzip_commit c =
+let parse_pregzip_commettre c =
   let obj_content = extract_data c in
-  commit_parser obj_content
+  commettre_parser obj_content
 
-let tree_parser data = 
+let baliveau_parser data = 
   let rec aux x = match x with
     | [] -> []
     | mode :: sha :: path :: q -> (mode, sha, path) :: aux q
-    | _ -> raise (GdfError "Mauvais format pour un tree")
-  in Tree(aux data)
+    | _ -> raise (GdfError "Mauvais format pour un baliveau")
+  in Baliveau(aux data)
 
 let deserialize str =
   let data = String.split_on_char ('\n') str in
@@ -316,27 +314,27 @@ let deserialize str =
                   d'entrée ne correspond pas à la taille de l'objet reconcaténé *)
                   assert ((String.length file_data) = (int_of_string size));
                   Blob(file_name, file_data)
-      | "commit" :: _ :: q ->
+      | "commettre" :: _ :: q ->
                   (* let file_data = String.concat "\n" q in *)
                   (* TO DO : la taille ça marche pas *)
-                  Commit(commit_parser (String.concat "\n" q))
-      | "tree" :: _ :: q -> tree_parser q (*il peut pas y avoir de \n random dans un tree normalement donc la liste q c'est exactement ce qu'on veut*)
+                  Commettre(commettre_parser (String.concat "\n" q))
+      | "baliveau" :: _ :: q -> baliveau_parser q (*il peut pas y avoir de \n random dans un baliveau normalement donc la liste q c'est exactement ce qu'on veut*)
       | _ -> Printf.printf "data : %s\n" str; raise (GdfError "Mauvais format de données")
 
-let serialize obj = (*le serialize du mr ne met pas le header. raph dit que c'est cringe. a voir...*)
+let serialize obj = (*le serialize du mr ne met pas le TÊTEer. raph dit que c'est cringe. a voir...*)
   match obj with
     | Blob(file_name, file_data) ->
         let size = string_of_int (String.length file_data) in
         String.concat "\n" ["blob"; size; file_name; file_data]
-    | Commit(c) ->
+    | Commettre(c) ->
         let size = string_of_int c.size in
-        let l_commit = concat_list_commit c in
-        String.concat "\n" (["commit"; size]@l_commit)
-    | Tree(l) -> 
+        let l_commettre = concat_list_commettre c in
+        String.concat "\n" (["commettre"; size]@l_commettre)
+    | Baliveau(l) -> 
       let contents_list = List.fold_left (fun acc (s,ss, sss) -> s :: ss :: sss :: acc) [] l in
-      let tree_contents = String.concat "\n" contents_list in
-      let size = string_of_int (String.length tree_contents) in
-      String.concat "\n" ["tree"; size; tree_contents]
+      let baliveau_contents = String.concat "\n" contents_list in
+      let size = string_of_int (String.length baliveau_contents) in
+      String.concat "\n" ["baliveau"; size; baliveau_contents]
     (*| _ -> failwith "attends 2s connard"*)
 
 let read_object sha =
@@ -344,7 +342,7 @@ let read_object sha =
   let len_sha = String.length sha in
   let dir_sha = String.sub sha 0 2
   and obj_name = String.sub sha 2 (len_sha - 2) in
-  let obj_path = (repo_find ())^"/.gdf/objects/" in
+  let obj_path = (repo_find ())^"/.gdf/objets/" in
   let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
   let pre_obj = read_str_until_eof file_channel in
   Gzip.close_in file_channel;
@@ -355,7 +353,7 @@ let find_type sha =
   let len_sha = String.length sha in
   let dir_sha = String.sub sha 0 2
   and obj_name = String.sub sha 2 (len_sha - 2) in
-  let obj_path = (repo_find ())^"/.gdf/objects/" in
+  let obj_path = (repo_find ())^"/.gdf/objets/" in
   let file_channel = Gzip.open_in (obj_path^dir_sha^"/"^obj_name) in
   let c_type = add_char_until '\n' file_channel in
   Gzip.close_in file_channel;
@@ -371,34 +369,34 @@ let rec ref_resolve ref =
   match first_bits with
     | "ref: " -> ref_resolve lasts_bits
     | _       -> List.hd (String.split_on_char '\n' data))
-  with _ -> raise (GdfError "Le nom donné ne correspond pas à une ref")
+  with _ -> raise (GdfError "Le nom donné ne correspond pas à une référence")
 
 
 let object_resolve name = match name with
-(* Fonction qui renvoie les possibilités pour un nom donné, un tag ou un sha
+(* Fonction qui renvoie les possibilités pour un nom donné, un etiquette ou un sha
    sous forme de liste de string *)
     | "" -> raise (GdfError "Le nom est vide et ne peut donc pas correspondre
     à un haché")
-    | "HEAD" -> [("head",ref_resolve "HEAD")]
+    | "TETE" -> [("tete",ref_resolve "TETE")]
     | _ -> (let possibilities = ref [] in
           let name_len = String.length name in
           if name_len >= 4 then begin
             let prefix = String.sub name 0 2 in
             let suffix = String.sub name 2 (name_len - 2) in
-            let path = (repo_find ())^"/.gdf/objects/"^prefix in
+            let path = (repo_find ())^"/.gdf/objets/"^prefix in
             let files_here = Sys.readdir path in
             Array.iter (fun x -> if not (Sys.is_directory (path^"/"^x)) 
                                 && (String.sub x 0 (name_len - 2) = suffix)
                                 then possibilities := ("blob",prefix^x)::(!possibilities)) files_here
           end;(
-          try let sha_tag = ref_resolve ("refs/tags/"^name)
-              in possibilities := ("tag",sha_tag)::(!possibilities) 
+          try let sha_etiquette = ref_resolve ("refs/etiquettes/"^name)
+              in possibilities := ("etiquette",sha_etiquette)::(!possibilities) 
           with _ -> ();
-          try let sha_tag = ref_resolve ("refs/heads/"^name)
-              in possibilities := ("head",sha_tag)::(!possibilities) 
+          try let sha_etiquette = ref_resolve ("refs/tetes/"^name)
+              in possibilities := ("tete",sha_etiquette)::(!possibilities) 
           with _ -> ());
-          (* try let sha_tag = ref_resolve ("refs/remotes/"^name)
-              in possibilities := sha_tag::(!possibilities) 
+          (* try let sha_etiquette = ref_resolve ("refs/remotes/"^name)
+              in possibilities := sha_etiquette::(!possibilities) 
           with _ -> ();
           pour l'instant on ne le met pas mais ça peut servir dans la suite*)
           !possibilities)
@@ -407,20 +405,21 @@ let object_find name fmt =
   (* fonction qui renvoie le sha d'un objet dont le nom est name *)
   let list_resolve = object_resolve name in
   if fmt = "" then begin
-    if List.length list_resolve <> 1
-    then raise (GdfError ("Le nom : "^name^" ne correspond pas à une occurence valide
-  ou correspond à plusieurs occurences")) (* TO DO : faire une meilleure erreur *)
+    if List.length list_resolve = 0
+    then raise (GdfError ("Le nom : "^name^" ne correspond à aucune occurence valide"))
+    else if List.length list_resolve > 1
+    then raise (GdfError ("Le nom : "^name^"correspond à plusieurs occurences")) 
     else let (_,y) = List.hd list_resolve in y end
   else begin
     let rec aux list_resolve fmt = match list_resolve, fmt with
     | [],_ -> raise (GdfError "Aucune occurence trouvée")
     | (_,x)::_,_ when (find_type x = fmt) -> x
-    | ("tag",x)::_,_ -> ref_resolve ("tags/"^x)
-    | (_,x)::_,"tree" when (find_type x = "commit") -> (*c'est pas tres beau mais ça doit marcher*)
+    | ("etiquette",x)::_,_ -> ref_resolve ("etiquettes/"^x)
+    | (_,x)::_,"baliveau" when (find_type x = "commettre") -> (*c'est pas tres beau mais ça doit marcher*)
         let obj = read_object x in (match obj with
-          | Commit c -> c.tree
-          | _ -> raise (GdfError "Mauvais type de fichier"))
-    | ("head",x)::_,_ -> Printf.printf "type : %s\nx : %s\n" (find_type x) x;x
+          | Commettre c -> c.baliveau
+          | _ -> raise (GdfError "Mauvais type d'objet"))
+    | ("tete",x)::_,_ -> x
     | _::q,_ -> aux q fmt
   in aux list_resolve fmt
   end
@@ -434,9 +433,9 @@ let write_object obj do_write =
     let first_sha = String.sub sha 0 2 
     and last_sha = String.sub sha 2 ((String.length sha) - 2) in
       let repo_path = repo_find () in
-        (if not (Sys.file_exists (repo_path^"/.gdf/objects/"^first_sha)) 
-          then Unix.mkdir (repo_path^"/.gdf/objects/"^first_sha) perm_base); (*crée le repertoire ou on range l'objet s'il existe pas encore*)
-        let file_channel = Gzip.open_out (repo_path^"/.gdf/objects/"^first_sha^"/"^last_sha) in
+        (if not (Sys.file_exists (repo_path^"/.gdf/objets/"^first_sha)) 
+          then Unix.mkdir (repo_path^"/.gdf/objets/"^first_sha) perm_base); (*crée le repertoire ou on range l'objet s'il existe pas encore*)
+        let file_channel = Gzip.open_out (repo_path^"/.gdf/objets/"^first_sha^"/"^last_sha) in
           write_str file_channel serialized_obj;
           Gzip.close_out file_channel));
   sha
@@ -444,12 +443,12 @@ let write_object obj do_write =
 let cat_file fmt sha = (*le pelo fait des trucs bizarres avec object find, a mediter. le type ne sert a rien, voir doc git*)
   let obj = read_object (object_find sha fmt) in 
     match obj with
-      | Blob(_, str) -> Printf.printf "%s" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
-      | Commit(c) -> Printf.printf "%s" (String.concat "\n" (concat_list_commit c))
-      | Tree(l) -> 
+      | Blob(_, str) -> Printf.printf "%s\n" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
+      | Commettre(c) -> Printf.printf "%s\n" (String.concat "\n" (concat_list_commettre c))
+      | Baliveau(l) -> 
         let contents_list = List.fold_left (fun acc (s,ss, sss) -> s :: ss :: sss :: acc) [] l in
-        let tree_contents = String.concat "\n" contents_list in (*nos trees seront illisibles...*)
-        Printf.printf "%s" tree_contents
+        let baliveau_contents = String.concat "\n" contents_list in (*nos baliveaus seront illisibles...*)
+        Printf.printf "%s\n" baliveau_contents
       (*| _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets"*)
 
 let hash_file do_write typfile f_name =
@@ -459,61 +458,61 @@ let hash_file do_write typfile f_name =
   close_in f_channel;
   match typfile with
     | "blob" -> write_object (Blob(f_name, data)) do_write
-    | "commit" -> write_object (Commit(parse_pregzip_commit f_name)) do_write
-    | "tree" -> 
-      let tree_contents = String.split_on_char '\n' data in
-      write_object (tree_parser tree_contents) do_write
-    | _ -> raise (GdfError (typfile ^ " n'est pas un type de fichier valide"))
+    | "commettre" -> write_object (Commettre(parse_pregzip_commettre f_name)) do_write
+    | "baliveau" -> 
+      let baliveau_contents = String.split_on_char '\n' data in
+      write_object (baliveau_parser baliveau_contents) do_write
+    | _ -> raise (GdfError (typfile ^ " n'est pas un type d'objet valide"))
 
 let compute_log name = 
-  (*alors la, il faut qu'on en parle. cette fonction donne l'arbre des commits en format .dot direct dans la console. okok pas de soucis. sauf que 1) on donne pas tout le log juste l'historique des commits passés en argument, 2) on peut passer qu'un seul commit en argument, 3) ya pas de merge. ?????? c'est juste une ligne ton log??? fin je vois pas l'interet de se casser les couilles avec graphviz pour faire juste une liste dans l'ordre. au passage, l'abscence de merge rends plein de trucs obsolètes, style la possibilité d'avoir >1 parents. apres, si thibault polge demande moi j'execute. mais ça sert a rien. en vrai peut etre on peut donner la possibilté d'avoir une liste d'arguments plus tard? ça serait rigolo au moins un peu. ou alors peut etre je suis juste con et j'ai mal compris. au passage tu sais ce que c'est une mite à l'envers? c'est une co-mite (commit). c'est pas grave si t'as pas compris je sais que mon humour est un peu trop subtil pour beaucoup de gens. bon allez je vais me log la gueule c'est tipar (parti en verlan)*)
-  let sha = object_find name "commit" in
+  (*alors la, il faut qu'on en parle. cette fonction donne l'arbre des commettres en format .dot direct dans la console. okok pas de soucis. sauf que 1) on donne pas tout le log juste l'historique des commettres passés en argument, 2) on peut passer qu'un seul commettre en argument, 3) ya pas de merge. ?????? c'est juste une ligne ton log??? fin je vois pas l'interet de se casser les couilles avec graphviz pour faire juste une liste dans l'ordre. au passage, l'abscence de merge rends plein de trucs obsolètes, style la possibilité d'avoir >1 aieuls. apres, si thibault polge demande moi j'execute. mais ça sert a rien. en vrai peut etre on peut donner la possibilté d'avoir une liste d'arguments plus tard? ça serait rigolo au moins un peu. ou alors peut etre je suis juste con et j'ai mal compris. au passage tu sais ce que c'est une mite à l'envers? c'est une co-mite (commettre). c'est pas grave si t'as pas compris je sais que mon humour est un peu trop subtil pour beaucoup de gens. bon allez je vais me log la gueule c'est tipar (parti en verlan)*)
+  let sha = object_find name "commettre" in
   (* Printf.printf "name : %s sha : %s\n" name sha; *)
   (* Printf.printf "sha : %s\n" sha; *)
   Printf.printf "digraph wyaglog{\n\tnode[shape=rect]";
-  let seen_commits = Hashtbl.create 64 in (*hmm, c'est pas beau. ya surement un module mieux mais raph est pas la pour me dire que en fait c'est pas comme ça qu'on fait*)
-  let rec log_graphviz comm = if not (Hashtbl.mem seen_commits comm.name) then
-      Hashtbl.add seen_commits comm.name true;
-      match comm.parent with
+  let seen_commettres = Hashtbl.create 64 in (*hmm, c'est pas beau. ya surement un module mieux mais raph est pas la pour me dire que en fait c'est pas comme ça qu'on fait*)
+  let rec log_graphviz comm = if not (Hashtbl.mem seen_commettres comm.name) then
+      Hashtbl.add seen_commettres comm.name true;
+      match comm.aieul with
         | [] -> ()
         | ""::[] -> ()
         | l -> List.iter (fun x -> 
             let truc = read_object x in match truc with
-              | Commit(c) -> 
+              | Commettre(c) -> 
                   Printf.printf "%s -> %s\n" c.name comm.name;
                   log_graphviz c
-              | _ -> raise (GdfError "L'objet n'est pas un commit")) l
+              | _ -> raise (GdfError "L'objet n'est pas un commettre")) l
   in match read_object sha with (*le prochain match que je dois ecrire ou ya un seul cas qui fonctionne je me defenestre*)
-    | Commit(coucou) -> log_graphviz coucou; Printf.printf "}\n"
-    | _ -> raise (GdfError (sha ^ " n'est pas un commit"))
+    | Commettre(coucou) -> log_graphviz coucou; Printf.printf "}\n"
+    | _ -> raise (GdfError (sha ^ " n'est pas un commettre"))
 
-let rec tree_checkout tree path = 
+let rec baliveau_checkout baliveau path = 
   let item (_, sha, file) =
     let obj = read_object sha in
     let dest = (path ^ "/" ^ file) in
     match obj with
-      | Tree(_) ->
+      | Baliveau(_) ->
         Unix.mkdir dest perm_base;
-        tree_checkout obj dest
+        baliveau_checkout obj dest
       | Blob(_, file_data) -> 
         let channel = Stdlib.open_out dest in
         Stdlib.output_string channel file_data; Stdlib.close_out channel
-      | _ -> raise (GdfError "Mauvais type de fichier pour un objet dans un tree")
-  in match tree with
-    | Tree(l) -> List.iter item l
-    | _ -> raise (GdfError "Mauvais type d'objet - un tree était attendu")
+      | _ -> raise (GdfError "Mauvais type de fichier pour un objet dans un baliveau")
+  in match baliveau with
+    | Baliveau(l) -> List.iter item l
+    | _ -> raise (GdfError "Mauvais type d'objet - un baliveau était attendu")
 
 let compute_checkout name dir =
-  let obj = read_object (object_find name "commit") in
-  let tree = match obj with
-    | Commit(c) -> read_object c.tree
-    | _ -> raise (GdfError (name ^ " is not a commit"))
+  let obj = read_object (object_find name "commettre") in
+  let baliveau = match obj with
+    | Commettre(c) -> read_object c.baliveau
+    | _ -> raise (GdfError (name ^ " n'est pas un commettre"))
   (*c'est pas tres beau trois if de suite mais ça permet de gérer les erreurs un peu mieux*)
   in (if (Sys.file_exists dir) then(
     if not (Sys.is_directory dir) then raise (GdfError ("Le fichier " ^ dir ^ " n'est pas un dossier"));
     if Sys.readdir dir <> [||] then raise (GdfError ("Le dossier " ^ dir ^ " n'est pas vide")))
   else Unix.mkdir dir perm_base);
-  tree_checkout tree (Unix.realpath dir)
+  baliveau_checkout baliveau (Unix.realpath dir)
   
 
 let print_refs () =
@@ -524,22 +523,21 @@ let print_refs () =
     let f_list = Sys.readdir path in
     Array.iter (fun x -> if Sys.is_directory (path^x) then aux (path^x^"/")
                         else begin
-                          ref_list := (extract_data (path^x),path)::(!ref_list) end) f_list
+                          ref_list := (extract_data (path^x),path^x)::(!ref_list) end) f_list
   in aux path0;
   List.iter (fun (sha, path) -> Printf.printf "%s %s\n" sha path) (!ref_list)
 
-let print_tag () =
-  Unix.chdir ((repo_find ())^"/.gdf/refs/tags");
+let print_etiquette () =
+  Unix.chdir ((repo_find ())^"/.gdf/refs/etiquettes");
   let file_list = Sys.readdir "." in
   Array.iter (fun x -> Printf.printf "%s\n" x) file_list
 
-let compute_tag name obj =
-  (* Fonction qui crée un tag dont le nom est <name> et qui
+let compute_etiquette name obj =
+  (* Fonction qui crée un etiquette dont le nom est <name> et qui
   est relié à l'objet <obj> *)
-  let data_obj = extract_data obj in
-  let sha = Sha1.to_hex (Sha1.string data_obj) in
-  Unix.chdir ((repo_find ())^"/.gdf/refs/tags");
-  if Sys.file_exists name then raise (GdfError ("Le tag "^name^" existe déjà"))
+  let sha = object_find obj "" in
+  Unix.chdir ((repo_find ())^"/.gdf/refs/etiquettes");
+  if Sys.file_exists name then raise (GdfError ("L'étiquette "^name^" existe déjà"))
   else begin
   let f_channel = Stdlib.open_out name in
   write_str_stdlib f_channel sha;
@@ -593,18 +591,18 @@ let entries_parser entry =
       i_size = int_of_string size;
       i_sha = sha;
       i_name = name}
-    | _ -> raise (GdfError "Mauvais format pour une entrée de l'index")
+    | _ -> raise (GdfError "Mauvais format pour une entrée de l'indice")
 
-let index_parser () = 
-  (* fonction qui parse le fichier index dans .gdf
-  plus précisémment, renvoie un type index 
+let indice_parser () = 
+  (* fonction qui parse le fichier indice dans .gdf
+  plus précisémment, renvoie un type indice 
   
-  ATTENTION : dans le fichier index les bits de poids le plus fort sont le plus 
+  ATTENTION : dans le fichier indice les bits de poids le plus fort sont le plus 
   à gauche, ie. (1000)_2 = (4)_10 *)
 
   Unix.chdir (repo_find ());
-  let data_ind = extract_data ".gdf/index" in (* on suppose que le fichier
-index n'est pas zippé pour l'instant, il faudra changer cette ligne si on
+  let data_ind = extract_data ".gdf/indice" in (* on suppose que le fichier
+indice n'est pas zippé pour l'instant, il faudra changer cette ligne si on
 choisit de le zipper *)
   let len_ind = String.length data_ind in
   let version = bit_string_to_int (String.sub data_ind 4 8) in
@@ -620,13 +618,13 @@ choisit de le zipper *)
     version = version
   } end
 
-let get_index_files () =
-  (* Fonction qui renvoie les fichiers qui ont été staged dans index *)
-  List.map (fun e -> e.i_name) ((index_parser ()).entries)
+let get_indice_files () =
+  (* Fonction qui renvoie les fichiers qui ont été setiquetteed dans indice *)
+  List.map (fun e -> e.i_name) ((indice_parser ()).entries)
 
-let print_index_files () =
-  (* Fonction qui affiche les noms des fichiers dans index *)
-  List.iter (fun x -> Printf.printf "%s\n" x) (get_index_files ())
+let print_indice_files () =
+  (* Fonction qui affiche les noms des fichiers dans indice *)
+  List.iter (fun x -> Printf.printf "%s\n" x) (get_indice_files ())
 
 let gitignore_parse lines =
   List.map (fun line -> 
@@ -657,8 +655,8 @@ let get_rules_for_file file =
   let rec aux () =
     if Unix.getcwd () = repo then begin
       if Sys.file_exists ".gdfignore" then
-      [get_rules_from_file (repo^"/.gdf/info/exclude");get_rules_from_file ".gdfignore"]
-      else [get_rules_from_file (repo^"/.gdf/info/exclude")]
+      [get_rules_from_file (repo^"/.gdf/info/exclus");get_rules_from_file ".gdfignore"]
+      else [get_rules_from_file (repo^"/.gdf/info/exclus")]
     end
     else begin
       Unix.chdir ("../"^(Unix.getcwd ()));
@@ -694,62 +692,61 @@ let compute_check_ignore file_lst =
 
 let are_we_on_branch () =
   let repo = repo_find () in
-  let head_data = extract_data (repo^("/.gdf/HEAD")) in
-  let begin_head_data = String.sub head_data 0 16 in
-  let end_head_data = String.sub head_data 16 (String.length head_data - 16) in
-  match begin_head_data with
-    | "ref: refs/heads/" -> end_head_data
+  let tete_data = extract_data (repo^("/.gdf/TETE")) in
+  let begin_tete_data = String.sub tete_data 0 16 in
+  let end_tete_data = String.sub tete_data 16 (String.length tete_data - 16) in
+  match begin_tete_data with
+    | "ref: refs/tetes/" -> end_tete_data
     | _ -> ""
 
 let cmd_status_branch () =
   (* Donne le début du status *)
   let branch = are_we_on_branch () in
   match branch with
-    | "" -> Printf.printf "HEAD detached at %s\n" (object_find "HEAD" "")
-    | _ -> Printf.printf "On branch %s\n" branch
+    | "" -> Printf.printf "TETE détaché à %s\n" (object_find "TETE" "")
+    | _ -> Printf.printf "Sur la branche %s\n" branch
 
-let is_subtree path =
+let is_subbaliveau path =
   try Sys.is_directory path
 with _ -> false
 
-let tree_to_dict ref =
-  (* Transorme un tree en Hashtbl dont les clefs sont les noms de fichiers
+let baliveau_to_dict ref =
+  (* Transorme un baliveau en Hashtbl dont les clefs sont les noms de fichiers
    et les valeurs sont les hachés des fichiers *)
   let table = Hashtbl.create 16 in
   let rec aux ref =
-    let tree_sha = object_find ref "tree" in
-    (* Printf.printf "sha_t : %s\n" tree_sha; *)
-    let tree = read_object tree_sha in
-    let rec compute_tree t = match t with
+    let baliveau_sha = object_find ref "baliveau" in
+    (* Printf.printf "sha_t : %s\n" baliveau_sha; *)
+    let baliveau = read_object baliveau_sha in
+    let rec compute_baliveau t = match t with
       | [] -> ()
       | (_,sha,path)::q -> (*Printf.printf "path : %s sha : %s\n" path sha;*)
-                              if is_subtree path then aux sha
-                              else Hashtbl.add table path sha; compute_tree q
-    in match tree with
-      | Tree(t) -> compute_tree t
-      | _ -> failwith "ça n'arrivera pas sauf si un connard essaie de nous faire une
-      mauvaise blague, et alors là il va entendre de quel bois je me chauffe ..."
+                              if is_subbaliveau path then aux sha
+                              else Hashtbl.add table path sha; compute_baliveau q
+    in match baliveau with
+      | Baliveau(t) -> compute_baliveau t
+      | _ -> failwith "le baliveau donné n'est pas vraiment un baliveau"
   in aux ref; table
 
-let cmd_status_head_index () =
-  Printf.printf "\nChanges to be committed:\n";
-  let head = tree_to_dict "HEAD" in
-  let index = index_parser () in
-  List.iter (fun e -> try let sha_in_head = Hashtbl.find head (e.i_name) in
+let cmd_status_tete_indice () =
+  Printf.printf "\nChangements à commettre:\n";
+  let tete = baliveau_to_dict "TETE" in
+  let indice = indice_parser () in
+  List.iter (fun e -> try let sha_in_tete = Hashtbl.find tete (e.i_name) in
                           (* Printf.printf "name : %s\n" e.i_name;
-                          Printf.printf "sha_in_head : %s sha : %s\n" sha_in_head e.i_sha; *)
-                          if sha_in_head <> e.i_sha 
-                          then Printf.printf "\tmodified:%s\n" e.i_name;
-                          Hashtbl.remove head e.i_name
-                        with _ -> Printf.printf "\tadded:\t%s\n" e.i_name) index.entries;
-  Hashtbl.iter (fun k _ -> Printf.printf "\tdeleted: %s\n" k) head
+                          Printf.printf "sha_in_tete : %s sha : %s\n" sha_in_tete e.i_sha; *)
+                          if sha_in_tete <> e.i_sha 
+                          then Printf.printf "\tmodifié:%s\n" e.i_name;
+                          Hashtbl.remove tete e.i_name
+                        with _ -> Printf.printf "\tajouté:\t%s\n" e.i_name) indice.entries;
+  Hashtbl.iter (fun k _ -> Printf.printf "\tsupprimé: %s\n" k) tete
 
-let cmd_status_index_worktree () =
-  Printf.printf "\nChanges not staged for commit:\n";
+let cmd_status_indice_workbaliveau () =
+  Printf.printf "\nChangments non mis en scène pour commettre:\n";
 
-  let index = index_parser () in
+  let indice = indice_parser () in
   List.iter (fun e -> if not (Sys.file_exists e.i_name)
-                      then Printf.printf "\tdeleted: %s\n" e.i_name
+                      then Printf.printf "\tsupprimé: %s\n" e.i_name
                       else begin
                         let stats = Unix.stat e.i_name in
                         (* Printf.printf "creation : %f ctime : %f last_modif : %f mtime : %f"
@@ -760,18 +757,18 @@ let cmd_status_index_worktree () =
                           let new_sha = hash_file false "blob" e.i_name in
                           (* Printf.printf "name : %s new_sha : %s old_sha : %s\n" e.i_name new_sha e.i_sha; *)
                           if new_sha <> e.i_sha then
-                            Printf.printf "\tmodified:%s\n" e.i_name
+                            Printf.printf "\tmodifié:%s\n" e.i_name
                         end
                       end
-              ) index.entries;
-  Printf.printf "\nUntracked files:\n";
+              ) indice.entries;
+  Printf.printf "\nFichiers non pistés:\n";
   let all_files = Array.to_list (Sys.readdir (repo_find ())) in
   List.iter (fun x -> Printf.printf "\t%s\n" x) (give_list_check_ignore all_files)
 
 let compute_status () =
   cmd_status_branch ();
-  cmd_status_head_index ();
-  cmd_status_index_worktree ()
+  cmd_status_tete_indice ();
+  cmd_status_indice_workbaliveau ()
 
 let create_entry path _ =
   (* Fonction qui prend un path et un format et qui
@@ -816,18 +813,18 @@ let write_entry channel entry =
   write_0 ();
   write_str_stdlib channel entry.i_name
 
-let index_write index = 
-  (*écrit l'index. ça djoufara l'index d'avant, fais gaffe ma gueule*)
-  let index_channel = Stdlib.open_out ".gdf/index" in
-    write_str_stdlib index_channel "DIRC";
-    write_str_stdlib index_channel (int_to_bit_string index.version);
-    write_str_stdlib index_channel (int_to_bit_string (List.length index.entries));
-    List.iter (write_entry index_channel) index.entries; (*poualala la curryfication ça me donne envie de manger indien*)
-    Stdlib.close_out index_channel (*je l'ai pas oublié cette fois ci quel boss*)
+let indice_write indice = 
+  (*écrit l'indice. ça djoufara l'indice d'avant, fais gaffe ma gueule*)
+  let indice_channel = Stdlib.open_out ".gdf/indice" in
+    write_str_stdlib indice_channel "DIRC";
+    write_str_stdlib indice_channel (int_to_bit_string indice.version);
+    write_str_stdlib indice_channel (int_to_bit_string (List.length indice.entries));
+    List.iter (write_entry indice_channel) indice.entries; (*poualala la curryfication ça me donne envie de manger indien*)
+    Stdlib.close_out indice_channel (*je l'ai pas oublié cette fois ci quel boss*)
 
 let compute_rm path_list do_delete skip_missing =
   (* fonction qui supprime des fichiers *)
-  let index = index_parser () in
+  let indice = indice_parser () in
   let repo = (repo_find ()) ^ "/" in
   let abs_paths = Hashtbl.create 16 in
   List.iter (fun path -> 
@@ -841,38 +838,38 @@ let compute_rm path_list do_delete skip_missing =
       (remove := full_path :: !remove;
       Hashtbl.remove abs_paths full_path)
     else
-      kept_entries := entry :: !kept_entries) index.entries;
-  if (Hashtbl.length abs_paths > 0) && (not skip_missing) then raise (GdfError "Impossible de supprimer des fichiers absents de l'index");
+      kept_entries := entry :: !kept_entries) indice.entries;
+  if (Hashtbl.length abs_paths > 0) && (not skip_missing) then raise (GdfError "Impossible de supprimer des fichiers absents de l'indice");
   (if do_delete then
     List.iter Unix.unlink !remove);
-  index_write ({entries = !kept_entries; version = index.version})
+  indice_write ({entries = !kept_entries; version = indice.version})
 
 let compute_add paths delete skip_missing =
-  (* ajoute les fichiers dans paths dans l'index *)
+  (* ajoute les fichiers dans paths dans l'indice *)
   compute_rm paths delete skip_missing;
   let repo = repo_find () in
   let list_clean = ref [] in
   List.iter (fun path -> let abs_path = repo^"/"^path in
                          if not (Sys.file_exists abs_path)
                          then raise (GdfError ("Le fichier "^path^" n'existe pas
-                         ou n'est pas dans le worktree"))
+                         ou n'est pas dans le baliveau de travail"))
                          else list_clean := abs_path::(!list_clean)) paths;
-  let cur_index = index_parser () in
-  let entries = ref cur_index.entries in
+  let cur_indice = indice_parser () in
+  let entries = ref cur_indice.entries in
   List.iter (fun x ->
     let entry = create_entry x "blob" in
     entries := entry::(!entries)) !list_clean;
-  let new_index = {
+  let new_indice = {
     entries = !entries;
-    version = cur_index.version
-  } in index_write new_index
+    version = cur_indice.version
+  } in indice_write new_indice
 
 let true_dirname file = 
   match (Filename.dirname file) with
     | "." -> ""
     | unautrestringnimportelequel -> unautrestringnimportelequel
 
-let tree_from_index index =
+let baliveau_from_indice indice =
   let contents = Hashtbl.create 32 in
   Hashtbl.add contents "" [];
 
@@ -888,7 +885,7 @@ let tree_from_index index =
     let dir = true_dirname entry.i_name
     in let entry_list = Hashtbl.find contents dir in
     Hashtbl.replace contents dir (entry :: entry_list)
-  in List.iter add_to_contents index.entries;
+  in List.iter add_to_contents indice.entries;
 
   let sorted_paths = List.rev (List.sort compare (List.of_seq (Hashtbl.to_seq_keys contents))) in (*quelle horreur. mais ça marche (normalement...)*)
   let sha = ref "" in
@@ -896,12 +893,12 @@ let tree_from_index index =
   (* Hashtbl.iter (fun a l -> Printf.printf "path : %s\n" a;
                           List.iter (fun x -> Printf.printf "\te_name : %s\n" x.i_name) l) contents; *)
 
-  let create_tree path =
+  let create_baliveau path =
     let make_leaf entry =
       let leaf_mode = entry.i_perms in
       (string_of_int leaf_mode, entry.i_sha, Filename.basename entry.i_name) (*TODO : ecrire les perms en octal, pas en decimal comme je le fais la*)
-    in let tree = Tree (List.map make_leaf (Hashtbl.find contents path)) in
-    sha := write_object tree true;
+    in let baliveau = Baliveau (List.map make_leaf (Hashtbl.find contents path)) in
+    sha := write_object baliveau true;
     let fake_entry = {
       i_creation = 0;
       i_last_modif = 0;
@@ -917,47 +914,46 @@ let tree_from_index index =
     let entry_list = Hashtbl.find contents (true_dirname path) in
     Hashtbl.replace contents (true_dirname path) (fake_entry :: entry_list)
 
-  in List.iter create_tree sorted_paths;
+  in List.iter create_baliveau sorted_paths;
   !sha
 
-let commit_create tree parent author message =
-  let new_commit = {
-    tree = tree;
-    parent = parent;
-    author = author;
-    committer = author;
+let commettre_create baliveau aieul auteur message =
+  let new_commettre = {
+    baliveau = baliveau;
+    aieul = aieul;
+    auteur = auteur;
+    commetteur = auteur;
     gpgsig = ""; (* on pourrait peut-être en mettre une mais c'est pas le plus urgent *)
     name = message;
     size = 0 (* TO DO : changer ça *)
   } in
-  write_object (Commit(new_commit)) true
+  write_object (Commettre(new_commettre)) true
   
 let find_author () =
   let user = (config_parser ()).utilisateur in
   user.u_name ^ " " ^ user.u_email
 
-let compute_commit message =
+let compute_commettre message =
   let repo = repo_find () in
-  let index = index_parser () in
-  let tree = tree_from_index index in
-  (* Printf.printf "tree : %s\n" tree; *)
-  let commit = 
-    try (let ref_head = object_find "HEAD" "" in
-        commit_create tree [ref_head] "" message)
+  let indice = indice_parser () in
+  let baliveau = baliveau_from_indice indice in
+  (* Printf.printf "baliveau : %s\n" baliveau; *)
+  let commettre = 
+    try (let ref_tete = object_find "TETE" "" in
+        commettre_create baliveau [ref_tete] "" message)
     with _ -> (
-      let commit2 = commit_create tree [] (find_author ()) message in
-      Printf.printf "commit : %s\n" (String.escaped commit2);
-      let master_channel = Stdlib.open_out (repo^"/.gdf/refs/heads/master") in
-      write_str_stdlib master_channel commit2;
-      Stdlib.close_out master_channel;
-      commit2) in
+      let commettre2 = commettre_create baliveau [] (find_author ()) message in
+      let maitre_channel = Stdlib.open_out (repo^"/.gdf/refs/tetes/maitre") in
+      write_str_stdlib maitre_channel commettre2;
+      Stdlib.close_out maitre_channel;
+      commettre2) in
   let branch = are_we_on_branch () in 
   match branch with
-    | "" ->let branch_channel = Stdlib.open_out (repo^"/.gdf/HEAD") in
+    | "" ->let branch_channel = Stdlib.open_out (repo^"/.gdf/TETE") in
             write_str_stdlib branch_channel "\n";
             Stdlib.close_out branch_channel
-    | _ -> let branch_channel = Stdlib.open_out (repo^"/.gdf/refs/heads/"^branch) in
-            write_str_stdlib branch_channel (commit^"\n");
+    | _ -> let branch_channel = Stdlib.open_out (repo^"/.gdf/refs/tetes/"^branch) in
+            write_str_stdlib branch_channel (commettre^"\n");
             Stdlib.close_out branch_channel
 
 let f_test () =

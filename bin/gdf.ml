@@ -4,23 +4,21 @@
 open Arg
 open Libgdf
 
-let force = ref false
 let doWrite = ref false
 let objType = ref "blob"
-let not_light = ref false
 let type_rev = ref ""
 
 let options = ref []
 
 let findOptions str = match str with
-  | "initier" -> [("-f", Set force, "placeholder")]
-  | "hacher-objet" -> [("-w", Set doWrite, "placeholder"); ("-t", Set_string objType, "placeholder")]
+  | "initialiser" -> []
+  | "hacher-objet" -> [("-w", Set doWrite, "écrit l'objet"); ("-t", Set_string objType, "pour donner le type de l'objet")]
   | "concatener-fichier" -> []
   | "enregistrer" -> []
   | "verifier" -> []
   | "montrer-references" -> []
-  | "etiqueter" -> [("-a", Set not_light, "placeholder")]
-  | "analyser-revision" -> [("-t", Set_string type_rev, "placeholder")] (* TO DO : j'ai pas compris son truc de wyag-type *)
+  | "etiqueter" -> []
+  | "analyser-revision" -> [] (* TO DO : j'ai pas compris son truc de wyag-type *)
   | "enumerer-fichiers" -> []
   | "verifier-ignorer" -> []
   | "statut" -> []
@@ -28,7 +26,7 @@ let findOptions str = match str with
   | "ajouter" -> []
   | "commettre" -> []
   | "test" -> []
-  | _ -> failwith "Cette commande n'existe pas"
+  | _ -> raise (GdfError "Cette commande n'existe pas")
 
 let isSubcomm = ref true
 
@@ -46,37 +44,37 @@ let read_option () =
 let () = try (Printexc.record_backtrace true;
   let found_args, c_name = read_option () in
   match c_name, found_args with
-    | "initier", x::[] -> compute_init x
+    | "initialiser", x::[] -> compute_init x
     | "hacher-objet", x::[] -> let sha = hash_file !doWrite !objType x
                               in print_string sha
     | "concatener-fichier", sha :: typ :: [] -> cat_file typ sha
     | "enregistrer", x :: [] -> compute_log x
     | "verifier", dir :: sha :: [] -> compute_checkout sha dir
     | "montrer-references", [] -> print_refs ()
-    | "etiqueter", obj :: name :: [] -> compute_tag name obj
-    | "etiqueter", name :: [] -> compute_tag name "HEAD"
-    | "etiqueter", [] -> print_tag ()
+    | "etiqueter", obj :: name :: [] -> compute_etiquette name obj
+    | "etiqueter", name :: [] -> compute_etiquette name "TETE"
+    | "etiqueter", [] -> print_etiquette ()
     | "analyser-revision", name :: [] -> compute_rev_parse name !type_rev
-    | "enumerer-fichiers", [] -> print_index_files ()
+    | "enumerer-fichiers", [] -> print_indice_files ()
     | "verifier-ignorer", l -> compute_check_ignore l
     | "statut", [] -> compute_status ()
     | "supprimer", l -> compute_rm l true false
     | "ajouter", l -> compute_add l false true (* TO DO : faire mieux *)
-    | "commettre", m::[] -> compute_commit m
+    | "commettre", m::[] -> compute_commettre m
     | "test", [] -> f_test ()
     | _ -> failwith "Mauvais arguments")
-  with (GdfError str) -> Printf.printf "Erreur : %s" str
+  with (GdfError str) -> Printf.printf "Erreur : %s\n" str
 
-(* Test pour le parser des commits :
-let () = (let commit = commit_parser "24commit_test" in
+(* Test pour le parser des commettres :
+let () = (let commettre = commettre_parser "24commettre_test" in
           print_newline ();
-          Printf.printf "tree : %s" (commit.tree);
+          Printf.printf "baliveau : %s" (commettre.baliveau);
           print_newline ();
-          print_string "parent : "; List.iter print_string (commit.parent);
+          print_string "parent : "; List.iter print_string (commettre.parent);
           print_newline ();
-          Printf.printf "gpgsig : %s" (commit.gpgsig);
+          Printf.printf "gpgsig : %s" (commettre.gpgsig);
           print_newline ();
-          Printf.printf "name : %s" (commit.name)) *)
+          Printf.printf "name : %s" (commettre.name)) *)
 
 
 
