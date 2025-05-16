@@ -61,8 +61,8 @@ let () = try (Printexc.record_backtrace true;
     | "verifier-ignorer", l -> compute_check_ignore l
     | "statut", [] -> compute_status ()
     | "supprimer", l -> compute_rm l true false
-    | "add", l -> compute_add l false true (* TO DO : faire mieux *)
-    | "ajouter", m::[] -> compute_commit m
+    | "ajouter", l -> compute_add l false true (* TO DO : faire mieux *)
+    | "commettre", m::[] -> compute_commit m
     | "test", [] -> f_test ()
     | _ -> failwith "Mauvais arguments")
   with (GdfError str) -> Printf.printf "Erreur : %s" str

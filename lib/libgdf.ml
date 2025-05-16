@@ -12,16 +12,6 @@ type worktree = path
 
 type git_directory = path
 
-type user = string*string
-(* Potentiellement, je pensais faire un truc genre :
-{ name : string;
-  mail : string }
-}
-  
-mais pour l'instant je reste sur string*string tant que j'ai pas fini
-mon parser à commit donc faudrait peut-être le changer en dessous mais flemme
-pour l'instant *)
-
 type commit = {
   tree : string;
   parent : string list;
@@ -42,13 +32,22 @@ type entries = {
   i_gid : int;
   i_size : int;
   i_sha : string;
-  i_name : string;
+  i_name : string
 }
 
 type index = {
   entries : entries list;
   version : int
 }  
+
+type utilisateur = {
+  u_email : string;
+  u_name : string
+  }
+
+type configuration = {
+  utilisateur : utilisateur
+}
 
 type ignoring_rules = Usual | Excl | Comment
 
@@ -118,7 +117,7 @@ let compute_init s =
   let exclude_channel = Stdlib.open_out (s^"/.gdf/info/exclude") in
     write_str_stdlib exclude_channel "";
   let config_channel = open_out (s^"/.gdf/config") in
-    output_string config_channel "[core]\n\trepositoryformatversion = 0\n\tfilemode = false\n\tbare = false";
+    output_string config_channel "";
     close_out config_channel; close_out index_channel; close_out head_channel
 
   
@@ -197,7 +196,38 @@ let add_char_until c f_channel =
     if read_char = c then is_c := false
     else acc := add_char_to_str c !acc
   done; !acc *)
-  
+
+let make_config_readable l = 
+  (*gives entries the format [[category-name];[entry1;entry2;...;entryn]], easy to parse and manipulate while   allowing the config file to be readable*)
+  let trimmed_list = List.map String.trim l in
+  let entries_list = List.map (String.split_on_char '\n') trimmed_list in
+  List.map (List.map String.trim) entries_list
+
+
+let parse_user l =
+  let name = ref "" and email = ref "" in
+  let treat entry = 
+    let clean_entry = List.map String.trim (String.split_on_char '=' entry) in
+    match clean_entry with
+      | "nom" :: q -> name := String.concat "=" q
+      | "courriel" :: q -> email := String.concat "=" q
+      | _ -> ()
+  in List.iter treat l;
+  {u_name = !name; u_email = !email}
+
+let config_parser () =
+  let repo = repo_find () in
+  let config_data = extract_data (repo ^ "/.gdf/config") in
+  let pre_fields = String.split_on_char '[' config_data in 
+  let fields = List.map (String.split_on_char ']') pre_fields in (*Useless right now - it's there for flexibility, it's very easy to add fields*)
+  let config_list = List.map make_config_readable fields in
+  let user = ref {u_name = ""; u_email = ""} in
+  let parse x = match x with
+    | ["utilisateur"] :: q :: [] -> user := parse_user q
+    | _ -> ()
+  in List.iter parse config_list;
+  {utilisateur = !user}
+
 let commit_parser obj_content =
   (* Parser pour les commits, dsl c'est immonde *) (
   let data_list = String.split_on_char '\n' obj_content in
@@ -902,6 +932,10 @@ let commit_create tree parent author message =
   } in
   write_object (Commit(new_commit)) true
   
+let find_author () =
+  let user = (config_parser ()).utilisateur in
+  user.u_name ^ " " ^ user.u_email
+
 let compute_commit message =
   let repo = repo_find () in
   let index = index_parser () in
@@ -911,7 +945,7 @@ let compute_commit message =
     try (let ref_head = object_find "HEAD" "" in
         commit_create tree [ref_head] "" message)
     with _ -> (
-      let commit2 = commit_create tree [] "" message in
+      let commit2 = commit_create tree [] (find_author ()) message in
       Printf.printf "commit : %s\n" (String.escaped commit2);
       let master_channel = Stdlib.open_out (repo^"/.gdf/refs/heads/master") in
       write_str_stdlib master_channel commit2;

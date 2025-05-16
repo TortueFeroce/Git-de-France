@@ -1,4 +1,3 @@
-[core]
-	repositoryformatversion = 0
-	filemode = false
-	bare = false
+[utilisateur]
+		  nom = baptou
+	 email = baptou@baptou.baptou
