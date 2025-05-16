@@ -228,6 +228,14 @@ let config_parser () =
   in List.iter parse config_list;
   {utilisateur = !user}
 
+let set_user name email =
+  let repo = repo_find () in
+  let config_data = extract_data (repo ^ "/.gdf/config") in
+  let config_channel = Stdlib.open_out (repo ^ "/.gdf/config") in
+  Stdlib.output_string config_channel config_data;
+  Stdlib.output_string config_channel ("\n[utilisateur]\n\tnom = " ^ name ^ "\n\tcourriel = " ^ email);
+  Stdlib.close_out config_channel
+
 let commettre_parser obj_content =
   (* Parser pour les commettres, dsl c'est immonde *) (
   let data_list = String.split_on_char '\n' obj_content in
@@ -940,7 +948,7 @@ let compute_commettre message =
   (* Printf.printf "baliveau : %s\n" baliveau; *)
   let commettre = 
     try (let ref_tete = object_find "TETE" "" in
-        commettre_create baliveau [ref_tete] "" message)
+        commettre_create baliveau [ref_tete] (find_author ()) message)
     with _ -> (
       let commettre2 = commettre_create baliveau [] (find_author ()) message in
       let maitre_channel = Stdlib.open_out (repo^"/.gdf/refs/tetes/maitre") in

@@ -25,13 +25,14 @@ let findOptions str = match str with
   | "supprimer" -> [] (*pas d'options?*)
   | "ajouter" -> []
   | "commettre" -> []
+  | "configuere-utilisateur" -> []
   | "test" -> []
   | _ -> raise (GdfError "Cette commande n'existe pas")
 
 let isSubcomm = ref true
 
 let read_option () =
-  let args = ref [] in
+  let args = ref [] in 
   let command_name = ref "" in
   Arg.parse_dynamic options
   (fun s -> if !isSubcomm then (options := findOptions s; 
@@ -62,6 +63,7 @@ let () = try (Printexc.record_backtrace true;
     | "ajouter", l -> compute_add l false true (* TO DO : faire mieux *)
     | "commettre", m::[] -> compute_commettre m
     | "test", [] -> f_test ()
+    | "configurer-utilisateur", email :: name :: [] -> set_user name email
     | _ -> failwith "Mauvais arguments")
   with (GdfError str) -> Printf.printf "Erreur : %s\n" str
 
