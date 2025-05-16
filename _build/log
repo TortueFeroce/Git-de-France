@@ -1,8 +1,8 @@
 # dune build ./bin/gdf.exe
 # OCAMLPARAM: unset
 # Shared cache: enabled-except-user-rules
-# Shared cache location: /home/baptiste/.cache/dune/db
-# Workspace root: /home/baptiste/Documents/Informatique/OS/Git-de-France
+# Shared cache location: /home/axel/.cache/dune/db
+# Workspace root: /home/axel/Cours/Informatique/L3/OS/Git-de-France
 # Auto-detected concurrency: 16
 # Dune context:
 #  { name = "default"
@@ -13,5 +13,5 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ /home/baptiste/.opam/default/bin/ocamlc.opt -config > /tmp/dune_97a100_output
+$ /usr/bin/ocamlc.opt -config > /tmp/dune_d51feb_output
 # Promoting "_build/default/bin/gdf.exe" to "bin/gdf.exe"
