@@ -964,6 +964,20 @@ let compute_commettre message =
             write_str_stdlib branch_channel (commettre^"\n");
             Stdlib.close_out branch_channel
 
+let branche_create name =
+  let get_TETE_sha = object_find "TETE" "" in
+  let repo = repo_find () in
+  Unix.chdir (repo^"/.gdf/refs/tetes");
+  try (let nouvelle_branche_channel = Stdlib.open_out name in
+      write_str_stdlib nouvelle_branche_channel get_TETE_sha;
+      Stdlib.close_out nouvelle_branche_channel)
+  with _ -> raise (GdfError ("La branche "^name^" existe déjà"))
+
+let print_branches () =
+  let repo = ((repo_find ())^"/.gdf/refs/tetes") in
+  let files = Sys.readdir repo in
+  Array.iter (fun x -> Printf.printf "%s\n" x) files
+
 let f_test () =
   (* fonction de test *)
   let repo = repo_find () in

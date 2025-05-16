@@ -26,6 +26,7 @@ let findOptions str = match str with
   | "ajouter" -> []
   | "commettre" -> []
   | "configuere-utilisateur" -> []
+  | "branche" -> []
   | "test" -> []
   | _ -> raise (GdfError "Cette commande n'existe pas")
 
@@ -46,6 +47,7 @@ let () = try (Printexc.record_backtrace true;
   let found_args, c_name = read_option () in
   match c_name, found_args with
     | "initialiser", x::[] -> compute_init x
+    | "initialiser", [] -> compute_init "."
     | "hacher-objet", x::[] -> let sha = hash_file !doWrite !objType x
                               in print_string sha
     | "concatener-fichier", sha :: typ :: [] -> cat_file typ sha
@@ -62,6 +64,8 @@ let () = try (Printexc.record_backtrace true;
     | "supprimer", l -> compute_rm l true false
     | "ajouter", l -> compute_add l false true (* TO DO : faire mieux *)
     | "commettre", m::[] -> compute_commettre m
+    | "branche", name::[] -> branche_create name
+    | "branche", [] -> print_branches ()
     | "test", [] -> f_test ()
     | "configurer-utilisateur", email :: name :: [] -> set_user name email
     | _ -> failwith "Mauvais arguments")
