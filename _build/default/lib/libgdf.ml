@@ -392,10 +392,11 @@ let object_resolve name = match name with
             let prefix = String.sub name 0 2 in
             let suffix = String.sub name 2 (name_len - 2) in
             let path = (repo_find ())^"/.gdf/objets/"^prefix in
-            let files_here = Sys.readdir path in
+            try (let files_here = Sys.readdir path in
             Array.iter (fun x -> if not (Sys.is_directory (path^"/"^x)) 
                                 && (String.sub x 0 (name_len - 2) = suffix)
-                                then possibilities := ("blob",prefix^x)::(!possibilities)) files_here
+                                then possibilities := ("blob",prefix^x)::(!possibilities)) files_here)
+            with _ -> ()
           end;(
           try let sha_etiquette = ref_resolve ("refs/etiquettes/"^name)
               in possibilities := ("etiquette",sha_etiquette)::(!possibilities) 
@@ -421,6 +422,7 @@ let object_find name fmt =
   else begin
     let rec aux list_resolve fmt = match list_resolve, fmt with
     | [],_ -> raise (GdfError "Aucune occurence trouvée")
+    | ("tete",x)::_,_ when fmt = "" -> x
     | (_,x)::_,_ when (find_type x = fmt) -> x
     | ("etiquette",x)::_,_ -> ref_resolve ("etiquettes/"^x)
     | (_,x)::_,"baliveau" when (find_type x = "commettre") -> (*c'est pas tres beau mais ça doit marcher*)
@@ -431,7 +433,6 @@ let object_find name fmt =
     | _::q,_ -> aux q fmt
   in aux list_resolve fmt
   end
-
 
 let write_object obj do_write =
   let serialized_obj = serialize obj in
@@ -509,21 +510,9 @@ let rec baliveau_checkout baliveau path =
   in match baliveau with
     | Baliveau(l) -> List.iter item l
     | _ -> raise (GdfError "Mauvais type d'objet - un baliveau était attendu")
-
-let compute_checkout name dir =
-  let obj = read_object (object_find name "commettre") in
-  let baliveau = match obj with
-    | Commettre(c) -> read_object c.baliveau
-    | _ -> raise (GdfError (name ^ " n'est pas un commettre"))
-  (*c'est pas tres beau trois if de suite mais ça permet de gérer les erreurs un peu mieux*)
-  in (if (Sys.file_exists dir) then(
-    if not (Sys.is_directory dir) then raise (GdfError ("Le fichier " ^ dir ^ " n'est pas un dossier"));
-    if Sys.readdir dir <> [||] then raise (GdfError ("Le dossier " ^ dir ^ " n'est pas vide")))
-  else Unix.mkdir dir perm_base);
-  baliveau_checkout baliveau (Unix.realpath dir)
-  
-
-let print_refs () =
+    
+    
+    let print_refs () =
   Unix.chdir ((repo_find ())^"/.gdf/");
   let ref_list = ref [] in
   let path0 = "refs/" in
@@ -540,21 +529,21 @@ let print_etiquette () =
   let file_list = Sys.readdir "." in
   Array.iter (fun x -> Printf.printf "%s\n" x) file_list
 
-let compute_etiquette name obj =
+  let compute_etiquette name obj =
   (* Fonction qui crée un etiquette dont le nom est <name> et qui
   est relié à l'objet <obj> *)
   let sha = object_find obj "" in
   Unix.chdir ((repo_find ())^"/.gdf/refs/etiquettes");
   if Sys.file_exists name then raise (GdfError ("L'étiquette "^name^" existe déjà"))
   else begin
-  let f_channel = Stdlib.open_out name in
-  write_str_stdlib f_channel sha;
+    let f_channel = Stdlib.open_out name in
+    write_str_stdlib f_channel sha;
   close_out f_channel end
 
-
-let compute_rev_parse name fmt =
+  
+  let compute_rev_parse name fmt =
   Printf.printf "%s" (object_find name fmt)
-
+  
 let bit_string_to_int s =
   (* Passe du binaire à la base 10 *)
   let n = String.length s in
@@ -570,7 +559,7 @@ let int_to_bit_string n =
     | _ -> let r = i mod 2 in
            if r = 0 then aux (i/2) ("0"^s)
            else aux (i/2) ("1"^s)
-  in let base_str = aux n "" in
+          in let base_str = aux n "" in
   let len_base = String.length base_str in
   assert (len_base <= 8);
   let paddington = String.make (8 - len_base) '0' in
@@ -599,8 +588,8 @@ let entries_parser entry =
       i_size = int_of_string size;
       i_sha = sha;
       i_name = name}
-    | _ -> raise (GdfError "Mauvais format pour une entrée de l'indice")
-
+      | _ -> raise (GdfError "Mauvais format pour une entrée de l'indice")
+      
 let indice_parser () = 
   (* fonction qui parse le fichier indice dans .gdf
   plus précisémment, renvoie un type indice 
@@ -610,8 +599,8 @@ let indice_parser () =
 
   Unix.chdir (repo_find ());
   let data_ind = extract_data ".gdf/indice" in (* on suppose que le fichier
-indice n'est pas zippé pour l'instant, il faudra changer cette ligne si on
-choisit de le zipper *)
+  indice n'est pas zippé pour l'instant, il faudra changer cette ligne si on
+  choisit de le zipper *)
   let len_ind = String.length data_ind in
   let version = bit_string_to_int (String.sub data_ind 4 8) in
   let _ = bit_string_to_int (String.sub data_ind 12 8) in
@@ -624,8 +613,8 @@ choisit de le zipper *)
   {
     entries = List.map (fun e -> entries_parser e) entries;
     version = version
-  } end
-
+    } end
+    
 let get_indice_files () =
   (* Fonction qui renvoie les fichiers qui ont été setiquetteed dans indice *)
   List.map (fun e -> e.i_name) ((indice_parser ()).entries)
@@ -830,6 +819,23 @@ let indice_write indice =
     List.iter (write_entry indice_channel) indice.entries; (*poualala la curryfication ça me donne envie de manger indien*)
     Stdlib.close_out indice_channel (*je l'ai pas oublié cette fois ci quel boss*)
 
+let compute_erase () =
+  (* Fonction qui supprime tous les fichiers d'un dossier qui sont aussi dans l'index *)
+  List.iter (fun x -> if Sys.file_exists x then Sys.remove x) (get_indice_files ())
+
+let compute_checkout name dir is_empty =
+  let obj = read_object (object_find name "commettre") in
+  let baliveau = match obj with
+    | Commettre(c) -> read_object c.baliveau
+    | _ -> raise (GdfError (name ^ " n'est pas un commettre"))
+  (*c'est pas tres beau trois if de suite mais ça permet de gérer les erreurs un peu mieux*)
+  in (if (Sys.file_exists dir) then(
+    if not (Sys.is_directory dir) then raise (GdfError ("Le fichier " ^ dir ^ " n'est pas un dossier"));
+    if is_empty && (Sys.readdir dir <> [||]) then raise (GdfError ("Le dossier " ^ dir ^ " n'est pas vide"));
+    if not is_empty then compute_erase ())
+  else Unix.mkdir dir perm_base);
+  baliveau_checkout baliveau (Unix.realpath dir)
+
 let compute_rm path_list do_delete skip_missing =
   (* fonction qui supprime des fichiers *)
   let indice = indice_parser () in
@@ -967,16 +973,45 @@ let compute_commettre message =
 let branche_create name =
   let get_TETE_sha = object_find "TETE" "" in
   let repo = repo_find () in
-  Unix.chdir (repo^"/.gdf/refs/tetes");
-  try (let nouvelle_branche_channel = Stdlib.open_out name in
-      write_str_stdlib nouvelle_branche_channel get_TETE_sha;
-      Stdlib.close_out nouvelle_branche_channel)
-  with _ -> raise (GdfError ("La branche "^name^" existe déjà"))
+  let path = repo^"/.gdf/refs/tetes/"^name in
+  if not (Sys.file_exists path) then begin
+    let nouvelle_branche_channel = Stdlib.open_out path in
+    write_str_stdlib nouvelle_branche_channel get_TETE_sha;
+    Stdlib.close_out nouvelle_branche_channel
+  end
+  else raise (GdfError ("la branche "^name^" existe déjà"))
+
+let find_branche_tete () =
+  (* Fonction qui renvoie le nom de la branche sur laquelle la tête pointe *)
+  let rec aux ref acc = 
+    let path = (repo_find ())^("/.gdf/")^ref in
+    try (let data = extract_data path in
+    let first_bits = String.sub data 0 5 in
+    let lasts_bits = String.sub data 5 (String.length data - 5) in
+    match first_bits with
+      | "ref: " -> aux lasts_bits (List.hd (List.rev (String.split_on_char '/' lasts_bits)))
+      | _       -> acc)
+    with _ -> raise (GdfError "Le nom donné ne correspond pas à une référence")
+  in aux "TETE" ""
 
 let print_branches () =
   let repo = ((repo_find ())^"/.gdf/refs/tetes") in
   let files = Sys.readdir repo in
-  Array.iter (fun x -> Printf.printf "%s\n" x) files
+  let ref_tete = find_branche_tete () in
+  Array.iter (fun x -> if x = ref_tete then Printf.printf "\t* %s\n" x
+                      else Printf.printf "\t  %s\n" x) files
+
+let compute_checkout_branche nom_branche =
+  let repo = repo_find () in
+  let path = repo^"/.gdf/refs/tetes" in
+  if not (Sys.file_exists (path^"/"^nom_branche)) then raise (GdfError ("la branche "^nom_branche^" n'existe pas"))
+  else begin
+    let path_tete = (repo^"/.gdf/TETE") in
+    let tete_channel = Stdlib.open_out path_tete in
+    write_str_stdlib tete_channel ("ref: refs/tetes/"^nom_branche);
+    Stdlib.close_out tete_channel;
+    compute_checkout nom_branche "." false
+  end
 
 let f_test () =
   (* fonction de test *)

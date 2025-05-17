@@ -52,7 +52,8 @@ let () = try (Printexc.record_backtrace true;
                               in print_string sha
     | "concatener-fichier", sha :: typ :: [] -> cat_file typ sha
     | "enregistrer", x :: [] -> compute_log x
-    | "verifier", dir :: sha :: [] -> compute_checkout sha dir
+    | "verifier", dir :: sha :: [] -> compute_checkout sha dir true
+    | "verifier", nom_branche :: [] -> compute_checkout_branche nom_branche
     | "montrer-references", [] -> print_refs ()
     | "etiqueter", obj :: name :: [] -> compute_etiquette name obj
     | "etiqueter", name :: [] -> compute_etiquette name "TETE"
