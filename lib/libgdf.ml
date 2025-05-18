@@ -509,7 +509,7 @@ let rec baliveau_checkout baliveau path =
     | _ -> raise (GdfError "Mauvais type d'objet - un baliveau était attendu")
     
     
-    let print_refs () =
+let print_refs () =
   Unix.chdir ((repo_find ())^"/.gdf/");
   let ref_list = ref [] in
   let path0 = "refs/" in
@@ -526,7 +526,7 @@ let print_etiquette () =
   let file_list = Sys.readdir "." in
   Array.iter (fun x -> Printf.printf "%s\n" x) file_list
 
-  let compute_etiquette name obj =
+let compute_etiquette name obj =
   (* Fonction qui crée un etiquette dont le nom est <name> et qui
   est relié à l'objet <obj> *)
   let sha = object_find obj "" in
@@ -538,7 +538,7 @@ let print_etiquette () =
   close_out f_channel end
 
   
-  let compute_rev_parse name fmt =
+let compute_rev_parse name fmt =
   Printf.printf "%s" (object_find name fmt)
   
 let bit_string_to_int s =
