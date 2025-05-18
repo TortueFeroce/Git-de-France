@@ -22,12 +22,11 @@ let findOptions str = match str with
   | "enumerer-fichiers" -> []
   | "verifier-ignorer" -> []
   | "statut" -> []
-  | "supprimer" -> [] (*pas d'options?*)
+  | "supprimer" -> [] 
   | "ajouter" -> []
   | "commettre" -> []
   | "configuere-utilisateur" -> []
   | "branche" -> []
-  | "test" -> []
   | _ -> raise (GdfError "Cette commande n'existe pas")
 
 let isSubcomm = ref true
@@ -68,7 +67,6 @@ let () = try (Printexc.record_backtrace true;
     | "commettre", m::[] -> compute_commettre m
     | "branche", name::[] -> branche_create name
     | "branche", [] -> print_branches ()
-    | "test", [] -> f_test ()
     | "configurer-utilisateur", email :: name :: [] -> set_user name email
     | _ -> failwith "Mauvais arguments")
   with (GdfError str) -> Printf.printf "Erreur : %s\n" str
@@ -83,11 +81,3 @@ let () = (let commettre = commettre_parser "24commettre_test" in
           Printf.printf "gpgsig : %s" (commettre.gpgsig);
           print_newline ();
           Printf.printf "name : %s" (commettre.name)) *)
-
-
-
-(* 
-let empty_t = Term.(const print_test $ const ())
-let cmd = Cmd.v (Cmd.info "mesgrossescouilles") empty_t
-
-let () = exit (Cmd.eval cmd) *)

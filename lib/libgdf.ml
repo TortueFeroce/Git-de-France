@@ -181,7 +181,7 @@ let concat_list_commettre c =
   [" -----END PGP SIGNATURE-----";"";(c.name)]
   (* miam *)
 
-let write_str chan str = (*on pourrait utiliser output_substring mais parait il c'est pas bien*)
+let write_str chan str =
   for i = 0 to (String.length str) - 1 do
     Gzip.output_char chan str.[i]
   done
@@ -198,7 +198,7 @@ let add_char_until c f_channel =
   done; !acc *)
 
 let make_config_readable l = 
-  (*gives entries the format [[category-name];[entry1;entry2;...;entryn]], easy to parse and manipulate while   allowing the config file to be readable*)
+  (*gives entries the format [[category-name];[entry1;entry2;...;entryn]] - easy to parse and manipulate while allowing the config file to be readable*)
   let trimmed_list = List.map String.trim l in
   let entries_list = List.map (String.split_on_char '\n') trimmed_list in
   List.map (List.map String.trim) entries_list
@@ -329,7 +329,7 @@ let deserialize str =
       | "baliveau" :: _ :: q -> baliveau_parser q (*il peut pas y avoir de \n random dans un baliveau normalement donc la liste q c'est exactement ce qu'on veut*)
       | _ -> Printf.printf "data : %s\n" str; raise (GdfError "Mauvais format de données")
 
-let serialize obj = (*le serialize du mr ne met pas le TÊTEer. raph dit que c'est cringe. a voir...*)
+let serialize obj =
   match obj with
     | Blob(file_name, file_data) ->
         let size = string_of_int (String.length file_data) in
@@ -343,7 +343,6 @@ let serialize obj = (*le serialize du mr ne met pas le TÊTEer. raph dit que c'e
       let baliveau_contents = String.concat "\n" contents_list in
       let size = string_of_int (String.length baliveau_contents) in
       String.concat "\n" ["baliveau"; size; baliveau_contents]
-    (*| _ -> failwith "attends 2s connard"*)
 
 let read_object sha =
   (* Fonction qui renvoie l'objet associé au haché sha *)
@@ -425,7 +424,7 @@ let object_find name fmt =
     | ("tete",x)::_,_ when fmt = "" -> x
     | (_,x)::_,_ when (find_type x = fmt) -> x
     | ("etiquette",x)::_,_ -> ref_resolve ("etiquettes/"^x)
-    | (_,x)::_,"baliveau" when (find_type x = "commettre") -> (*c'est pas tres beau mais ça doit marcher*)
+    | (_,x)::_,"baliveau" when (find_type x = "commettre") ->
         let obj = read_object x in (match obj with
           | Commettre c -> c.baliveau
           | _ -> raise (GdfError "Mauvais type d'objet"))
@@ -449,16 +448,15 @@ let write_object obj do_write =
           Gzip.close_out file_channel));
   sha
 
-let cat_file fmt sha = (*le pelo fait des trucs bizarres avec object find, a mediter. le type ne sert a rien, voir doc git*)
+let cat_file fmt sha =
   let obj = read_object (object_find sha fmt) in 
     match obj with
-      | Blob(_, str) -> Printf.printf "%s\n" str (*thibault utilise serialize. apres discussion avec raph, on en a (il en a) conclu que c'est débile*)
+      | Blob(_, str) -> Printf.printf "%s\n" str
       | Commettre(c) -> Printf.printf "%s\n" (String.concat "\n" (concat_list_commettre c))
       | Baliveau(l) -> 
         let contents_list = List.fold_left (fun acc (s,ss, sss) -> s :: ss :: sss :: acc) [] l in
-        let baliveau_contents = String.concat "\n" contents_list in (*nos baliveaus seront illisibles...*)
+        let baliveau_contents = String.concat "\n" contents_list in
         Printf.printf "%s\n" baliveau_contents
-      (*| _ -> failwith "dune t'es vraiment casse couille quand tu t'y mets"*)
 
 let hash_file do_write typfile f_name =
   (* renvoie le sha d'un fichier *)
@@ -474,12 +472,11 @@ let hash_file do_write typfile f_name =
     | _ -> raise (GdfError (typfile ^ " n'est pas un type d'objet valide"))
 
 let compute_log name = 
-  (*alors la, il faut qu'on en parle. cette fonction donne l'arbre des commettres en format .dot direct dans la console. okok pas de soucis. sauf que 1) on donne pas tout le log juste l'historique des commettres passés en argument, 2) on peut passer qu'un seul commettre en argument, 3) ya pas de merge. ?????? c'est juste une ligne ton log??? fin je vois pas l'interet de se casser les couilles avec graphviz pour faire juste une liste dans l'ordre. au passage, l'abscence de merge rends plein de trucs obsolètes, style la possibilité d'avoir >1 aieuls. apres, si thibault polge demande moi j'execute. mais ça sert a rien. en vrai peut etre on peut donner la possibilté d'avoir une liste d'arguments plus tard? ça serait rigolo au moins un peu. ou alors peut etre je suis juste con et j'ai mal compris. au passage tu sais ce que c'est une mite à l'envers? c'est une co-mite (commettre). c'est pas grave si t'as pas compris je sais que mon humour est un peu trop subtil pour beaucoup de gens. bon allez je vais me log la gueule c'est tipar (parti en verlan)*)
   let sha = object_find name "commettre" in
   (* Printf.printf "name : %s sha : %s\n" name sha; *)
   (* Printf.printf "sha : %s\n" sha; *)
   Printf.printf "digraph wyaglog{\n\tnode[shape=rect]";
-  let seen_commettres = Hashtbl.create 64 in (*hmm, c'est pas beau. ya surement un module mieux mais raph est pas la pour me dire que en fait c'est pas comme ça qu'on fait*)
+  let seen_commettres = Hashtbl.create 64 in
   let rec log_graphviz comm = if not (Hashtbl.mem seen_commettres comm.name) then
       Hashtbl.add seen_commettres comm.name true;
       match comm.aieul with
@@ -491,7 +488,7 @@ let compute_log name =
                   Printf.printf "%s -> %s\n" c.name comm.name;
                   log_graphviz c
               | _ -> raise (GdfError "L'objet n'est pas un commettre")) l
-  in match read_object sha with (*le prochain match que je dois ecrire ou ya un seul cas qui fonctionne je me defenestre*)
+  in match read_object sha with 
     | Commettre(coucou) -> log_graphviz coucou; Printf.printf "}\n"
     | _ -> raise (GdfError (sha ^ " n'est pas un commettre"))
 
@@ -811,13 +808,12 @@ let write_entry channel entry =
   write_str_stdlib channel entry.i_name
 
 let indice_write indice = 
-  (*écrit l'indice. ça djoufara l'indice d'avant, fais gaffe ma gueule*)
   let indice_channel = Stdlib.open_out ".gdf/indice" in
     write_str_stdlib indice_channel "DIRC";
     write_str_stdlib indice_channel (int_to_bit_string indice.version);
     write_str_stdlib indice_channel (int_to_bit_string (List.length indice.entries));
-    List.iter (write_entry indice_channel) indice.entries; (*poualala la curryfication ça me donne envie de manger indien*)
-    Stdlib.close_out indice_channel (*je l'ai pas oublié cette fois ci quel boss*)
+    List.iter (write_entry indice_channel) indice.entries;
+    Stdlib.close_out indice_channel
 
 let compute_erase () =
   (* Fonction qui supprime tous les fichiers d'un dossier qui sont aussi dans l'index *)
@@ -901,7 +897,7 @@ let baliveau_from_indice indice =
     Hashtbl.replace contents dir (entry :: entry_list)
   in List.iter add_to_contents indice.entries;
 
-  let sorted_paths = List.rev (List.sort compare (List.of_seq (Hashtbl.to_seq_keys contents))) in (*quelle horreur. mais ça marche (normalement...)*)
+  let sorted_paths = List.rev (List.sort compare (List.of_seq (Hashtbl.to_seq_keys contents))) in 
   let sha = ref "" in
 
   (* Hashtbl.iter (fun a l -> Printf.printf "path : %s\n" a;
@@ -1012,10 +1008,3 @@ let compute_checkout_branche nom_branche =
     Stdlib.close_out tete_channel;
     compute_checkout nom_branche "." false
   end
-
-let f_test () =
-  (* fonction de test *)
-  let repo = repo_find () in
-  let chan = Stdlib.open_out (repo^"/fichier_test") in
-  write_str_stdlib chan "79d5e527bc66b195b63f7267992e3dcffa3de016";
-  Stdlib.close_out chan 

@@ -1,8 +1,0 @@
-lib: [
-  "_build/install/default/lib/gdf/META"
-  "_build/install/default/lib/gdf/dune-package"
-  "_build/install/default/lib/gdf/opam"
-]
-bin: [
-  "_build/install/default/bin/gdf"
-]
