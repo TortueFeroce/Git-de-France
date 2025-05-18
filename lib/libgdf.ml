@@ -1008,10 +1008,3 @@ let compute_checkout_branche nom_branche =
     Stdlib.close_out tete_channel;
     compute_checkout nom_branche "." false
   end
-
-let f_test () =
-  (* fonction de test *)
-  let repo = repo_find () in
-  let chan = Stdlib.open_out (repo^"/fichier_test") in
-  write_str_stdlib chan "79d5e527bc66b195b63f7267992e3dcffa3de016";
-  Stdlib.close_out chan 
