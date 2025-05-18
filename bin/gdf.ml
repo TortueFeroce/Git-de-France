@@ -22,7 +22,7 @@ let findOptions str = match str with
   | "enumerer-fichiers" -> []
   | "verifier-ignorer" -> []
   | "statut" -> []
-  | "supprimer" -> [] (*pas d'options?*)
+  | "supprimer" -> [] 
   | "ajouter" -> []
   | "commettre" -> []
   | "configuere-utilisateur" -> []
