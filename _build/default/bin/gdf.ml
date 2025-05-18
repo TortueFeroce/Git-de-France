@@ -33,6 +33,7 @@ let findOptions str = match str with
 let isSubcomm = ref true
 
 let read_option () =
+  Printf.printf "usage message : %s\n" usage_msg;
   let args = ref [] in 
   let command_name = ref "" in
   Arg.parse_dynamic options
